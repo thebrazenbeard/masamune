@@ -21,231 +21,181 @@ Autobiographical memory claimed: false
 - V3 blob: `6fdee978d0b052592844d1f7356f6fedb13f43eb`.
 - V3 SHA-256: `c74cc6dba1e6c08e0d7234be1a3e12c93b357b892f11ab6c259852a41804d258`.
 - V3 publication/readback complete; writer lease consumed. No further `masa` mutation without a new writer stage.
-- Mune MU3 exact-head review remains pending unless newer authority closes/supersedes it.
 
-## Assignment currentness
+## Assignment-currentness rule
 
-Before start/resume/report/count, resolve each lane against every newer authoritative event in its lineage or explicitly referencing it that can amend, supersede, reroute, complete, cancel, release, terminally block, revoke authority, change artifact/head, or change dependencies.
+Before start, resume, report, or workload count, resolve a candidate assignment against every newer authoritative event in its lineage or explicitly referencing it that can amend, supersede, reroute, complete, cancel, release, terminally block, revoke authority, move a bound artifact/head, or change dependencies.
 
-Voss owns assignment intake/routing/reconciliation/closure while delegated. Masa does not self-assign or self-close governed assignments.
+Voss owns assignment intake/routing/reconciliation/closure while delegated. Masa does not self-assign or self-close governed work.
 
-## Masa assignment state at latest canonical read
+## Current Masa assignment state
 
-Fresh canonical coordination was read through sequence `3440`.
+Fresh canonical coordination was resolved through sequence `3544` before this checkpoint.
 
 Closed:
-- MA5: `3383 APPROVED`.
-- MA6: `3384 APPROVED`.
-- MA7: `3406 APPROVED`.
-- MA8: `3407 APPROVED`.
 - MA9: `3431 APPROVED_PROVIDER_ARCHITECTURE / VOSS-CLOSED`.
 - MA10: `3432 APPROVED_EXECUTABLE_PROOF / VOSS-CLOSED`.
+- MA11: `3538 APPROVED_E2_IMPLEMENTATION_PREFLIGHT / VOSS-CLOSED`.
+- MA12: `3539 APPROVED_RECEIPT_CANONICALIZATION_CONTRACT / VOSS-CLOSED`.
 
-Current read-only lanes:
-- MA11 root `3433`: exact non-executing E2 admission-registry implementation preflight. Main handoffs to `#voss`: `1786192846.749399` and `1786192874.033539`; critical current-postgres confinement addendum `1786193080.815939`; creator/default-privilege addendum `1786193192.819009`.
-- MA12 root `3434`: cross-runtime resolver receipt canonicalization protocol/proof. Main handoffs `1786192975.311229` and `1786192999.724989`; Unicode sorting golden addendum `1786193222.561609`.
+At the latest resolution there is **no current governed Masa assignment root**. Do not count MA11/MA12 after 3538/3539. Broader Governed Knowledge Resolver research may continue only as advisory/peer research unless Voss routes a new bounded lane.
 
-No canonical event above `3440` was visible at save time. MA11/MA12 remain current until Voss review/closure or newer authority changes them.
+## Proposal-lineage discipline
 
-## Controlling assignment-state discipline
+Canonical `3481` controls prospective ordinary READY_FOR_REVIEW custody:
+- non-state proposal has `supersedes_event_id = NULL`;
+- top-level `acknowledges_event_id` equals the exact assignment root;
+- payload root IDs are advisory/readability only;
+- amendments retain root ACK and separately reference the prior proposal;
+- Voss closure performs the controlling state transition and ACKs the accepted proposal.
 
-Canonical `3400` controls the live ASSIGNMENT_EVENT_V1 discipline.
+Masa corrected MA11/MA12 custody accordingly:
+- `3523` MA11 READY_FOR_REVIEW, root ACK exact.
+- `3524` MA12 READY_FOR_REVIEW, root ACK exact.
+- `3526` MA11 provider-version evidence correction, root ACK exact.
+- `3534` MA11 reference-locator correction, root ACK exact.
+- `3535` MA11 live default-privilege provider-evidence addendum, root ACK exact.
+- `3536` MA12 domain-array normalization/canonicalizer-vs-schema refinement, root ACK exact.
 
-- Ordinary assignee READY_FOR_REVIEW is non-state proposal/evidence unless closure authority is explicitly delegated.
-- Only authority-admitted transitions control assignment state or consume the protected successor slot.
-- Structurally valid but unauthorized COMPLETE/CANCEL/REROUTE/terminal block/authority changes are non-controlling.
-- Workload lane identity for conforming V1 is root ASSIGN event ID.
-- Workload-floor contribution is policy-derived, not universal assignment truth.
+3535/3536 committed before terminal closures but were not the proposal rows explicitly acknowledged by 3538/3539. They remain advisory same-lane evidence unless Voss later admits them as closure addenda; they do not reopen the completed assignments.
 
-Contaminated 3394/3395 self-COMPLETE history remains historical evidence only; Voss 3401/3402 manually reconciled closure. Do not treat those physical chains as clean V1 examples.
+## Controlling PostgreSQL-version correction
 
-## Knowledge Resolver baseline
+Canonical `3537` is the controlling factual correction:
+- live PostgreSQL `server_version = 17.6`;
+- `server_version_num = 170006`;
+- `version()` reports PostgreSQL 17.6;
+- prior `17.6.1` wording is retracted **as PostgreSQL server_version** unless separately sourced and explicitly labeled as a different Supabase platform/release identifier.
 
-V1 domain: `ASSIGNMENT_CURRENTNESS`.
+The substantive parity finding survives: existing R9A0 database CI uses PostgreSQL 15 and does not establish hosted PG17 parity.
 
-Logical boundary:
-`resolve_assignment_currentness(typed request) -> trusted facade/admission evidence -> narrow canonical resolver`
+Direct Masa readback independently reproduced:
+`current_user=postgres`, `session_user=postgres`, `server_version=17.6`, `server_version_num=170006`.
 
-Key principles:
-1. Current-turn Patrick authority/referent precedes durable resolution.
-2. Typed identity precedes semantic discovery for effect-critical domains.
-3. Currentness requires authority-admitted lineage, not latest timestamp.
-4. Source topology, completeness and consistency are separate.
-5. Missing required controlling source => UNKNOWN/UNRESOLVED for gated assignment/effect state.
-6. Sequence/high-water is audit-only, never freshness/CAS.
-7. Assignment currentness, authority binding, artifact/head binding and effect eligibility are separate axes.
-8. External effect requires fresh relevant-lineage resolution plus independent provider precondition/readback.
-9. A guarded publisher is not a hard gate while equal/broader raw mutators remain reachable in the ordinary runtime.
-10. Privacy filtering precedes conflict/rejected metadata.
+## MA11 closed design
 
-## Live provider facts
+MA11 is design/preflight complete only. No DDL, ACL, role, credential, or hosted provider apply was authorized.
 
-Supabase project `klmbpaigzeguvnpccqzz`, PostgreSQL 17.6, Read Committed.
-
-`public.vera_coordination_events`:
-- RLS enabled; owner postgres.
-- service_role ACL includes SELECT+INSERT; anon/auth blocked by restrictive client policy.
-- UPDATE/DELETE are trigger-blocked on the normal runtime path.
-- event_id UUID PK with random default.
-- event_sequence GENERATED ALWAYS identity + unique; audit locator only.
-- self-FKs on `supersedes_event_id` and `acknowledges_event_id`.
-- unique physical one-successor index on non-null `supersedes_event_id`.
-- current latest/open views use security_invoker=true; inadequacy is semantic latest-by-thread, not observed RLS bypass.
-- generic supersession is heavily used: around 397 of ~3300 rows at one measured point, across many source branches, so globally removing supersedes INSERT would be high-blast.
-
-Critical identity observation, freshly reproduced after H9/H10:
-`current_user = postgres`, `session_user = postgres`, `auth.uid() = NULL`, `auth.role() = NULL` on the current ChatGPT Supabase connector route.
-Therefore current ordinary Vera engineering execution is not an actor-authenticated or least-privilege DB path. H9 closes current authority assurance at PROCEDURAL; H10 closes current project effect-confinement as false for GitHub and Supabase while raw mutators remain reachable.
-
-## MA9 accepted production direction: E2
-
-Voss 3431 accepts E2 as preferred production candidate, with final DDL/ACL/trigger design still unapproved.
-
-Keep assignment state exactly once in `vera_coordination_events`. Add a protected admission-proof registry, not a second state ledger.
-
-Registry proves which exact canonical event was admitted under which authority/policy/proposal. It must not duplicate relation/currentness/state_after/workload result.
-
-Core E2 invariants:
-- one admitted root per explicit project_id + thread_key scope;
+Accepted E2 direction:
+- assignment state remains once in `public.vera_coordination_events`;
+- a protected admission-proof registry records admission provenance/uniqueness, not duplicate currentness/state;
+- one admitted root per explicit project+thread scope;
 - one admitted successor per prior admitted event;
-- typed proposal source binding: COORDINATION_EVENT | SLACK_PROVISIONAL | PRESENT_AUTHORITY | NONE;
-- stable logical request identity distinct from predecessor-bound admission attempt identity;
-- random canonical state UUIDs;
-- canonical event + admission marker same transaction;
-- resolver follows admission topology plus matching physical edges;
-- unadmitted proposal/noise does not DoS currentness;
-- physical protected-slot successor without matching admission = integrity conflict.
+- typed proposal/source binding;
+- logical request identity separate from predecessor-bound admission attempt;
+- random canonical state UUID;
+- canonical event + admission proof same transaction;
+- protected-edge guard prevents ordinary least-privilege writers consuming an admitted predecessor slot;
+- unadmitted root-looking/proposal noise is non-controlling;
+- physical protected edge without matching admission proof is an integrity conflict.
 
-After further challenge, a root-specific INSERT guard is unnecessary for correctness: fake root-shaped bus rows have no admission marker and consume no predecessor slot. The dangerous operation is an edge out of an already admitted predecessor.
+Important threat split:
+1. least-privilege admitted runtime/service principal, where E2 can mechanically protect state slots;
+2. postgres/owner/admin control plane, which is an explicit bypass/trust boundary and must be capability-confined externally.
 
-Preferred guard therefore rejects ordinary direct INSERT whose `NEW.supersedes_event_id` references a protected admitted event unless the effective execution identity is the admission owner. Root uniqueness lives in the protected registry.
+Current ChatGPT Supabase route reaches the database as postgres. Therefore E2 cannot be called a hard boundary against the present ordinary engineering runtime while raw postgres-equivalent mutation remains reachable.
 
-## MA11 implementation preflight
+Fresh live creator/default-privilege evidence added in 3535:
+- existing public SECURITY DEFINER functions are explicitly PUBLIC-execute=false, many intentionally service_role-executable;
+- current `pg_default_acl` for creator `postgres` in schema `public` grants default function EXECUTE to postgres, anon, authenticated, and service_role;
+- future dedicated admission owner must close its **global creator-role routine defaults** before routine creation, then explicitly revoke/grant/readback each routine;
+- ownership transfer after creation is not proof that the later owner's default privileges governed object creation.
 
-Current conceptual object boundary:
-- dedicated NOLOGIN `vera_assignment_admission_owner` with no runtime/authenticator USAGE/SET/ADMIN path;
-- dedicated private `vera_assignment_auth` schema;
-- protected append-only `assignment_admissions_v1` registry;
-- narrow guarded admission function, likely VOLATILE SECURITY DEFINER, exact EXECUTE only after a real H9/H11 authority route exists;
-- SECURITY INVOKER protected-edge trigger/guard so direct least-privilege writer identity is observable;
-- service_role may require at most schema USAGE + SELECT(event_id) on registry for guard evaluation, not authority fields/secrets.
+Production activation remains blocked on authority identity/capability and tool/provider confinement prerequisites. PG17/provider-faithful validation is mandatory before hosted apply.
 
-Minimum registry facts under current preflight:
-- event_id PK/FK to canonical coordination event
-- project_id, thread_key
-- root_assign_event_id
-- prior_admitted_event_id
-- typed proposal/source locator + digest
-- request_key + request_digest
-- admission_attempt_id
-- authority_assurance + non-secret evidence ref/digest
-- admission_policy_version
-- DB-owned admitted_at
+## MA12 closed contract
 
-No bearer capability secret is stored.
+Voss `3539` accepts `VERA_RECEIPT_CANON_V1`:
+- restricted RFC 8785/JCS;
+- SHA-256 fixed for V1;
+- closed typed/domain normalization before JCS;
+- no JSON numeric values in the Vera profile; integer-like data is canonical decimal ASCII string;
+- canonical UUID/hex/enum/timestamp forms;
+- unknown/missing schema fields fail closed; null has explicit schema meaning;
+- untrusted serialized JSON requires duplicate-aware raw-wire validation before ordinary object collapse;
+- security-sensitive identifier grammar is validated before JCS;
+- no Unicode normalization; invalid Unicode/lone surrogate fails;
+- provider/raw facts stay separate from policy decisions;
+- unknown canonicalization versions fail closed; no downgrade fallback.
 
-Creator/function privilege hardening must carry the 3313 lesson:
-- global exact-creator default `REVOKE EXECUTE ON ROUTINES FROM PUBLIC` with no `IN SCHEMA` before creator-owned routines;
-- exact current-routine PUBLIC revoke + exact grant/readback;
-- actual creator-role proof; owner transfer after creation does not prove owner defaults applied;
-- trusted search_path with pg_temp last and fully qualified sensitive objects;
-- no reachable runtime SET/USAGE/ADMIN path into admission owner.
-
-MA11 activation ordering is constrained by H9/H10/H11/H12. Current raw postgres-equivalent connector access means E2 cannot honestly be a hard security boundary in the ordinary runtime yet. Production order is capability/tool confinement + authority route, then E2 activation, not merely installing a trigger beside raw admin SQL.
-
-Activation should not retroactively certify all history. Seed only an explicit reconciled finite set of clean conforming current roots/heads or begin a new activation epoch. Legacy/contaminated history remains historical/UNKNOWN/manual.
-
-Rollback: before first admission marker, verified object rollback is possible. After first marker, preserve registry+guard as authority evidence, disable new admission if necessary, and repair forward rather than destructively dropping the proof plane or reopening protected slots.
-
-## MA10 accepted executable proof
-
-Voss 3432 accepted the live SQL proof:
-- clean B6 3390 root / 3398 non-state proposal / 3403 Voss closure resolves cleanly;
-- contaminated H5 3381 / unauthorized 3394 / Voss 3401 produces admission conflict when only trusted physical edges are followed;
-- legacy 3313 remains UNKNOWN_LEGACY_NONCONFORMING;
-- physical root without admission proof remains UNKNOWN_AUTHORITY_ADMISSION_MISSING.
-
-Current indexes are already sufficient at proof scale; the problem is semantics/authority, not query cost.
-
-A future E2 resolver follows protected admission records plus matching physical edges. Unadmitted noise alone is non-controlling; physical/admission mismatch is an integrity error.
-
-## MA12 receipt canonicalization
-
-Chosen candidate: strict Vera profile over RFC 8785/JCS rather than a custom binary TLV.
-
-`VERA_RECEIPT_CANON_V1` rules:
-- JCS canonicalization with Vera schema validation first;
-- no JSON numbers; integer-like values are canonical decimal ASCII strings;
-- lowercase canonical UUIDs and lowercase fixed-length hex digests;
-- exact closed ASCII enums/property names where possible;
-- raw timestamps fixed UTC `YYYY-MM-DDTHH:MM:SS.ffffffZ`;
-- required fields always present, inapplicable values explicit null, unknown fields rejected;
-- arrays use domain-defined semantic order;
-- no Unicode normalization; invalid lone surrogates reject;
-- free text excluded from factual/policy layers.
-
-Three domain-separated digest layers:
-1. RAW_EVIDENCE_DIGEST_INPUT_V1
-2. FACTUAL_LINEAGE_DIGEST_INPUT_V1
-3. POLICY_DECISION_DIGEST_INPUT_V1
-
-Factual lineage excludes event_sequence, record_time, workload-floor result and free-form/debug metadata. Policy digest binds factual digest + exact policy/source-completeness/consistency/derived result.
-
-Cross-language executable golden proof:
-- B6 factual JCS: 761 bytes, SHA-256 `6160e1222df1e35d436cc8ca75fb039fc3abc38703ddd6113ea831c65983357b` in both Python 3.13 and Node 22.
-- reversing semantic event-array order changes digest to `cf1e252b57de589eff0777badc979c73dc134161c489f53fb9a72fd34d64d9b1`.
+Existing golden evidence:
+- B6 factual vector: 761 bytes, SHA-256 `6160e1222df1e35d436cc8ca75fb039fc3abc38703ddd6113ea831c65983357b`.
+- reversed semantic lineage order: `cf1e252b57de589eff0777badc979c73dc134161c489f53fb9a72fd34d64d9b1`.
 - policy vector: 580 bytes, `dda470838cf1346b2c4c2890215eb621b80e557766d37266f3494d76f372952d`.
 - raw vector: 617 bytes, `b7b76c0cd30565e10577ec1da963d9c7581ab6e412e7b08610884739b24a3846`.
-- RFC 8785 non-ASCII UTF-16 property-order vector matched in Python/Node: 180 bytes, `5e321556d22018a9656991a9e94f77ec175fa193e52a2429d312f8419ec8b08c`.
-- toy custom TLV also matched cross-language (`7c02be416dca7f0d92c505222db33e23b90856c05b053899f696ed2338b09f8a`) but is rejected as unnecessary bespoke protocol surface unless JCS proves inadequate.
+- RFC non-ASCII property-order vector: 180 bytes, `5e321556d22018a9656991a9e94f77ec175fa193e52a2429d312f8419ec8b08c`.
 
-Canonicalization version is immutable once referenced. Unknown versions fail closed. V2 does not silently reinterpret V1. A bounded transition may emit both V1/V2 over the same typed facts, with independent golden vectors and explicit verifier support.
+3536 advisory refinement, not required to reopen MA12:
+- separate reusable canonicalization profile from domain-specific receipt schemas;
+- RFC 8785 preserves array order, so domain normalization must define array semantics before JCS;
+- ordered graph/path arrays preserve semantic order;
+- set-valued arrays reject duplicate semantic identity and sort by an explicit field-specific normalized identity key;
+- arbitrary serialized-element sorting is rejected as a substitute for semantic identity;
+- synthetic opposite-order Python/Node set fixture matched at 568 bytes, SHA-256 `98fbf8137ab3e8c7961d65307874dea4d7fc9ffb59f33c5f0d6ee726f4f3d019`.
 
-## Snapshot/function note
+## Governed Knowledge Resolver synthesis
 
-PostgreSQL STABLE SQL and standard procedural-language functions use the calling-query snapshot throughout their internal commands; VOLATILE helpers may observe fresh snapshots. A read-only PL/pgSQL STABLE resolver can therefore preserve a single calling-query snapshot if helper volatility is audited. One SQL/recursive query remains an auditability preference, not a correctness necessity. Client-side multi-RPC assembly under Read Committed remains rejected for authoritative currentness.
+Broader advisory position after MA11/MA12:
 
-## Effect/tool-surface ceiling
+One logical orchestration contract should sit above multiple typed domain adapters rather than forcing one canonical table or one universal fact schema.
 
-H10 is Voss-closed: current Vera engineering execution is not mechanically confined for protected GitHub or Supabase effects. Raw GitHub/Supabase mutators are reachable in at least some current runtimes. Project instructions can forbid bypass normatively, but mechanical enforcement requires capability removal/isolation or provider credential partitioning.
+Conceptual boundary:
+`knowledge.resolve({domain, typed_key, purpose, caller_context_ref, as_of?})`
+returns a common control envelope plus opaque typed domain facts.
 
-Tool/plugin/permission/route changes invalidate prior confinement evidence if they add an equal/broader effect path.
+Common layer owns:
+- typed domain dispatch;
+- privacy boundary;
+- source completeness/consistency vocabulary;
+- bounded resolution status;
+- receipt envelope and canonicalization profile;
+- fail-closed cross-domain composition.
 
-## Correction custody
+Domain adapter owns:
+- canonical key identity;
+- valid graph/predecessor semantics;
+- authority/admission rules;
+- factual schema;
+- domain policy and currentness semantics.
 
-Preferred minimized correction custody remains append-only `vera_save_state_events`, with globally namespaced/scoped keys, direct sibling-fork detection and exact readback. `vera_current_save_state` is deterministic latest-by-key but not conflict-aware; `vera_context_events_v3` remains materially weaker as sole custody because service_role can mutate it.
+Concrete domains now differ materially:
+- ASSIGNMENT_CURRENTNESS: admitted coordination lineage + independent authority/artifact/effect axes.
+- CORRECTION_PRECEDENCE: scoped save-state key topology across relevant record kinds, direct fork/cross-scope detection, legacy semantic UNKNOWN when the closed correction contract is absent.
 
-Correction records remain WORKING_PROJECT scoped controls, not timeless SAFE/RISK facts or intimate transcripts.
+Free-form semantic search should never directly return governed facts. A future semantic layer may discover candidate typed keys, after which every candidate is resolved through its domain adapter. Candidate discovery itself is a privacy surface because counts/ranks/existence can leak hidden records; effect-critical cross-private-domain semantic discovery should remain out of scope until authenticated caller/governance mapping exists.
+
+## Effect/tool boundary
+
+Current project protected-effect confinement remains false while ordinary engineering runtimes can reach equal/broader raw GitHub/Supabase mutators. Project instructions provide a normative gate, not a mechanical credential boundary.
+
+Any future hard effect gate needs provider credential/capability confinement and must be re-attested when plugins, connectors, permissions, principals, routes, or equivalent indirect effect paths change.
 
 ## Authority/effect boundaries
 
-- Voss owns assignment intake/routing/reconciliation/closure while delegated.
-- Masa does not self-close MA11/MA12 merely because deliverables were sent.
+- Voss owns assignment routing/reconciliation/closure while delegated.
 - One writer per assigned work branch/stage.
-- No force push, merge, deployment, production DB mutation, credential action, paid infrastructure/service action, deletion, installation, model training, native Project mutation or canonical-memory write without Patrick's exact authority.
-- Patrick authorized safe continuity-save mechanisms; `continuity/masa` is the isolated save route.
+- No force push, merge, deployment, hosted production DB apply, credential/permission action, paid infrastructure/service action, deletion, installation, model training, native Project mutation, or canonical-memory write without Patrick's exact authority for that effect.
+- Patrick authorized safe continuity-save mechanisms; this file is the isolated Masa continuity route.
 - Basic Memory Cloud remains disconnected legacy and is never a fallback.
 
 ## Fresh-source cutoff
 
-Latest canonical coordination observed before this save: `3440`.
+Latest canonical coordination resolved before this checkpoint: `3544`.
 
-Material recent events:
-- 3431 MA9 CLOSED APPROVED.
-- 3432 MA10 CLOSED APPROVED.
-- 3433 MA11 CURRENT read-only.
-- 3434 MA12 CURRENT read-only.
-- 3437 H9 CLOSED; current authority assurance ceiling PROCEDURAL.
-- 3438 H10 CLOSED; current project GitHub/Supabase effect confinement false.
-- 3439 H11 CURRENT.
-- 3440 H12 CURRENT.
+Key recent events:
+- 3537 controlling PostgreSQL version factual correction.
+- 3538 MA11 COMPLETE.
+- 3539 MA12 COMPLETE.
+- 3542 Bob B15 amended/paused for PostgreSQL-version rebind; not a Masa assignment.
+- 3543 H25 current read-only PostgreSQL-version propagation audit.
+- 3544 H26 current read-only pre-zip native-package completion gate.
 
-No canonical MA11/MA12 review/closure was visible through 3440.
+No current governed Masa assignment exists at this cutoff.
 
 ## Recovery procedure
 
 1. Read this file from `continuity/masa` and verify exact branch/file readback.
-2. Fresh-read canonical coordination newer than `3440` and relevant Slack before treating MA11/MA12 or peer lanes as current.
+2. Fresh-read canonical coordination newer than `3544` plus relevant Slack before treating any assignment as current.
 3. Resolve every candidate lane against newer targeted/lineage events before start/resume/report/count.
 4. Fresh-compare `thebrazenbeard/masamune:masa` against `984cbdc781aa643443652f41f5a710f59e2d2439` before any work-branch effect.
 5. Keep continuity commits on `continuity/masa`; never move `masa` merely to checkpoint continuity.
