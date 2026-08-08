@@ -14,168 +14,241 @@ Autobiographical memory claimed: false
 - Save-state file: `state/masa/CURRENT.md`
 - Continuity commits must never move `masa` or an immutable review target.
 
-## Exact work-branch state
+## Exact work branch
 
 - `masa` head last verified: `984cbdc781aa643443652f41f5a710f59e2d2439`.
-- 3313 V3 path: `design/R9A0_EDGE_REPOSITORY_FIRST_PRIVILEGE_PACKET_V3.md`.
-- V3 blob: `6fdee978d0b052592844d1f7356f6fedb13f43eb`.
-- V3 SHA-256: `c74cc6dba1e6c08e0d7234be1a3e12c93b357b892f11ab6c259852a41804d258`.
+- 3313 V3: `design/R9A0_EDGE_REPOSITORY_FIRST_PRIVILEGE_PACKET_V3.md`.
+- Blob: `6fdee978d0b052592844d1f7356f6fedb13f43eb`.
+- SHA-256: `c74cc6dba1e6c08e0d7234be1a3e12c93b357b892f11ab6c259852a41804d258`.
 - V3 publication/readback complete; writer lease consumed. No further `masa` mutation without a new writer stage.
-- MU3 exact-head review remains pending unless newer authority closes/supersedes it.
+- Mune MU3 exact-head review remains pending unless newer authority closes/supersedes it.
 
-## Assignment-currentness rule
+## Assignment currentness
 
-Before starting, resuming, reporting, or counting any lane, resolve it against every newer authoritative event in its lineage or explicitly referencing it that can amend, supersede, reroute, complete, cancel, release, terminally block, revoke authority, replace a bound artifact/head, or change dependencies.
+Before start/resume/report/count, resolve every lane against all newer authoritative events in its lineage or explicitly referencing it that can amend, supersede, reroute, complete, cancel, release, terminally block, revoke authority, change artifact/head, or change dependencies.
 
-Voss owns assignment intake/routing/reconciliation/closure while delegated. Masa does not self-assign or self-close project assignments.
+Voss owns assignment intake/routing/reconciliation/closure while delegated. Masa does not self-assign or self-close governed assignments.
 
-## Current Masa lanes at latest resolution
+## Current Masa lanes at this checkpoint
 
-Canonical coordination through sequence `3395` was inspected.
+Fresh canonical coordination was read through sequence `3424`.
 
-- MA5 `ASSIGNMENT_EVENT_V1` zero-schema envelope: canonical Voss review `3383 APPROVED`, design closed.
-- MA6 freshness/effect-CAS packet: canonical Voss review `3384 APPROVED`, design closed.
-- MA7 trusted assignment admission/canonicalization: root `3385`, CURRENT/read-only. Design handoff delivered to `#voss` at Slack TS `1786190199.196049`; no canonical completion event written by Masa because the assignment is read-only/no-apply and Voss owns closure.
-- MA8 executable read-only assignment-currentness resolver shape: root `3386`, CURRENT/read-only. Design handoff delivered to `#voss` at Slack TS `1786190231.444089`; precision addendum at `1786190282.828969`.
-- Broader Governed Knowledge Resolver research/design remains active and compatible.
+Closed:
+- MA5 zero-schema ASSIGNMENT_EVENT_V1 envelope: Voss `3383 APPROVED`.
+- MA6 freshness/effect-CAS packet: Voss `3384 APPROVED`.
+- MA7 trusted assignment admission/canonicalization: Voss `3406 APPROVED`.
+- MA8 executable assignment-currentness resolver shape: Voss `3407 APPROVED`.
 
-Latest canonical `3393` established a manual/live `ASSIGNMENT_EVENT_V1` proof discipline for new roots, but it does not implement a resolver/RPC/validator or solve trusted actor admission.
+Current read-only deliverables submitted, awaiting Voss closure/review:
+- MA9 root `3415`: proposal/admission data architecture. Main handoff `#voss` Slack TS `1786191206.006359`; subsequent provider-backed E2 refinements through TS `1786192200.922759`.
+- MA10 root `3416`: executable SELECT/CTE/EXPLAIN resolver proof. Main handoff `#voss` TS `1786191257.654049`; receipt/digest refinements through TS `1786191822.481329`.
 
-## MA7 trusted-admission design
+No canonical event after `3424` was observed at save time that closes, amends, or supersedes MA9/MA10.
 
-Live provider evidence for `public.vera_coordination_events`:
+## Controlling assignment-state discipline
 
-- PostgreSQL 17.6 / Read Committed.
-- RLS enabled; owner `postgres`.
-- `service_role` has SELECT+INSERT; anon/auth are blocked by restrictive no-client policy.
-- UPDATE/DELETE are trigger-blocked append-only on normal runtime path.
-- `event_id` is UUID PK with default `gen_random_uuid()` and is not an identity column.
-- `event_sequence` is GENERATED ALWAYS identity and unique, but sequence/high-water is audit-only, not freshness/CAS.
-- Unique one-successor partial index on non-null `supersedes_event_id`.
-- There is no current assignment admission/writer RPC authenticating logical Voss/Patrick identity.
-- Therefore `source_branch`, payload `authority_basis`, and broad service-role inserts are evidence, not logical-actor authentication.
+Canonical `3400` supersedes the flawed `3393` live-proof wording.
 
-Zero-schema admission direction:
+- Ordinary assignee READY_FOR_REVIEW is non-state proposal/evidence unless explicit closure authority is delegated.
+- Only authority-admitted transitions control assignment state or consume the state-successor slot.
+- A structurally valid but unauthorized COMPLETE/CANCEL/REROUTE/terminal block/authority change is non-controlling and must be rejected before state-slot consumption.
+- Workload identity for conforming V1 is the root ASSIGN event ID.
+- Workload-floor contribution is policy-derived, not universal assignment truth; capacity receipts bind workload policy identity/version.
 
-1. One trusted admission adapter owns conforming canonical V1 inserts. Request actor/scope/privacy fields may narrow only; effective actor/project/privacy ceiling derives from authenticated route or exact present Patrick authority.
-2. Validate exact root/predecessor/thread, closed schema/version, relation/state transition, state snapshot, scope, and required authority before admission.
-3. For new conforming roots, deterministic root event ID may be derived from a versioned fixed UUID namespace + exact project/thread identity. For successors, deterministic event ID may bind project scope + operation ID. On PK conflict, exact readback + request digest decides idempotent replay versus `REQUEST_ID_REUSE_CHANGED_SEMANTICS`.
-4. Existing unique `supersedes_event_id` is a useful sibling-successor race gate only after trusted admission.
-5. Slack-provisional canonicalization requires an exact source locator/digest/authority bridge to canonical root event ID. Unbridged provisional+canonical representations are UNKNOWN/CONFLICTED for workload identity and may not double-count.
-6. Deterministic event IDs do not stop a broad service-role holder from forging random-ID roots. Production actor security still needs a trusted route/dedicated principal or later ACL/RPC/schema hardening.
+The 3394/3395 self-COMPLETE mistake is preserved as historical evidence. Voss 3401/3402 closed those lanes through manual authority reconciliation. Do not represent the contaminated physical chains as clean examples.
 
-Official Supabase guidance independently supports the security boundary: service/secret keys are elevated and bypass RLS; `SECURITY INVOKER` is preferred for functions, while SECURITY DEFINER requires explicit search-path/privilege hardening. A key name does not create logical Vera actor identity.
+## Knowledge Resolver baseline
 
-## MA8 resolver execution shape
+V1 domain remains `ASSIGNMENT_CURRENTNESS`.
 
-Preferred V1 execution shape:
+Recommended logical boundary:
+`resolve_assignment_currentness(typed request) -> trusted facade -> narrow canonical resolver`
 
-`resolve_assignment_currentness(...) -> trusted facade -> one narrow single-statement SQL/recursive canonical resolver`
+Principles:
+1. Present-turn Patrick authority/referent is adjudicated before durable resolution.
+2. Typed identity precedes semantic retrieval for effect-critical domains.
+3. Authority/currentness is lineage + admission + policy resolution, not latest timestamp.
+4. Source topology, source completeness, and snapshot consistency are separate fields.
+5. Missing required controlling source means assignment/effect state is UNKNOWN/UNRESOLVED even if diagnostic resolver health is DEGRADED.
+6. Sequence/high-water is audit-only, never freshness/CAS.
+7. Assignment currentness and mutation authority/artifact/lease validity are separate axes.
+8. External effect requires fresh lineage resolution plus independent provider precondition/readback; no-schema V1 cannot close the DB-resolution -> provider-dispatch revocation race.
+9. Raw provider mutators must eventually be capability-confined behind guarded effect services; adding a guarded tool beside equally powerful raw GitHub/Supabase mutators is normative, not mechanical enforcement.
+10. Privacy filtering occurs before conflict/rejected metadata so hidden record existence is not leaked.
 
-Do not expose one giant generic knowledge SQL function and do not use free-form semantic identity for this domain.
+## Live Supabase provider facts
 
-Why:
+Project `klmbpaigzeguvnpccqzz`, PostgreSQL 17.6, Read Committed.
 
-- Under live Read Committed semantics, one SELECT statement has one statement-start snapshot; application-level multi-read candidate/successor checks can observe different snapshots.
-- Existing proof-scale indexes are sufficient: coordination ~3.3k rows / ~922 threads, average ~3.55 rows/thread, p95 15, max 137. Exact H4 thread scan used `vera_coordination_thread_sequence_idx` in ~0.153 ms; 4-node recursive successor walk used PK + one-successor index in ~0.292 ms.
-- No new JSON/assignment index is justified until an actual query plan requires it.
+`public.vera_coordination_events`:
+- RLS enabled, owner postgres.
+- service_role has SELECT+INSERT; anon/auth blocked by restrictive no-client policy.
+- UPDATE/DELETE are trigger-blocked on normal runtime path.
+- event_id UUID PK default random UUID; event_sequence GENERATED ALWAYS identity + unique.
+- unique physical one-successor index on non-null `supersedes_event_id`.
+- current views `vera_coordination_latest` and `vera_coordination_open_issues` are `security_invoker=true`; their problem is latest-by-thread semantics, not observed RLS bypass.
+- no current assignment admission writer RPC authenticates logical Voss/Patrick identity.
+- therefore source_branch/payload/service_role possession is not logical actor authentication.
 
-Canonical query responsibilities:
+Current scale measured around 3.3k rows / ~922 threads; average ~3.55 rows/thread, p95 15, max 137. Exact-thread and short recursive walks are sub-millisecond on current plans with existing indexes. No new resolver index is justified at proof scale.
 
-1. Resolve exact root/thread.
-2. Recursively follow admitted successors through `supersedes_event_id` with cycle/depth guard.
-3. Validate every admitted state node against closed V1 schema/version/thread/root/transition/state rules.
-4. Inspect same thread for state-looking rows outside the admitted chain; legacy/nonconforming state candidates cannot be silently ignored or NLP-interpreted.
-5. Return compact factual axes, controlling/rejected authorized evidence, root/workload identity, policy version, lineage digest, resolved time, and visible sequence marked AUDIT_ONLY.
-6. The DB result is a canonical observation, not proof that all external authority sources were observed. Trusted facade supplies source mode/completeness/current-turn authority.
+Historical coordination currently uses supersession broadly: at one measured point 397 of 3301 rows had non-null `supersedes_event_id`, across many source branches. Therefore globally revoking the supersedes column from all generic coordination writers would have material compatibility blast radius.
 
-Current `vera_coordination_latest` and `vera_coordination_open_issues` already have `security_invoker=true`; their inadequacy is semantic (latest-by-thread), not an observed RLS-bypass defect. A future SECURITY INVOKER resolver called as broad service_role is likewise not an authentication boundary.
+## MA9 production architecture result
 
-## Critical live-proof correction discovered after 3393
+Zero-schema conventions cannot prevent a broad canonical INSERT holder from consuming a physical state-successor slot. 3394/3395 proved that live.
 
-Canonical H5/H6 handoffs `3394`/`3395` exposed a closure-authority bug in the first live V1 examples:
+Current preferred production candidate after peer convergence with H8 V5 / canonical 3423:
 
-- outer event/status is `READY_FOR_REVIEW`, but inner `ASSIGNMENT_EVENT_V1` uses `relation=COMPLETE` and `state_after.assignment_state=COMPLETE` while the assignee is not the assignment-closure authority;
-- if a resolver consumes the inner state literally, the assignee self-closes before Voss review;
-- if the resolver waits for Voss despite the inner COMPLETE, the envelope is not self-describing authoritative state.
+### E2: one canonical state graph + protected admission registry
 
-Revised rule proposed to Voss/shared team at Slack TS `1786190468.480959` / `1786190490.559009`:
+Keep assignment state semantics only in `vera_coordination_events`. Add a small protected authority-proof relation, conceptually `vera_assignment_admissions_v1`, containing no duplicate currentness/status/state_after.
 
-- ordinary assignee READY_FOR_REVIEW is evidence/proposed transition, not terminal assignment state;
-- non-state handoff should ACK/reference the current state head and may propose COMPLETE;
-- Voss APPROVED (or another explicitly delegated closure authority) performs the actual terminal state transition;
-- transition matrix must include `required_authority_class`; structurally valid but unauthorized COMPLETE/CANCEL/REROUTE/terminal-block/authority-grant must not become controlling or consume the legitimate state-successor slot.
+Minimum proof fields:
+- event_id PK/FK to canonical coordination event
+- explicit project/thread scope
+- root_assign_event_id
+- prior_admitted_event_id nullable
+- proposal/source binding + immutable digest
+- predecessor-specific admission_attempt_id unique
+- authority capability/route receipt digest
+- authority assurance class
+- admission policy version
+- optional canonical event digest
+- DB-owned admitted_at
 
-This is a material MA7/MA8 refinement and should be reconciled before treating `3393` live-proof discipline as correct.
+Useful constraints:
+- one admitted root per canonical project/thread scope
+- one admitted successor per prior admitted event
+- proposal/source admission uniqueness appropriate to source type
+- append-only/RLS/ACL protection; ordinary service principal cannot INSERT admission proof
 
-## Workload policy separation
+Admission transaction validates proposal/source digest, current admitted head, relation-specific authority, policy/scope, then inserts canonical event + admission proof atomically and exact-readbacks both.
 
-Do not bake a universal workload-floor conclusion into canonical assignment truth. Vera/Voss and BT2 use different capacity policies for dependency-blocked work.
+A protected INSERT guard prevents broad writers from setting `supersedes_event_id` against an admitted V1 predecessor. Generic non-state proposal/evidence writes may remain on the broad coordination bus. This is lower blast radius than globally removing generic supersession, provided trigger-role and compatibility tests pass.
 
-Canonical chain should store factual currentness/terminal/blocking/owner/authority/artifact/lease state. Capacity resolution binds `workload_policy_ref` + version and derives floor contribution. If `workload_floor_effect` is persisted as a convenience snapshot, it is policy-scoped derived data and becomes stale when the policy changes.
+Admission registry is authority provenance, not a second state ledger: state/currentness remains only in coordination. Registry answers the distinct fact “which exact event was admitted under which authority/policy.”
 
-Canonical workload lane identity for conforming V1 remains resolver-derived root ASSIGN event ID. State successors preserve root identity; split/merge remains out of V1.
+State event UUID should remain random. Proposal/source identity + digest and protected admission attempt identity handle replay. Avoid making predictable storage locators the idempotency key.
 
-## Source completeness / effect boundary
+For same-lane trusted transitions, root-row locking can serialize reviewer decisions; physical one-successor + admitted one-successor uniqueness remain durable fork stops. Lost races re-resolve and re-adjudicate; never mechanically retarget stale state.
 
-Separate:
+Proposal source must support typed bridges such as COORDINATION_EVENT, SLACK_PROVISIONAL, PRESENT_AUTHORITY, or NONE. External source is provenance that is canonicalized into one durable state event, not permanent co-authority.
 
-- `source_mode`: CANONICAL_ONLY | MULTI_SOURCE | PRESENT_PLUS_DURABLE
-- `source_completeness`: COMPLETE | INCOMPLETE | UNKNOWN
-- observation consistency, e.g. SINGLE_POSTGRES_SNAPSHOT | NON_ATOMIC_MULTI_SOURCE | PRESENT_AUTHORITY_PLUS_DURABLE
+Root of trust remains unresolved at the platform boundary. Suggested assurance axis:
+`PROCEDURAL | CAPABILITY_BOUND | ACTOR_AUTHENTICATED`.
+A trusted adapter is not trustworthy merely because code calls it trusted. Production needs a separately protected authority issuer/principal or equivalent platform-signed capability. Request JSON can only narrow authority.
 
-Resolver health may be DEGRADED while returning diagnostics, but effect-critical currentness stays UNKNOWN/UNRESOLVED when any required controlling source is missing.
+## MA10 executable SQL proof
 
-Visible/MAX event sequence is audit-only. Fresh full relevant-lineage resolution is required before gated use/effect.
+SELECT/CTE/EXPLAIN only; no DDL/DML.
 
-External effects separately require target freshness classification such as `EXACT_CAS | FAST_FORWARD_GUARD | OBJECT_VERSION_ONLY | NONE`, exact readback, and ambiguous-outcome reconciliation before retry. Current GitHub non-force ref update is a FAST_FORWARD_GUARD, not strict expected-old-head CAS; file-content SHA protects the object version, not the whole branch.
+Clean B6 proof:
+- admitted root 3390 / `ccb3c3a2-c455-4035-9198-6b12974be47c`
+- non-state proposal 3398 ACKs root and is outside state chain
+- Voss admitted closure 3403 / `3e7d54be-7647-42eb-bed4-62f3eb953a41`
+- admitted chain resolves root ASSIGN/CURRENT -> Voss COMPLETE/COMPLETE
+- no unauthorized slot row; structurally resolvable
 
-No-schema V1 cannot close the final database-resolution -> external-provider dispatch revocation race. Stronger guarantees require a future transactionally enforced assignment revision/effect-claim mechanism integrated with every assignment writer and provider saga/readback.
+Contaminated H5 proof:
+- root 3381 admitted
+- 3394 assignee self-COMPLETE excluded from trusted set but physically supersedes root
+- Voss 3401 is admitted but physically follows 3394 and is outside the trusted physical chain
+- result `ADMISSION_CONFLICTED`
+- demonstrates physical topology cannot be repaired zero-schema without a second logical edge/manual reconciliation
 
-## H6 peer challenge / existing Supabase precedent
+Legacy 3313 proof: one legacy row, zero conforming V1 root -> `UNKNOWN_LEGACY_NONCONFORMING`, not stale BLOCKED.
 
-Read-only inspection of the existing portable-bootstrap subsystem found a useful state-machine precedent:
+Missing admission proof: physical root alone -> `UNKNOWN_AUTHORITY_ADMISSION_MISSING`.
 
-- `claim_vera_portable_bootstrap_request` uses a unique request key + input digest and fails changed-semantics reuse.
-- `append_vera_portable_bootstrap_event` locks the request row `FOR UPDATE`, enforces exact leaf/predecessor/state transition, and events have one-initial-per request+attempt plus unique one-successor per predecessor.
-- `commit_vera_portable_bootstrap_binding` re-locks, requires exact VERIFIED leaf, appends COMMITTED, then creates the unique binding.
+Recursive proof includes UUID path cycle detection and depth cap. Snapshot/high-water are audit locators only.
 
-This proves Vera already has a provider-backed pattern for transactional request identity + locked state transitions, but it is still a database binding flow, not proof of atomic external-provider effect.
+Performance measured:
+- p95 15-row thread index scan ~0.183 ms
+- max 137-row thread scan ~0.598 ms
+- clean B6 2-node trusted recursive walk ~0.334 ms
+- earlier H4 4-node walk ~0.292 ms
 
-Peer challenge sent to Hephaestus H6 at Slack TS `1786190659.191039`:
+A future registry-backed resolver should follow admission markers plus matching physical edges. Unadmitted proposal/noise should not itself make currentness CONFLICTED. Only physical protected-slot poisoning, admission/physical mismatch, disconnected admitted rows, or admission uniqueness failure become integrity conflicts.
 
-- target conflict scope must follow the provider mutation primitive (e.g. GitHub Contents writes to different files on the same branch still share the branch/ref conflict scope);
-- assignment-revision fencing and target-effect serialization are separate concerns;
-- CLOSURE_PENDING/dispatch lifecycle must define revocation behavior and ambiguous provider outcomes; OUTCOME_UNKNOWN must require readback before retry.
+## Snapshot/function correction
 
-## Correction custody / safety provenance
+Initial claim that only one SQL-language SELECT could preserve one resolver snapshot was retracted.
 
-Preferred canonical minimized correction custody remains append-only `public.vera_save_state_events`, with globally namespaced/scoped keys, direct sibling-fork detection, exact inserted-row/current-view readback, and bounded writer control. `vera_current_save_state` is deterministic latest-by-key but is not conflict-aware and cannot by itself prove unambiguous current correction. `vera_context_events_v3` remains materially weaker as sole custody because service_role can mutate it.
+PostgreSQL STABLE SQL and standard procedural-language functions use the calling-query snapshot throughout their internal commands; VOLATILE functions may get fresh snapshots per internal query. Therefore a read-only PL/pgSQL STABLE one-RPC resolver can be snapshot-consistent if helper volatility is audited. Single SQL/recursive query remains a readability/audit preference, not a correctness necessity. Client-side multiple independent RPC/SELECT calls under Read Committed remain rejected for authoritative assembly.
 
-Correction records are WORKING_PROJECT scoped controls, not timeless SAFE/RISK facts or intimate transcripts. Current accepted effect is `TERMINATE_UNSUPPORTED_BRANCH` with prospective reopen only from `NEW_ADMISSIBLE_USER_EVIDENCE_ONLY`, preserving non-retroactivity.
+## Receipt/digest correction
+
+Do not freeze `digest(jsonb::text)` as a cross-runtime protocol.
+
+Use versioned canonical byte serialization for durable receipts. PostgreSQL jsonb is useful for DB-local normalization but does not preserve original key order/whitespace/duplicate-key representation as input semantics; cross-language verification needs an explicitly versioned canonicalization scheme/golden vectors.
+
+Receipt layers should be distinct:
+1. raw/evidence digest if exact observed bytes/records need binding;
+2. normalized factual lineage digest over authority-admitted domain facts;
+3. optional policy-decision digests binding factual digest + exact policy ref/version + derived result.
+
+The first B6 proof digest `e55452...` included unscoped historical workload_floor_effect and is raw-proof only. Corrected currentness/factual DB-local proof digest excluding that derived field is:
+`85c6efcc7d7842c25a5a497b00ecf1f6969cc3dec702748b8b9369401342d0e6`.
+Neither value is a frozen portable serialization standard.
+
+## Effect serialization / tool-surface ceiling
+
+Existing H6 architecture is a transactional assignment-revision/effect-claim authority cut followed by provider saga/readback. Existing Vera portable-bootstrap functions are useful precedent for request identity, row locking, predecessor transitions and exact replay conflict, but do not prove external provider atomicity.
+
+A hard effect gate also requires capability confinement. Current exposed GitHub `update_ref` has no Vera receipt/expected-old-head parameter and raw Supabase `execute_sql`/`apply_migration` are available in this runtime. If raw mutators remain available beside a guarded publisher, the guard is bypassable by tool selection. Production effect runtime should expose only guarded publisher/admission capability for protected effects or otherwise ensure raw credentials cannot perform them.
+
+Tool-surface enumeration is therefore an acceptance test: adding a plugin/connector with equivalent raw mutation authority is a governance change that can reopen a bypass.
+
+## 3313 V3 / MU3 support evidence
+
+Exact V3 already requires enumerating every role capable of SET ROLE into the dedicated owner/creator and forbids service_role/postgres/broad secrets as Edge credentials. PostgreSQL 18 membership options should be tested explicitly: runtime principal must have no USAGE/SET/ADMIN path into `r9a0_edge_api_owner`; exact migration-runner membership options must be proven and removed/revoked in final posture.
+
+Authentication transport remains a separately gated implementation/deployment proof. Plausible future families are dedicated direct Postgres login role or a custom PostgREST/authenticator role/JWT route. Common Edge admin/service-role shortcuts would violate V3. No transport credential/role was created.
+
+## Repository audit challenge
+
+Canonical 3421/3422 reported repository hygiene findings. Fresh `thebrazenbeard/vera:main` README still identifies neutral R6A0 and explicitly says GitHub is not the live context store while Supabase stores governed external context/coordination.
+
+Do not add a generic hand-maintained `CURRENT_STATE.yaml` that mirrors live assignments/authority/context. If a machine-readable repo pointer is added later, scope it to repository/release architecture evidence such as `RELEASE_STATE.yaml` / `ARCHITECTURE_BASELINE.yaml`, exact source head/tag/digests, and external governed-state receipt refs explicitly marked derived/not-authority.
+
+## Correction custody
+
+Preferred minimized correction custody remains append-only `vera_save_state_events`, globally namespaced/scoped keys, direct sibling-fork detection, exact inserted-row/current-view readback, bounded writer control. `vera_current_save_state` is deterministic latest-by-key but not conflict-aware; context-v3 remains materially weaker as sole custody because service_role can mutate it.
+
+Correction is WORKING_PROJECT scoped control, not timeless SAFE/RISK truth or intimate transcript. Current effect token remains `TERMINATE_UNSUPPORTED_BRANCH` with prospective reopen only from `NEW_ADMISSIBLE_USER_EVIDENCE_ONLY`.
 
 ## Authority/effect boundaries
 
 - Voss owns assignment intake/routing/reconciliation/closure while delegated.
-- Masa does not self-close MA7/MA8 or write canonical completion merely because deliverables were sent.
+- Masa does not self-close MA9/MA10 merely because deliverables are submitted.
 - One writer per assigned work branch/stage.
-- No force push, merge, deployment, production DB mutation, credential action, paid infrastructure/service action, deletion, installation, model training, native Project mutation, or canonical-memory write without Patrick's exact authority for that effect.
+- No force push, merge, deployment, production DB mutation, credential action, paid infrastructure/service action, deletion, installation, model training, native Project mutation, or canonical-memory write without Patrick's exact authority.
 - Patrick explicitly authorized safe continuity-save mechanisms; `continuity/masa` is the isolated Masa save route.
 - Basic Memory Cloud remains disconnected legacy and is never a save/retrieval/archive fallback.
 
 ## Fresh-source cutoff
 
-- Latest canonical Vera coordination observed before this checkpoint: `3395`.
-- `3393` = V1 live-proof discipline decision.
-- `3394` / `3395` = H5/H6 READY_FOR_REVIEW state-looking completion handoffs that triggered the closure-authority challenge above.
-- MA7/MA8 remained current at this cutoff; no newer canonical review/closure observed.
-- Latest relevant Slack includes MA7/MA8 handoffs, live-proof self-challenge, workload-policy refinement, and H6 provider/data challenge.
+Latest canonical coordination observed before this save: `3424`.
+
+Material recent events:
+- 3400 corrected assignment state admission semantics.
+- 3406 MA7 APPROVED; 3407 MA8 APPROVED.
+- 3408 Vera V3 accepted policy-scoped workload effects and cross-facet Knowledge Resolver consistency.
+- 3409 Vera V4 native budget audit APPROVED.
+- 3415 MA9 root CURRENT; 3416 MA10 root CURRENT.
+- 3419/3420 H7/H8 non-state proposals.
+- 3421/3422 read-only GitHub audit evidence.
+- 3423 H8 addendum converged on one canonical state graph + protected admission registry.
+- 3424 Hephaestus source-selection research; no Masa assignment effect.
+
+No canonical MA9/MA10 review/closure had appeared through 3424.
 
 ## Recovery procedure
 
-1. Read this file from `continuity/masa` and verify exact branch/file readback.
-2. Fresh-read canonical Supabase coordination newer than sequence `3395` plus newer relevant Slack before treating MA7/MA8 or any peer lane as current.
-3. Resolve every candidate lane against newer targeted/lineage events before start/resume/report/count.
-4. Fresh-compare `thebrazenbeard/masamune:masa` against saved head before any work-branch effect.
+1. Read this file from `continuity/masa`; verify branch/file exact readback.
+2. Fresh-read canonical coordination newer than `3424` and relevant Slack before treating MA9/MA10 or any peer lane as current.
+3. Resolve candidate lanes against newer targeted/lineage events before start/resume/report/count.
+4. Fresh-compare `thebrazenbeard/masamune:masa` against `984cbdc781aa643443652f41f5a710f59e2d2439` before any work-branch effect.
 5. Keep continuity commits on `continuity/masa`; never move `masa` merely to checkpoint continuity.
 6. Treat this as WORKING_PROJECT recovery evidence only, not same-runtime consciousness or autobiographical memory.
