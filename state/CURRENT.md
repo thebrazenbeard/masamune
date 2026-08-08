@@ -1,51 +1,58 @@
 # Mune Current Continuation Pointer
 
 **Memory class:** `WORKING_PROJECT`  
-**Checkpoint time:** `2026-08-08T10:16:00-04:00`  
+**Checkpoint time:** `2026-08-08T10:54:00-04:00`  
 **Orientation at save:** `COMPLETE_FROM_FRESH_SNAPSHOT`  
-**Current checkpoint:** `state/checkpoints/2026-08-08T1016-0400.md`  
-**Checkpoint commit:** `31c6fe98088e0f3c9e8cb6f949dd1ce330b2362a`  
-**Canonical Vera coordination observed through:** `3534`
+**Current checkpoint:** `state/checkpoints/2026-08-08T1054-0400.md`  
+**Checkpoint commit:** `53fbbe6c2d78b32286d96dfed7713dff377db664`  
+**Canonical Vera coordination observed through:** `3550`
 
 ## Recovery order
 
 1. Read this pointer.
 2. Read the exact checkpoint above at its immutable checkpoint commit.
-3. Before executing, reporting, resuming, or counting work, resolve all newer Vera coordination events than sequence `3534` and consume newer relevant Slack coordination.
+3. Before executing, reporting, resuming, or counting work, resolve all newer Vera coordination events than sequence `3550` and consume newer relevant Slack coordination.
 4. Fresh-read every bound GitHub review target and mutable branch head before repository action.
 5. Newer authorized evidence supersedes this checkpoint where it conflicts.
 
-## Current Mune governed lanes at save
+## Current Mune governed lanes
 
-- `MU6` / root `3464`: correction-precedence resolver proof. Deliverable complete, but canonical READY_FOR_REVIEW custody under prospective policy 3481 is still missing because R8A3 requires explicit exact-target Patrick authority for a production Supabase INSERT. Artifact `reviews/correction-precedence-resolver-proof-mu6-v1.md` @ `2019b3f1714dca9e12534f17f0a0590e0a5fb278`; key-scope addendum `reviews/correction-precedence-resolver-proof-mu6-key-scope-addendum-v1.md` @ `329c91600e86a02b89d08965d4f369f453fdb7bb`. Do not self-close.
-- `MU7` / root `3465`: Edge transport/capability audit. Deliverable complete with the same canonical-handoff authority blocker. Artifact `reviews/edge-transport-capability-audit-mu7-v1.md` @ `d2d5af0228a7567f7de38834c6e68069f938b6f1`; PG17 parity addendum `reviews/edge-transport-capability-audit-mu7-pg17-parity-addendum-v1.md` @ `bf5044da072abd8d426c7c2750f6877b121b4ea7`. Do not self-close.
+- `MU6` / root 3464, current amendment 3547: substantive correction-precedence resolver proof complete; no new design defect found. Canonical 3481 READY_FOR_REVIEW proposal remains outstanding. Primary artifact `2019b3f1714dca9e12534f17f0a0590e0a5fb278`; key-scope addendum `329c91600e86a02b89d08965d4f369f453fdb7bb`.
+- `MU7` / root 3465, current amendment 3548: substantive Edge transport/capability audit complete; no new intrinsic V3 design defect found. Canonical 3481 READY_FOR_REVIEW proposal remains outstanding. Primary artifact `d2d5af0228a7567f7de38834c6e68069f938b6f1`; PG17 addendum `bf5044da072abd8d426c7c2750f6877b121b4ea7`. Live PostgreSQL truth is `17.6 / 170006`.
 
-Voss was notified of the exact production-DB authority blocker at Slack TS `1786198540.009199`.
+No production Supabase handoff row was inserted because the current Patrick instruction is broad continuation rather than exact-target production-DB mutation authority under R8A3. Do not self-close either lane.
 
-## Recent independent research
+## Latest independent research
 
-- H23/H24 observer/fixture challenge: `research/h23-h24-zero-paid-observer-fixture-adversarial-v1.md` @ `9d6d9b69521218b8be2b87d28d40ad4d25517904`.
-- Main refinement: temporal coverage does not imply event/effect-class coverage; restored evidence bytes do not fill an observer outage; false-positive alert resolution does not itself restore effect eligibility; actor attribution is not authorization; cadence is risk/retention bounded.
-- H23/H24 were closed at 3531/3532, but canonical amendments 3525/3527 committed before those closures and were not named by the closure receipts. Reconciliation race reported to Voss at Slack TS `1786198563.710349`; do not reopen without Voss action.
+`research/ma13-ma14-pg17-owner-ack-semantics-adversarial-v1.md` @ `bfbacf075ff294a2f412d854e8be4398d76e4c6f`.
 
-## Current project snapshot through 3534
+Key findings:
 
-- 3518: Patrick directly authorized ordinary non-destructive repository implementation in `thebrazenbeard/vera-R9A0`; merge/deploy/hosted DB/credential/paid/deletion/install/training/canonical-memory effects remain excluded.
-- 3528: B12 Contract/schema/validator closed and admitted for repo implementation.
-- 3529: B13 deterministic regression bundle closed and admitted for repo implementation.
-- 3530: B14 Settings-only implementation closed at `ddcd98b4e61df09f06886f2073ecbdfad21c8f12`.
-- 3533: Bob holds sole B15 writer lease on `feature/r9a0-combined-native-implementation-v1` from exact head `ddcd98b4...`; Mune must not patch that branch.
-- 3534: Masa reference-only correction preserves direct PostgreSQL server evidence `17.6 / 170006`.
+- Exact PR2 migration `58a6ae4...` is expected target-incompatible under the observed managed PG17 posture unless corrected: fresh `r9a0_owner` lacks both the required SET-role path from non-super CREATEROLE `postgres` and the database CREATE privilege required for the first schema ownership transfer.
+- Plain Docker postgres:17 superuser CI is insufficient; provider-faithful CI must emulate the managed non-super runner, role graph, database ACL, membership options and engine/version receipt.
+- Current PR2 generic ACK-as-state chain is not compatible with current coordination semantics. Live evidence includes many-to-one ACK (up to 18 observed children), 471 cross-thread ACK refs and 68 retained cross-thread supersedes refs.
+- Preferred prospective semantics: ACK is non-state provenance/reference; state is typed/domain-admitted; generic latest activity is explicitly non-authoritative; legacy cross-thread relations require adapters.
 
-Current project GitHub/Supabase protected-effect confinement remains false; no production provider-effect enable is qualified.
+## Canonical project snapshot through 3550
 
-## Key current architecture
+- 3537: PostgreSQL server truth corrected to `17.6 / 170006`.
+- 3538: MA11 E2 preflight closed.
+- 3539: MA12 canonicalization contract closed.
+- 3540/3541: H23/H24 closure race reconciled with closure addenda.
+- 3542: Bob B15 paused for PG17 version rebind while preserving B11 Settings.
+- 3543/H25 and 3544/H26: Hephaestus current read-only lanes.
+- 3545/MA13 and 3546/MA14: Masa current read-only lanes.
+- 3547/MU6 and 3548/MU7: Mune lanes remain CURRENT/read-only.
+- 3549/V5 and 3550/V6: Vera external-audit lanes remain CURRENT/read-only.
 
-- Correction resolution walks complete authorized scoped-key lineage across relevant record kinds before interpreting the leaf; `lifecycle_status=CURRENT` and `vera_current_save_state` are not governed currentness proofs.
-- Recommended correction key identity remains adapter-owned `SCOPED_CORRECTION_KEY_V1`; never caller-selected or inferred from string shape.
-- R9A0 database CI currently uses PostgreSQL 15; live Supabase database semantics are PostgreSQL 17.6/170006. Hosted PG17 parity remains unproven.
-- V3 narrow DB-principal transport is feasible; current managed Edge ambient broader DB/admin capability is not H12-confined.
-- Proposal evidence is non-state under 3481 and cannot consume assignment-state successor slots.
-- Basic Memory Cloud remains disconnected legacy and is never an active memory/archive/coordination route.
+## Communications and effect posture
+
+Two unreviewed Slack messages were created as drafts only, one to #masa and one to #voss. They are not sent and are not evidence of recipient consumption.
+
+Bob owns the current combined implementation writer lease. Mune must not patch that branch. Current project GitHub/Supabase protected-effect confinement remains false; no effect-enabled release is qualified.
+
+No merge, deploy, hosted DB apply, credential/permission change, paid service, deletion, installation, model training, canonical-memory write, or production provider mutation occurred.
+
+Basic Memory Cloud remains disconnected legacy and is never an active memory/archive/coordination route.
 
 This pointer is a technical continuation aid, not autobiographical memory and not authority over newer project state.
