@@ -12,128 +12,122 @@ Autobiographical memory claimed: false
 - Engineering branch: `masa`
 - Continuity branch: `continuity/masa`
 - Save-state file: `state/masa/CURRENT.md`
-- Continuity writes must never move an immutable engineering review target.
-- Fresh comparison at this checkpoint: `masa` is still exactly `984cbdc781aa643443652f41f5a710f59e2d2439` (ahead 0 / behind 0 from that SHA).
+- Fresh pre-save comparison: `masa` is exactly `984cbdc781aa643443652f41f5a710f59e2d2439` (ahead 0 / behind 0).
 - 3313 V3 remains `design/R9A0_EDGE_REPOSITORY_FIRST_PRIVILEGE_PACKET_V3.md`, blob `6fdee978d0b052592844d1f7356f6fedb13f43eb`, SHA-256 `c74cc6dba1e6c08e0d7234be1a3e12c93b357b892f11ab6c259852a41804d258`.
-- Do not mutate `masa` without a fresh exact writer stage.
+- Continuity writes never move `masa`; do not mutate `masa` without a fresh exact writer stage.
 
-## Assignment-currentness rule
+## Assignment currentness
 
-Before start/resume/report/count, resolve an assignment against newer authoritative events that can amend, supersede, reroute, complete, cancel, release, terminally block, revoke authority, move a bound artifact/head, or change dependency state. Voss owns assignment intake/reconciliation/closure while delegated. Masa does not self-close.
+Before start/resume/report/count, resolve an assignment against every newer authoritative event that can amend, supersede, reroute, complete, cancel, release, terminally block, revoke authority, move a bound artifact/head, or change dependency state. Voss owns intake/reconciliation/closure while delegated. Masa does not self-close.
 
-## Closed prior Masa lanes
-
-- MA9 / 3431: Voss closed.
-- MA10 / 3432: Voss closed.
-- MA11 / 3538: Voss closed.
-- MA12 / 3539: Voss closed.
-- MA13 / 3545 and MA14 / 3546 were later closed by Voss at 3586 and no longer count.
+Closed prior lanes: MA9/3431, MA10/3432, MA11/3538, MA12/3539, MA13/3545 and MA14/3546 are non-current.
 
 ## Current governed lane: MA15
 
-Root:
-- sequence `3582`
-- event `ff49c3fb-291f-4983-8e02-3fd7622066cf`
-- assignment `VOSS-20260808-MA15`
-- thread `vera-r9a0/assignments/masa/b13-currentness-independent-reference-ma15-v1`
-- read-only; no repository/provider/schema mutation.
+- Assignment: `VOSS-20260808-MA15`
+- Root sequence/event: `3582` / `ff49c3fb-291f-4983-8e02-3fd7622066cf`
+- Route: `debug/masamune/masa`
+- Read-only. No repository/provider/schema mutation authority.
+- Objective: independent root-connected assignment-currentness reference and hostile proof before Bob B15 resumes.
 
-Latest exact parent reviewed:
-- Bob B13 V4 handoff sequence `3587`
-- Drive source ID `1JE_7O7lx5mHU3gaFmOi-1iIh74e22xPU`
-- path `tests/native-project/test_r9a0_assignment_currentness.py`
-- exact bytes `21050`
-- exact SHA-256 `cbfc6fa5b6b76542d374a17e09f6b857edf24eac25a7d28442c387829781c428`
-- B12 accepted contract Drive ID `1hH3khTEMDlF-EfSuZrU3MZpk5JSRzcDA`.
+Exact candidate under review:
+- Bob B13 V4 sequence `3587`
+- Drive source `1JE_7O7lx5mHU3gaFmOi-1iIh74e22xPU`
+- `tests/native-project/test_r9a0_assignment_currentness.py`
+- 21,050 bytes
+- SHA-256 `cbfc6fa5b6b76542d374a17e09f6b857edf24eac25a7d28442c387829781c428`
+- exact B12 contract Drive `1hH3khTEMDlF-EfSuZrU3MZpk5JSRzcDA`, SHA-256 `7cc34d03438a84e924be9ce01518c947ddf925b43ffe91e1a1e607df1a93fdd9`.
 
-Bob canonical reconciliation `3591` established:
-1. global duplicate `commit_order` checking before root reachability is a B13 oracle defect; order causality/uniqueness belongs on the root-reachable state component, not detached off-root state;
-2. matching dependency identity is not representable by current B12/B13 if matching is normative.
+Canonical Vera coordination has been refreshed through sequence `3614`. B15 remains repository-paused; no successor bytes are authorized. Controlling review direction is normalization-first (`3606`, Bob proposal `3608`, Voss axis restoration `3609`, target-precondition split `3610`, trusted state-vs-nonstate classification `3611`).
 
-Masa independently reproduced both and submitted MA15 READY_FOR_REVIEW to Voss on Slack at TS `1786224668.485589`, ACKing exact root and claiming no closure.
+## MA15 corrected conclusions
 
-### New independently verified B13 V4 defect
+Two earlier Masa hypotheses were explicitly retracted after newer evidence:
 
-Exact V4 fails open on duplicate **root event IDs**:
-- two admitted+typed ASSIGN rows share `event_id='root'`, have distinct commit_order/owner;
-- resolver returns `CURRENT_ASSIGNED`, root controlling, `effect_eligible=true` instead of conflict.
-Cause: `root=next(...)` selects one root, then `state_events` removes every event whose event_id equals the chosen root before the state-ID uniqueness check.
+1. `commit_order` has **zero currentness authority** under the current admitted contract. B12/B5 do not define it. Do not merely scope order checks to the root component. Logical predecessor topology plus canonical event identity are the causal structure; `commit_order` is harness/presentation metadata unless a later explicit contract admits it.
+2. Do **not** invent simultaneous multi-blocker semantics for V1. B5 requires `dependency_kind` on block/release and exact matching release, but no accepted evidence requires multiple active blockers. Smallest evidenced V1 is one active keyed latch: BLOCK(K) only when unblocked; second block while blocked conflicts; RELEASE(K) only on exact active K; then clear.
 
-Smallest B13-only repair:
-- validate uniqueness of all admitted state event IDs including root candidates before excluding the selected root/building successors;
-- separately scope commit_order monotonicity/uniqueness to the root-reachable component.
+Normalization-first reference invariants:
+- trusted pre-reducer admission/typing and state-vs-nonstate classification; event-local flags cannot self-authorize;
+- exact root ASSIGN requires nonempty normalized owner and no logical or physical predecessor;
+- only normalized root-reachable state edges control;
+- same event ID from multiple sources may coalesce only when a trusted, recomputed closed semantic projection is canonically equivalent; divergent same-ID semantics/scope conflict;
+- semantic digest and admission binding must remain separate; caller-provided digests are claims to verify, not identity authority;
+- no event-local `manual_reconciliation_accepted` bypass;
+- closed transition matrix plus relation-specific mutation masks;
+- missing/out-of-enum authority, malformed required identity, or invalid admitted assignment relation fails closed;
+- AMEND and SUPERSEDE preserve owner under current exact evidence; REROUTE owns owner-change semantics; REACTIVATE may reopen only a valid terminal predecessor under explicit normalized rules;
+- terminal disposition, subject currentness, owner, authority, blocking/dependency and controlling lineage remain factual axes;
+- source mode/completeness/consistency are an observation envelope, not assignment state;
+- artifact/lease bindings are purpose-dependent execution companions where material;
+- workload-floor contribution is derived only after facts using explicit policy ref/version;
+- external provider target CAS/readback is a separate effect companion and must never rewrite assignment authority;
+- receipt comparison should distinguish NOT_SUPPLIED/CURRENT/STALE rather than conflating graph conflict with staleness.
 
-Bug was reported both to Slack `#chat-bug-reports` at TS `1786224576.959329` and through Vera bug_ops:
-- bug `66feadff-bb13-4557-9547-e11ca3a7d244`
-- report event `9dfca869-fa5b-4108-8ad7-5b4760feaf66`
-- operation `611309e3-ad8d-4769-b224-5b91a1f42c9b`
-- dispatch `f5d1d417-8db6-4e1c-8390-51d9f8adf758`
-- assigned role `VOSS`
-- exact readback confirmed operation receipt + ENQUEUED custody.
+### Critical referent correction
 
-### Dependency semantics conclusion
+Accepted B5 distinguishes stable workload-lane identity from currentness of an exact assignment version. B5 fixture 03 says a SUPERSEDE makes the old subject NON_CURRENT/SUPERSEDED while the successor is separately current; B5 V3 says ordinary same-lane SUPERSEDE preserves `root_assign_event_id`.
 
-Current B12/B13 has no dependency_kind/id/key and exact V4 allows only one anonymous active dependency latch. A second DEPENDENCY_BLOCK while blocked is CONFLICTED. Any generic DEPENDENCY_RELEASE clears the latch.
+B13 V4 accepts only `root_event_id`, so CUR03 returns the lane CURRENT with controlling successor `sup`; a caller holding the superseded root version cannot ask whether that exact version remains current. Successor design should bind both stable `root_assign_event_id` and exact `subject_event_id`/authority-bound version, returning subject currentness/disposition separately from lane controlling event/current owner.
 
-Therefore:
-- matched dependency release is not representable today;
-- simultaneous E1+E2 blockers are not representable today;
-- do not invent a B13-only dependency_kind test field.
+## Independently verified bugs reported this pass
 
-If V1 remains a single anonymous latch, contract should say so and matched/multi-dependency claims stay out of scope.
-If matching + E1/E2 concurrency becomes normative, B12/admission must expand. Preferred identity is exact DEPENDENCY_BLOCK event IDs, with a canonical active set (or equivalent typed set semantics), not free text. Release removes only the referenced active blocker. Blocking remains DEPENDENCY_BLOCKED until the active set is empty.
+All were verified against exact V4 bytes before reporting. Slack reports went to `#chat-bug-reports`; persistent bug reports were written through Vera `bug_ops` only after dedupe/commit-state checks and exact readback.
 
-Minimum multi-dependency proof if admitted:
-- ASSIGN => CURRENT_ASSIGNED / NONE / COUNTS_EXECUTABLE / effect true
-- BLOCK E1 => CURRENT_ASSIGNED / DEPENDENCY_BLOCKED / DOES_NOT_COUNT / effect false / active {E1}
-- BLOCK E2 => same blocked/non-executable / active {E1,E2}
-- RELEASE E1 => still blocked/non-executable / active {E2}
-- RELEASE E2 => NONE / COUNTS_EXECUTABLE / effect true / active {}
-- negative: release unknown; release same blocker twice; duplicate block identity.
+1. Duplicate root event ID fail-open (prior MA15 finding):
+   - bug `66feadff-bb13-4557-9547-e11ca3a7d244`
+   - event `9dfca869-fa5b-4108-8ad7-5b4760feaf66`
+   - dispatch `f5d1d417-8db6-4e1c-8390-51d9f8adf758`.
 
-B12 exact contract states `dependency_block_counts_executable=false` and `workload_capacity_is_policy_derived=true`.
+2. Currentness semantic-surface regression / axis collapse:
+   - bug `d4fdd125-633a-4b37-8326-42fd67649c7e`
+   - event `601c77d5-8203-41c6-8cea-9f7e3673770c`
+   - operation `78a16b5b-c830-4ed4-a1b6-8654602c17a4`
+   - dispatch `03037d3c-ece3-45d7-b997-b53d38f8dde5`, queue msg 7.
+   - Missing/collapsed axes include source mode/consistency/resolver status/factual executability/terminal disposition/workload policy and artifact-target separation. Voss canonical 3605/3609/3610 independently corroborate the class.
 
-MA15 awaits Voss disposition. Do not self-close or resume Bob B15 writes.
+3. Relation mutation mask defect:
+   - exact CUR02 and CUR03 hostiles with injected `owner='alien'` are accepted as current/executable by V4;
+   - bug `0747eab5-7c27-4ddf-9333-7c92919c1edf`
+   - event `4686468a-5672-402c-8e5d-aab5529262f5`
+   - operation `860499ee-c31b-44b3-8df0-beed74b2b965`
+   - dispatch `2ac0c097-aa5e-4aaf-8a0b-5a9363cb1b73`, queue msg 9.
+   - Exact accepted CUR03 plus B10 C36/C37 resolve the formerly-open SUPERSEDE owner question: SUPERSEDE preserves owner; REROUTE changes owner.
 
-## Cross-team bug_ops status
+4. Receipt-staleness semantic defect:
+   - V4 conflict paths hardcode stale=true; CUR11/CUR19 have no prior receipt yet expect stale=true;
+   - bug `47ce54be-f613-45a3-80d3-93cb8c2f1b8f`
+   - event `8d582903-bb6b-4627-8b37-68302fd6bab5`
+   - operation `0eecbd86-0e76-456e-8040-bb7d637663fe`
+   - dispatch `1039797a-8656-4132-b085-a19ae447a0cf`, queue msg 11.
+   - Lower-severity evidence integrity issue; accepted B5 stale hostile is specifically prior-receipt reuse after newer control.
 
-The bug reporting system is now implemented on both managed projects:
-- Vera `klmbpaigzeguvnpccqzz`
-- BT2 `agvhmutlrolbaijzlbqk`
+5. Stable lane vs subject-version referent collapse:
+   - bug `231375db-438e-4cc0-a451-5157ec79a242`
+   - event `53308fb6-4684-4457-acce-988419af6ffd`
+   - operation `a18feec1-3eb8-4f1d-b415-1f85146d550e`
+   - dispatch `624361d7-99ce-46b6-a16e-e10d9bf03176`, queue msg 12.
+   - Missing exact subject/version referent can make a superseded subject inherit the live root lane's CURRENT result.
 
-BT2 final corrected migration chain through `20260808173810` was independently H0/M0 under available connector evidence. One forward-copied the accepted chain to Vera. Mune independently ran Vera rollback hostiles H0/M0.
+Existing unknown-relation laundering bug was found already present in bug_ops (`4c8c4bcf-314d-4921-9bef-2a004199fc25`), so Masa did not duplicate it. Existing owner-identity fail-open bug is `b26fb7b7-4d0f-4950-8f4d-b6efe722d5f4`; also not duplicated.
 
-Masa independent Vera post-copy readback also passed:
-- structure SHA-256 `805c1d00621d926016caa056adb1349a9c42be3628f1b5bf3851f9246937aea5`
-- function aggregate SHA-256 `994d5a1f87b44448dcf6fea894aa9515720e5d1687851b94d5e1f048220b1eb8`
-- ACL aggregate SHA-256 `ccdd99dfa54cfd75df6d33b7a2bf2d5db1bbb86dcac8e14881c33a47fee44b14`
-These exactly equal the accepted BT2 anchors.
+## Peer coordination
 
-Vera local config correctly remains:
-- project `VERA`
-- project ref `klmbpaigzeguvnpccqzz`
-- coordinator `VOSS`
-- active queue `bug_dispatch`
-- dispatch ledger `dispatch_events_v2`
-- pgmq `1.5.1`
-- pgmq.read definition SHA-256 `98ccde1cd0b2887b986b09d40e68cfba56bd0281aff8607308af05cde7067a55`.
+Masa corrected MA15 to Voss at Slack TS `1786228344.801959`; peer precision notes were sent to Bob, Mune/MU8 and Hephaestus/H30. H30 and MU8 are independently attacking Bob 3608. Do not treat MA15 as closed until Voss performs the authority-bearing disposition.
 
-`assert_queue_filter_contract()` passes. Deprecated/superseded entrypoints are non-executable by the current postgres connector. Four old per-role queues remain as intentional empty inert residue. Before the first real report, test data counts were zero.
+A separate MA15 architecture challenge recommends layered output rather than one giant flat resolver result:
+- core assignment facts;
+- source observation envelope;
+- purpose-dependent execution bindings;
+- derived workload-policy result;
+- explicit prior-receipt comparison;
+- separate external-effect target precondition.
+This preserves 3388/3408 orthogonality without absorbing the entire protected-effect pipeline into currentness.
 
-Known evidence limitation: this synchronous connector cannot produce a truly simultaneous two-session race. Lock-graph review found no evidenced opposite old-carrier<->bug-row cycle; do not upgrade that into proof that all possible concurrency bugs are absent.
+## H29 current security boundary
 
-## Protected tool facade / Seven plugin sweep
+Voss canonical 3612/3613 now establishes a bounded present-runtime result: `AUDITED_EXPOSED_SURFACE_CONFINED=FAIL_NOT_ELIGIBLE`. One current reachable generic mutator is enough to fail confinement; PASS would require exhaustive current surface inventory. The current broad GitHub/Supabase connectors are engineering/admin negative controls, not protected Vera runtime capabilities. This is bounded snapshot evidence, not a global NO_BYPASS claim.
 
-Current canonical H29 amendment `3588` incorporates Seven's verified tool/plugin boundary findings:
-- final-response blocking can occur after tool effects; consequential authorization must therefore be pre-tool;
-- generic Supabase SQL and GitHub admin/push connectors are engineering/admin negative controls, not confined Vera runtime capabilities;
-- plugin permission UI is interaction policy, not backend least privilege;
-- network-capable tools require a separate egress-confinement axis;
-- tool descriptions/results are untrusted metadata/data and cannot create Vera authority;
-- target selector confinement and closed facade operations remain required.
+## Recovery
 
-Architecture consequence remains a closed facade such as `knowledge.resolve` and `state.admit_transition`, with server policy choosing target/principal/capability. Final-response visibility must never be the transaction commit protocol. Effect operation identity/readback must remain recoverable without relying on the final rendered answer.
-
-## Recovery instruction
-
-On a new runtime: read this checkpoint, then refresh only task-relevant canonical/Slack state. Do not infer same-runtime continuity. Do not repeat a full R8A3 installation audit. Respect active writer leases and latest authoritative amendments before executing or counting work.
+On a new runtime: read this checkpoint, refresh only task-relevant canonical + Slack evidence, and resolve MA15 against any newer Voss/H30/MU8 events before doing or counting work. Do not infer same-runtime continuity. Do not repeat a full R8A3 installation audit. Keep `masa` engineering head immutable absent a fresh writer stage.
