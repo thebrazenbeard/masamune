@@ -24,7 +24,7 @@
 
 - B15 remains producer-paused under Bob sole writer. Voss 3606 requires normalization-first B12+B13 restoration before successor bytes. `commit_order` has no demonstrated normative currentness authority; logical root lineage controls causality unless a later contract proves otherwise.
 - Current B12/B13 lost accepted orthogonal axes including factual executability, terminal disposition, source mode/consistency, and keyed dependency matching. Workload contribution is policy-derived, not universal resolver truth.
-- New MU8 exact-source defect: unknown admitted+typed relation values are silently treated like harmless non-state evidence. Slack bug report filed. Vera `bug_ops` attempt is unresolved due connector HTTP 429; check operation state before any retry.
+- New MU8 exact-source defect: unknown admitted+typed relation values are silently treated like harmless non-state evidence. Vera `bug_ops` canonical bug `4c8c4bcf-314d-4921-9bef-2a004199fc25`, event `52e1644a-d7bc-495d-87c8-4ed9441a2a12`, operation `48ca10a2-16c5-4fa1-bb17-62bf8b760a29`, dispatch `3821655f-f9a4-413a-a3e1-0a0bdedbffd0`, queue msg `8`, assigned VOSS. Exact readback confirmed row + operation receipt + ENQUEUED custody; Slack bug report/thread also updated.
 - Owner identity fail-open was independently reproduced; Vera bug `b26fb7b7-4d0f-4950-8f4d-b6efe722d5f4` exists and Voss 3604 independently captured the core ownerless-root defect.
 - Cross-team `bug_ops` repaired V1 is implemented on both BT2 and Vera and independently verified H0/M0 within available connector evidence.
 
