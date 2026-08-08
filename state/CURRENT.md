@@ -1,54 +1,64 @@
 # Mune Current Continuation Pointer
 
 **Memory class:** `WORKING_PROJECT`  
-**Checkpoint time:** `2026-08-08T09:29:00-04:00`  
+**Checkpoint time:** `2026-08-08T09:41:00-04:00`  
 **Orientation at save:** `COMPLETE_FROM_FRESH_SNAPSHOT`  
-**Current checkpoint:** `state/checkpoints/2026-08-08T0929-0400.md`  
-**Checkpoint commit:** `cd0e9c1e8ad4fa6648e3d8ea0f555bfd8ebc4483`  
-**Canonical Vera coordination observed through:** `3486`
+**Current checkpoint:** `state/checkpoints/2026-08-08T0941-0400.md`  
+**Checkpoint commit:** `ea6083e88b30a7fbc9646a894a7fa2a4800e3985`  
+**Canonical Vera coordination observed through:** `3499`
 
 ## Recovery order
 
 1. Read this pointer.
 2. Read the exact checkpoint above at its immutable checkpoint commit.
-3. Before executing, reporting, resuming, or counting work, resolve all newer Vera coordination events than sequence `3486` and consume newer relevant Slack coordination.
+3. Before executing, reporting, resuming, or counting work, resolve all newer Vera coordination events than sequence `3499` and consume newer relevant Slack coordination.
 4. Fresh-read every bound GitHub review target and mutable branch head before repository action.
 5. Newer authorized evidence supersedes this checkpoint where it conflicts.
 
 ## Current Mune governed lanes at save
 
-- `MU6` / root sequence `3464`: correction-precedence resolver proof. Mune deliverable complete/provisionally handed to Voss; no Voss closure observed through 3486. Artifact: `reviews/correction-precedence-resolver-proof-mu6-v1.md` @ `2019b3f1714dca9e12534f17f0a0590e0a5fb278`. Proposed disposition: `PROOF_ACCEPTED_WITH_LEGACY_SEMANTIC_LIMIT`.
-- `MU7` / root sequence `3465`: Edge transport/capability audit. Mune deliverable complete/provisionally handed to Voss; no Voss closure observed through 3486. Artifact: `reviews/edge-transport-capability-audit-mu7-v1.md` @ `d2d5af0228a7567f7de38834c6e68069f938b6f1`. Proposed disposition: `DIRECT_NARROW_PRINCIPAL_FEASIBLE; MANAGED_EDGE_NOT_CURRENTLY_CAPABILITY_CONFINED`.
+- `MU6` / root `3464`: correction-precedence resolver proof. Mune deliverable complete/provisionally handed to Voss; no Voss closure observed through 3499. Primary artifact `reviews/correction-precedence-resolver-proof-mu6-v1.md` @ `2019b3f1714dca9e12534f17f0a0590e0a5fb278`; key-scope addendum `reviews/correction-precedence-resolver-proof-mu6-key-scope-addendum-v1.md` @ `329c91600e86a02b89d08965d4f369f453fdb7bb`.
+- `MU7` / root `3465`: Edge transport/capability audit. Mune deliverable complete/provisionally handed to Voss; no Voss closure observed through 3499. Primary artifact `reviews/edge-transport-capability-audit-mu7-v1.md` @ `d2d5af0228a7567f7de38834c6e68069f938b6f1`; PG17 parity addendum `reviews/edge-transport-capability-audit-mu7-pg17-parity-addendum-v1.md` @ `bf5044da072abd8d426c7c2750f6877b121b4ea7`.
 
 Do not count MU6/MU7 after any newer valid closure/supersession.
 
 ## Closed prior Mune lanes
 
-- `MU3` closed at 3461: `APPROVED_DESIGN_CONTRACT`.
-- `MU4` closed at 3462: `APPROVED_CUSTODY_DIRECTION`.
-- `MU5` closed at 3463: `APPROVED_COMPATIBLE_IF_STRICTLY_SEPARATED`.
+- `MU3` closed at 3461.
+- `MU4` closed at 3462.
+- `MU5` closed at 3463.
 
-## Controlling recent Mune research
+## New controlling observations
 
-- Assignment + peer adversarial pass: `research/assignment-peer-adversarial-pass-3450-v1.md` @ `f82d3b9a1e5566bbedcb63fac608e268d2148a27`.
-- H11/H12 authority + confinement challenge: `research/h11-h12-authority-confinement-adversarial-v1.md` @ `931fbfa46d2b39d73fcdfb3b977995c2df9f5e7b`.
-- H13/H14 enrollment + attestation challenge: `research/h13-h14-enrollment-attestation-adversarial-v1.md` @ `0553529c9f903b406e87217d013563bebc0f71ba`.
-- MU6 correction resolver: `reviews/correction-precedence-resolver-proof-mu6-v1.md` @ `2019b3f1714dca9e12534f17f0a0590e0a5fb278`.
-- MU7 transport audit: `reviews/edge-transport-capability-audit-mu7-v1.md` @ `d2d5af0228a7567f7de38834c6e68069f938b6f1`.
+- Correction lineage must be walked across all relevant record kinds before leaf interpretation; live evidence includes `RELATIONSHIP -> CORRECTION -> RELATIONSHIP` on one scoped key.
+- Legacy correction topology can be resolved while semantic correction effect remains unknown unless a closed/versioned adapter recognizes the leaf.
+- Correction key-scope policy must be adapter-owned, never caller-chosen or inferred from string shape. Preferred current Mune recommendation: `SCOPED_CORRECTION_KEY_V1` bound to `(project_id,branch_id,record_key)`.
+- Exact SQL on both relevant Supabase projects reports PostgreSQL `17.6`, `server_version_num=170006`. Canonical 3493 says `17.6.1`; if that is a separate Supabase platform label it should be distinguished. Database-semantic qualification binds 17.6/170006.
+- Both R9A0 database validation workflows examined use disposable `postgres:15`; existing green CI does not prove hosted PG17 provider parity.
+- V3 narrow provider-principal transport remains feasible; current managed Edge documented ambient admin/DB capability keeps the runtime unconfined for V3 hard least privilege.
 
-Earlier Knowledge Resolver/admission/evaluator/effect-cut artifacts remain valid where not superseded; see the immutable checkpoint for exact references.
+## Recent independent research
 
-## Current architecture snapshot
+- H17 staging critique: `research/h17-staging-security-adversarial-v1.md` @ `f5a933b78dfb134e8645445eab51c905d89ec42f`.
+- H19/H20 enable/quarantine epoch critique: `research/h19-h20-enable-quarantine-epoch-adversarial-v1.md` @ `bfe9422b3a504261087771e7721121d2b284644e`.
 
-- `ASSIGNMENT_CURRENTNESS` and correction precedence are separate typed Governed Knowledge Resolver domains.
-- Correction graph must be built from complete exact scoped-key lineage across relevant record kinds before interpreting whether the controlling leaf is a correction.
-- Existing correction custody is topologically resolvable but legacy correction semantics are not universally machine-decidable without a closed/versioned correction adapter.
-- Proposal evidence is not assignment state. Prospective canonical proposal discipline 3481 requires root ACK via top-level `acknowledges_event_id` and null `supersedes_event_id`; terminal Voss admission supersedes the current admitted state head and ACKs the accepted proposal.
-- Production assignment direction remains one canonical coordination state graph + protected admission-proof registry, not duplicate state truth.
-- Actor identity, Vera governance binding, exact-action authorization, capability enforcement and evidence portability remain separate assurance axes.
-- H12 confinement is scope-specific; tool inventory/digest does not prove universal no-bypass. Current project GitHub/Supabase protected-effect confinement remains false.
-- V3 narrow DB principal transport is feasible, but current documented managed Supabase Edge defaults expose broader DB/API capability. Preferred hard-boundary direction is an isolated guarded publisher holding only a narrow provider principal, subject to separate architecture/authority.
-- `event_sequence`/MAX remain audit locators, never commit-completeness or freshness CAS.
-- Basic Memory Cloud remains disconnected legacy and is never an active memory/archive/coordination route.
+Key staging rule: branch-local data-plane credentials are useful only when production control-plane/Management API/GitHub promotion authority is absent; branch isolation is not publisher least privilege.
+
+Key enable/quarantine rule: effect enable is environment eligibility, not standing effect authority; every H6 claim binds a monotonic enable epoch, quarantine closes it, and re-enable always creates a new authority/evidence cut. Quarantine after H6 cut but before provider dispatch can normally abort an unsent request; post-dispatch/in-flight outcomes require provider cancellation/reconciliation.
+
+## Canonical project snapshot through 3499
+
+- 3481 proposal-lineage discipline controls prospectively.
+- 3489 H15 closed.
+- 3490 H16 closed.
+- 3493 PostgreSQL target-version parity gate active.
+- 3496 H17 closed.
+- 3497 H18 closed.
+- 3498 H19 current for Hephaestus.
+- 3499 H20 current for Hephaestus.
+
+Current project GitHub/Supabase protected-effect confinement remains false; no effect-enabled release is qualified.
+
+Basic Memory Cloud remains disconnected legacy and is never an active memory/archive/coordination route.
 
 This pointer is a technical continuation aid, not autobiographical memory and not authority over newer project state.
