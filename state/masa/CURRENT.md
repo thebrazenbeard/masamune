@@ -9,273 +9,131 @@ Autobiographical memory claimed: false
 ## Repository custody
 
 - Repository: `thebrazenbeard/masamune`
-- Work branch: `masa`
+- Engineering branch: `masa`
 - Continuity branch: `continuity/masa`
 - Save-state file: `state/masa/CURRENT.md`
-- Continuity commits never move `masa` or an immutable review target.
-
-## Exact work branch
-
-- `masa` head last verified: `984cbdc781aa643443652f41f5a710f59e2d2439`.
-- 3313 V3 path: `design/R9A0_EDGE_REPOSITORY_FIRST_PRIVILEGE_PACKET_V3.md`.
-- V3 blob: `6fdee978d0b052592844d1f7356f6fedb13f43eb`.
-- V3 SHA-256: `c74cc6dba1e6c08e0d7234be1a3e12c93b357b892f11ab6c259852a41804d258`.
-- V3 publication/readback complete; writer lease consumed. No `masa` mutation without a new exact writer stage.
+- Continuity writes must never move an immutable engineering review target.
+- Fresh comparison at this checkpoint: `masa` is still exactly `984cbdc781aa643443652f41f5a710f59e2d2439` (ahead 0 / behind 0 from that SHA).
+- 3313 V3 remains `design/R9A0_EDGE_REPOSITORY_FIRST_PRIVILEGE_PACKET_V3.md`, blob `6fdee978d0b052592844d1f7356f6fedb13f43eb`, SHA-256 `c74cc6dba1e6c08e0d7234be1a3e12c93b357b892f11ab6c259852a41804d258`.
+- Do not mutate `masa` without a fresh exact writer stage.
 
 ## Assignment-currentness rule
 
-Before start/resume/report/count, resolve each assignment against every newer authoritative event in its lineage or explicitly referencing it that can amend, supersede, reroute, complete, cancel, release, terminally block, revoke authority, move a bound artifact/head, or change dependencies.
+Before start/resume/report/count, resolve an assignment against newer authoritative events that can amend, supersede, reroute, complete, cancel, release, terminally block, revoke authority, move a bound artifact/head, or change dependency state. Voss owns assignment intake/reconciliation/closure while delegated. Masa does not self-close.
+
+## Closed prior Masa lanes
 
-Voss owns assignment intake/routing/reconciliation/closure while delegated. Masa does not self-assign or self-close governed work.
+- MA9 / 3431: Voss closed.
+- MA10 / 3432: Voss closed.
+- MA11 / 3538: Voss closed.
+- MA12 / 3539: Voss closed.
+- MA13 / 3545 and MA14 / 3546 were later closed by Voss at 3586 and no longer count.
+
+## Current governed lane: MA15
+
+Root:
+- sequence `3582`
+- event `ff49c3fb-291f-4983-8e02-3fd7622066cf`
+- assignment `VOSS-20260808-MA15`
+- thread `vera-r9a0/assignments/masa/b13-currentness-independent-reference-ma15-v1`
+- read-only; no repository/provider/schema mutation.
 
-## Current assignments at this checkpoint
+Latest exact parent reviewed:
+- Bob B13 V4 handoff sequence `3587`
+- Drive source ID `1JE_7O7lx5mHU3gaFmOi-1iIh74e22xPU`
+- path `tests/native-project/test_r9a0_assignment_currentness.py`
+- exact bytes `21050`
+- exact SHA-256 `cbfc6fa5b6b76542d374a17e09f6b857edf24eac25a7d28442c387829781c428`
+- B12 accepted contract Drive ID `1hH3khTEMDlF-EfSuZrU3MZpk5JSRzcDA`.
 
-Fresh canonical Vera coordination was resolved through sequence `3550`.
+Bob canonical reconciliation `3591` established:
+1. global duplicate `commit_order` checking before root reachability is a B13 oracle defect; order causality/uniqueness belongs on the root-reachable state component, not detached off-root state;
+2. matching dependency identity is not representable by current B12/B13 if matching is normative.
 
-Closed:
-- MA9 `3431 APPROVED_PROVIDER_ARCHITECTURE / VOSS-CLOSED`.
-- MA10 `3432 APPROVED_EXECUTABLE_PROOF / VOSS-CLOSED`.
-- MA11 `3538 APPROVED_E2_IMPLEMENTATION_PREFLIGHT / VOSS-CLOSED`.
-- MA12 `3539 APPROVED_RECEIPT_CANONICALIZATION_CONTRACT / VOSS-CLOSED`.
+Masa independently reproduced both and submitted MA15 READY_FOR_REVIEW to Voss on Slack at TS `1786224668.485589`, ACKing exact root and claiming no closure.
 
-Current read-only lanes:
+### New independently verified B13 V4 defect
 
-### MA13 / `VOSS-20260808-MA13`
-- Root sequence `3545`.
-- Root event `8766fc04-36d6-4524-b348-4fc781e8cb39`.
-- Thread `vera-r9a0/assignments/masa/pg17-provider-parity-ci-blueprint-ma13-v1`.
-- Objective: exact provider-faithful PostgreSQL 17 CI successor around the R9A0 DB candidate; distinguish historical PG15 evidence, upstream PG17 engine semantics, provider-contract emulation, and later managed-target validation.
-- No workflow/repo/provider write authority.
+Exact V4 fails open on duplicate **root event IDs**:
+- two admitted+typed ASSIGN rows share `event_id='root'`, have distinct commit_order/owner;
+- resolver returns `CURRENT_ASSIGNED`, root controlling, `effect_eligible=true` instead of conflict.
+Cause: `root=next(...)` selects one root, then `state_events` removes every event whose event_id equals the chosen root before the state-ID uniqueness check.
 
-### MA14 / `VOSS-20260808-MA14`
-- Root sequence `3546`.
-- Root event `4d4b6950-2aee-4f0f-ae43-753f02d71adf`.
-- Thread `vera-r9a0/assignments/masa/e2-canonical-receipt-integration-packet-ma14-v1`.
-- Objective: exact future integration packet for accepted MA11 E2 admission architecture plus MA12 portable receipt semantics under PostgreSQL 17, while H13 authority/capability and H14/H17/H20 confinement remain separate gates.
-- No migration/repo/provider write authority.
+Smallest B13-only repair:
+- validate uniqueness of all admitted state event IDs including root candidates before excluding the selected root/building successors;
+- separately scope commit_order monotonicity/uniqueness to the root-reachable component.
 
-No newer Masa closure/amendment was visible through sequence 3550. Independent adversarial challenge was requested directly from Mune and Hephaestus and in the shared Vera build channel; no substantive MA13/MA14 peer reply had arrived at save time. Do not claim the adversarial pass complete yet.
+Bug was reported both to Slack `#chat-bug-reports` at TS `1786224576.959329` and through Vera bug_ops:
+- bug `66feadff-bb13-4557-9547-e11ca3a7d244`
+- report event `9dfca869-fa5b-4108-8ad7-5b4760feaf66`
+- operation `611309e3-ad8d-4769-b224-5b91a1f42c9b`
+- dispatch `f5d1d417-8db6-4e1c-8390-51d9f8adf758`
+- assigned role `VOSS`
+- exact readback confirmed operation receipt + ENQUEUED custody.
 
-## Proposal custody
+### Dependency semantics conclusion
 
-Canonical `3481` controls READY_FOR_REVIEW handoffs:
-- `supersedes_event_id=NULL`;
-- top-level ACK exact root ASSIGN event;
-- proposal/amendment lineage referenced separately;
-- only Voss/authorized closure performs assignment state transition.
+Current B12/B13 has no dependency_kind/id/key and exact V4 allows only one anonymous active dependency latch. A second DEPENDENCY_BLOCK while blocked is CONFLICTED. Any generic DEPENDENCY_RELEASE clears the latch.
 
-Do not submit final MA13/MA14 completion proposals until the material independent challenge is reconciled.
+Therefore:
+- matched dependency release is not representable today;
+- simultaneous E1+E2 blockers are not representable today;
+- do not invent a B13-only dependency_kind test field.
 
-## Provider/version truth
+If V1 remains a single anonymous latch, contract should say so and matched/multi-dependency claims stay out of scope.
+If matching + E1/E2 concurrency becomes normative, B12/admission must expand. Preferred identity is exact DEPENDENCY_BLOCK event IDs, with a canonical active set (or equivalent typed set semantics), not free text. Release removes only the referenced active blocker. Blocking remains DEPENDENCY_BLOCKED until the active set is empty.
 
-Direct SQL on both exposed managed Supabase projects reports:
-- PostgreSQL `server_version=17.6`;
-- `server_version_num=170006`;
-- migration/connector read path `current_user=session_user=postgres`.
+Minimum multi-dependency proof if admitted:
+- ASSIGN => CURRENT_ASSIGNED / NONE / COUNTS_EXECUTABLE / effect true
+- BLOCK E1 => CURRENT_ASSIGNED / DEPENDENCY_BLOCKED / DOES_NOT_COUNT / effect false / active {E1}
+- BLOCK E2 => same blocked/non-executable / active {E1,E2}
+- RELEASE E1 => still blocked/non-executable / active {E2}
+- RELEASE E2 => NONE / COUNTS_EXECUTABLE / effect true / active {}
+- negative: release unknown; release same blocker twice; duplicate block identity.
 
-Supabase project metadata separately reports database platform/build versions:
-- Vera: `17.6.1.147`, engine `17`;
-- BT2/R9A0 build-ground: `17.6.1.155`, engine `17`.
+B12 exact contract states `dependency_block_counts_executable=false` and `workload_capacity_is_policy_derived=true`.
 
-Controlling distinction: `17.6`/`170006` are PostgreSQL server semantic version fields; `17.6.1.xxx` is a separate Supabase database/platform build-version field. Do not collapse them.
+MA15 awaits Voss disposition. Do not self-close or resume Bob B15 writes.
 
-Accessible Supabase projects are Vera (`klmbpaigzeguvnpccqzz`) and BT2 (`agvhmutlrolbaijzlbqk`). Native migration history confirms the R9A0 integrity repair `20260806224900` is applied to neither exposed project. BT2 has only foundation `20260806133152` plus unrelated governance hardening. The custom R9A0 migration ledger likewise records 224900 as NOT_APPLIED.
+## Cross-team bug_ops status
 
-## Exact R9A0 candidate state
+The bug reporting system is now implemented on both managed projects:
+- Vera `klmbpaigzeguvnpccqzz`
+- BT2 `agvhmutlrolbaijzlbqk`
 
-Repository: `thebrazenbeard/vera-R9A0`.
+BT2 final corrected migration chain through `20260808173810` was independently H0/M0 under available connector evidence. One forward-copied the accepted chain to Vera. Mune independently ran Vera rollback hostiles H0/M0.
 
-PR #2 remains an open database candidate at:
-- head `58a6ae4d4272165bd5b988bdd7a8bb0e72417302`;
-- base/native `6a568d35c142dc37ea41a0209cdb1f295949f767`.
+Masa independent Vera post-copy readback also passed:
+- structure SHA-256 `805c1d00621d926016caa056adb1349a9c42be3628f1b5bf3851f9246937aea5`
+- function aggregate SHA-256 `994d5a1f87b44448dcf6fea894aa9515720e5d1687851b94d5e1f048220b1eb8`
+- ACL aggregate SHA-256 `ccdd99dfa54cfd75df6d33b7a2bf2d5db1bbb86dcac8e14881c33a47fee44b14`
+These exactly equal the accepted BT2 anchors.
 
-The old CI workflow on the native base uses `postgres:15`, `POSTGRES_USER=postgres`, applies four migrations, runs four SQL suites, the deterministic two-session harness, verifies the exact 22-file manifest, and emits `VERA_R9A0_DATABASE_CI_RECEIPT_V1`. That evidence is historical for the exact old candidate and is not PG17/provider parity evidence.
+Vera local config correctly remains:
+- project `VERA`
+- project ref `klmbpaigzeguvnpccqzz`
+- coordinator `VOSS`
+- active queue `bug_dispatch`
+- dispatch ledger `dispatch_events_v2`
+- pgmq `1.5.1`
+- pgmq.read definition SHA-256 `98ccde1cd0b2887b986b09d40e68cfba56bd0281aff8607308af05cde7067a55`.
 
-## MA13 findings / PG17 CI blueprint
+`assert_queue_filter_contract()` passes. Deprecated/superseded entrypoints are non-executable by the current postgres connector. Four old per-role queues remain as intentional empty inert residue. Before the first real report, test data counts were zero.
 
-### Managed-role emulation
+Known evidence limitation: this synchronous connector cannot produce a truly simultaneous two-session race. Lock-graph review found no evidenced opposite old-carrier<->bug-row cycle; do not upgrade that into proof that all possible concurrency bugs are absent.
 
-The official Docker image makes `POSTGRES_USER` a database superuser, unlike managed Supabase's `postgres` role. Live managed role posture includes:
-- `postgres`: LOGIN, NOSUPERUSER, CREATEROLE, CREATEDB, REPLICATION, BYPASSRLS, INHERIT;
-- `supabase_admin`: superuser administrative boundary;
-- `service_role`: BYPASSRLS;
-- `authenticator`: LOGIN + NOINHERIT;
-- authenticator memberships into anon/authenticated/service_role are SET=true, INHERIT=false, ADMIN=false.
+## Protected tool facade / Seven plugin sweep
 
-Preferred release CI is therefore a pinned PostgreSQL 17.6 image started with a synthetic bootstrap superuser such as `supabase_admin`, followed by creation of a separate role literally named `postgres` with the observed non-super managed attributes. Run ordinary R9A0 migrations/tests as that non-super postgres role. Bootstrap/admin credentials are for fixture setup and negative-control assertions only.
+Current canonical H29 amendment `3588` incorporates Seven's verified tool/plugin boundary findings:
+- final-response blocking can occur after tool effects; consequential authorization must therefore be pre-tool;
+- generic Supabase SQL and GitHub admin/push connectors are engineering/admin negative controls, not confined Vera runtime capabilities;
+- plugin permission UI is interaction policy, not backend least privilege;
+- network-capable tools require a separate egress-confinement axis;
+- tool descriptions/results are untrusted metadata/data and cannot create Vera authority;
+- target selector confinement and closed facade operations remain required.
 
-Provider-contract fixture should also model extensions schema/pgcrypto ownership and contract-relevant authenticator/service_role membership. Label this `SUPABASE_CONTRACT_EMULATION_V1`, never hosted-provider proof.
+Architecture consequence remains a closed facade such as `knowledge.resolve` and `state.admit_transition`, with server policy choosing target/principal/capability. Final-response visibility must never be the transaction commit protocol. Effect operation identity/readback must remain recoverable without relying on the final rendered answer.
 
-A self-hosted `supabase/postgres` image is optional evidence only if future SQL depends on Supabase image-specific patches/extensions. It is not a substitute for managed-target validation.
+## Recovery instruction
 
-Later strongest target claim remains separately authorized `SUPABASE_MANAGED_TARGET_VALIDATED` on an isolated managed target. MA13 creates no branch/project and incurs no cost.
-
-### Historical PG15
-
-If the future candidate adopts PG16+ role-membership syntax/semantics, do not maintain a ceremonial PG15 matrix. Prior exact `58a6ae4d...`/run evidence remains `PG15_BASELINE_HISTORICAL` for that old candidate. Future release-authoritative candidate is PG17. A real PG15 requirement would be an explicit backport lane.
-
-### Old 224900 likely target failure
-
-Exact candidate migration `20260806224900_r9a0_coordination_integrity_repairs.sql` creates `r9a0_owner` and then transfers schema/table/function/view ownership.
-
-On PG17, a non-super CREATEROLE user automatically gets ADMIN on a newly created role but SET=false/INHERIT=false by default. Live managed `SHOW createrole_self_grant` is empty. Ownership transfer requires ability to SET ROLE to the new owner; schema ownership transfer also requires the new owner to have CREATE on the database.
-
-Therefore old 224900 is `INFERRED_TARGET_FAILURE_PENDING_PROVIDER_FAITHFUL_EXECUTION` for at least two independent reasons:
-1. no SET path from non-super postgres to newly created `r9a0_owner`;
-2. no database CREATE privilege on `r9a0_owner` before `ALTER SCHEMA ... OWNER`.
-
-Do not claim hosted failure until disposable provider-faithful execution reproduces it.
-
-Safer future role choreography to test:
-1. create protected owner;
-2. use creator ADMIN to add a separate grantor-scoped temporary postgres->owner membership with SET=true, INHERIT=false;
-3. temporarily grant owner CREATE on current database;
-4. transfer/create required schemas;
-5. revoke database CREATE once no longer needed;
-6. create/transfer objects under exact owner identity and owner-default privilege posture;
-7. revoke postgres's own temporary SET grant by grantor, leaving the unavoidable bootstrap-superuser ADMIN/SET-false grant as explicit admin/break-glass boundary.
-
-Live `pg_auth_members` uniqueness includes grantor, so bootstrap and creator self-grants can coexist structurally. Disposable PG17 must prove the grant/revoke behavior rather than assume it.
-
-Final runtime invariant is no SET/INHERIT/ADMIN/CREATEROLE escalation path from ordinary runtime into protected owner. Do not falsely claim the migration/admin `postgres` role has no ADMIN path; that administrative capability is a separate H14/H17/H20 isolation boundary.
-
-### CI receipt V2
-
-Future release receipt should bind at least:
-- target class;
-- exact `server_version`, `server_version_num`, and when managed, Supabase platform database version separately;
-- pinned PG image reference+digest and actual service container identity;
-- provider-contract bootstrap profile digest;
-- migration `session_user/current_user` and `rolsuper=false` proof;
-- exact base/head/merge/workflow SHA/ref;
-- migration/test/concurrency/manifest outcomes;
-- migration range/ceiling actually validated;
-- runner/toolchain observations;
-- MA12 canonicalization scheme/version + receipt digest.
-
-Pin GitHub actions by reviewed full commit SHA and pin the PostgreSQL service image by digest. Current mutable `actions/checkout@v4`, `actions/upload-artifact@v4`, `ubuntu-latest`, and `postgres:15` are not sufficient provenance for a stronger release qualification.
-
-## MA14 findings / integration packet
-
-### Old ACK semantics are incompatible with current assignment governance
-
-Exact old R9A0 integrity migration/test treat ACK as a unique controlling state edge:
-- current head = row with no later superseder OR acknowledger;
-- every non-initial event must reference exactly one current head through supersedes XOR acknowledges;
-- unique `acknowledges_event_id`;
-- the test explicitly makes an ACK row the controlling tip.
-
-Canonical 3481/current assignment semantics are opposite:
-- READY_FOR_REVIEW ACK is non-state proposal evidence;
-- multiple amendments may ACK the same root;
-- authority closure may validly carry BOTH `supersedes_event_id=current admitted state` and `acknowledges_event_id=accepted proposal`.
-
-Live Vera clean B6 A/B proof:
-- 3398 proposal ACKs 3390 root;
-- 3403 Voss closure supersedes 3390 and ACKs 3398;
-- old exactly-one-link rule counts 2 and rejects the accepted pattern;
-- preclosure old ACK-or-supersedes head logic incorrectly makes proposal 3398 the state head.
-
-Live coordination also has hundreds of parents with multiple ACK children. ACK cannot remain a universal one-successor state primitive.
-
-### Revised generic coordination semantics
-
-Preferred future meaning:
-- `acknowledges_event_id` = many-to-one provenance/evidence reference, never generic authority/currentness;
-- `supersedes_event_id` = physical replacement/state-edge primitive with one-successor uniqueness;
-- both links may be non-null;
-- references must exist earlier and be same-thread;
-- generic latest activity may be sequence-based and explicitly NOT_AUTHORITY;
-- generic `thread_heads/latest_thread_state` authoritative semantics are deprecated/replaced, not naively converted to supersedes-only because non-state proposals would also appear as unsuperseded heads;
-- assignment currentness comes from the E2 admission graph plus matching supersedes edges only.
-
-Future generic validator should validate same-thread references and physical superseder uniqueness, not infer state from ACK. Drop unique ACK index. Preserve/clarify concurrency error handling; the current generic RPC's blanket unique-violation handler can mislabel a successor-slot collision as idempotency conflict.
-
-### Revise unshipped migration rather than force an obsolete chain
-
-Initial MA14 thought was to preserve old 224900 bytes and add a successor. That is superseded by fresh evidence: the old migration itself is likely PG17 target-incompatible and is not applied on any exposed governed target. Since PR2 is open/unmerged, preferred future writer action is to revise the unshipped 224900 migration/execution/rollback/test semantics under one exact writer lease, preserving old `58a6ae4d...` Git history as historical evidence and rerunning exact review/CI on the new head.
-
-Do not introduce a backfilled prelude or external session choreography merely to make obsolete bytes executable unless independent review produces a concrete reason.
-
-### E2 protected admission shape
-
-Keep canonical assignment state once in `r9a0_coordination.events`; add protected admission provenance only.
-
-Conceptual protected registry fields include:
-- event ID PK/FK;
-- explicit project+thread scope;
-- root assign event;
-- nullable prior admitted event;
-- typed proposal source kind/ref/event/digest;
-- stable logical request key;
-- predecessor-bound admission attempt identity;
-- canonical MA12 request digest + canonicalization version;
-- authority assurance and non-secret authority evidence ref/digest;
-- policy version;
-- DB-owned admitted time.
-
-Constraints: one admitted root per project/thread; one admitted successor per prior; root marker binds event=root; no duplicate state/currentness copied into registry.
-
-Protected-edge BEFORE INSERT guard only needs to block generic writers when `NEW.supersedes_event_id` targets an admitted predecessor. In R9A0 the dangerous generic writer is the existing SECURITY DEFINER append function owner `r9a0_owner`, not service_role direct table INSERT. Admission path runs as dedicated admission owner. Generic proposal/root-looking noise may exist but has no admission marker and is non-controlling.
-
-Because events use FORCE RLS, the dedicated admission owner needs exact event INSERT/SELECT privilege plus its own narrow policies. Registry stays private/append-only. Generic owner receives only minimum admission-event membership visibility needed by the invoker guard, not registry payload access.
-
-### H13 capability cut
-
-External production admission function remains unavailable until a stronger H13 authority/capability route exists. One-use capability redemption should be transactionally composable with the DB admission cut; a pure external bearer with no transactional redemption state cannot honestly guarantee atomic one-use admission under concurrency.
-
-MA14 may implement/test mechanical E2 core later, but activation/external EXECUTE remains blocked until authority and confinement gates are satisfied.
-
-### MA12 boundary
-
-Duplicate-aware raw-wire validation cannot live solely in a SQL/RPC accepting json/jsonb because duplicate property names have already been collapsed before PL/pgSQL sees the value.
-
-Target flow:
-`raw request bytes -> trusted admission facade duplicate-aware parse + closed domain normalization + security-identifier grammar + MA12 canonical request digest -> typed DB admission call -> atomic E2 state/admission write -> exact readback -> portable MA12 result/lineage receipt`.
-
-Portable receipt is evidence, never self-authorizing. Existing `r9a0_coordination.events.request_digest` is DB-local jsonb-text idempotency evidence and must not be relabeled as portable MA12. Crash-after-commit recovery finds the admitted event by logical request/attempt and regenerates the receipt from durable typed facts.
-
-### Service-role/RLS correction
-
-Managed `service_role` is BYPASSRLS. Candidate migration 070208 adds service-role SELECT RLS policies and its PG15 test treats them as enabling read access. On managed Supabase those policies are not an enforcement boundary; table ACLs + BYPASSRLS control the outcome. Future PG17 emulation must model service_role BYPASSRLS and stop counting those policies as privacy/security evidence.
-
-If the production Knowledge Resolver is supposed to enforce private read filtering, raw service-role/postgres SELECT in the ordinary runtime is mechanically incompatible with that claim. This motivates a separate `KNOWLEDGE_READ_CONFINEMENT` property or an explicit read dimension in H14/H12 capability matrices. Current engineering runtime can qualify resolver semantics, not hard information-flow confinement.
-
-## Broader Governed Knowledge Resolver
-
-Current advisory architecture remains:
-`knowledge.resolve({domain, typed_key, purpose, caller_context_ref, as_of?})`
-returns a small common control envelope plus opaque typed domain facts.
-
-Common layer: domain dispatch, privacy boundary, source completeness/consistency, bounded status, receipt envelope, fail-closed cross-domain composition.
-
-Domain adapter: key identity, graph semantics, admission/authority rules, factual schema, domain policy/currentness.
-
-Free-form semantic search may discover candidate typed keys only; it never directly returns governed facts. Candidate discovery is itself a privacy surface. Effect-critical/private semantic discovery remains out of scope until caller identity/governance and knowledge-read confinement are mechanically established.
-
-## Authority/effect boundaries
-
-- Voss owns assignment routing/reconciliation/closure while delegated.
-- One writer per assigned branch/stage.
-- No force push, merge, deployment, hosted DB mutation, credential/permission action, paid resource, deletion, installation, model training, native Project mutation, or canonical-memory write without Patrick's exact authority.
-- Current project effect confinement remains false while ordinary engineering runtimes can reach raw GitHub/Supabase mutators.
-- Basic Memory Cloud remains disconnected legacy and is never used as fallback.
-
-## Fresh-source cutoff
-
-Latest canonical coordination resolved before this save: `3550`.
-- 3545 MA13 CURRENT.
-- 3546 MA14 CURRENT.
-- 3547/3548 are Mune amendments only.
-- 3549/3550 are Vera amendments only.
-- No newer Masa state transition observed.
-
-## Recovery procedure
-
-1. Read this file from `continuity/masa` and verify exact branch/file readback.
-2. Fresh-read canonical coordination newer than `3550` plus `#voss/#masa/#mune/#hephaestus/#chat-build-team-vera` before treating MA13/MA14 as current.
-3. Resolve every candidate lane against newer targeted/lineage events before start/resume/report/count.
-4. Fresh-compare `thebrazenbeard/masamune:masa` against `984cbdc781aa643443652f41f5a710f59e2d2439` before any work-branch effect.
-5. Continue MA13/MA14 read-only research; wait for/reconcile independent adversarial challenge before final READY_FOR_REVIEW proposals under 3481.
-6. Keep continuity commits on `continuity/masa`; never move `masa` merely to checkpoint continuity.
-7. Treat this as WORKING_PROJECT recovery evidence only, not same-runtime consciousness or autobiographical memory.
+On a new runtime: read this checkpoint, then refresh only task-relevant canonical/Slack state. Do not infer same-runtime continuity. Do not repeat a full R8A3 installation audit. Respect active writer leases and latest authoritative amendments before executing or counting work.
