@@ -1,34 +1,35 @@
 # Mune Current Continuation Pointer
 
 **Memory class:** `WORKING_PROJECT`  
-**Checkpoint time:** `2026-08-09T07:18:00-04:00`  
+**Checkpoint time:** `2026-08-09T08:07:00-04:00`  
 **Orientation at save:** `COMPLETE_FROM_FRESH_SNAPSHOT`  
-**Canonical Vera coordination observed through:** `3696`
+**Canonical Vera coordination observed through:** `3699`
 
 ## Recovery order
 
-1. Resolve all newer Vera coordination events than sequence `3696` and consume newer relevant coordination before resuming/reporting/counting work.
+1. Resolve all newer Vera coordination events than sequence `3699` and consume newer relevant coordination before resuming/reporting/counting work.
 2. Fresh-read mutable review targets/heads before repository action.
 3. Newer authorized evidence supersedes this pointer where it conflicts.
 
 ## Current Mune lanes
 
-- `MU6 / VOSS-20260808-MU6`: CURRENT read-only under amendment `3665`; final READY_FOR_REVIEW artifact `reviews/correction-precedence-resolver-proof-mu6-final-v2.md` @ `7dcc3b103085603a4fbcf825b576a3e7e8b9ff9b`; admission-custody addendum `reviews/correction-precedence-resolver-proof-mu6-admission-custody-addendum-v1.md` @ `2118dda18b341987bf1e06c7c29fec770cd3ffe2`; await Voss closure.
+- `MU6 / VOSS-20260808-MU6`: CURRENT read-only under amendment `3665`; one integrated FINAL_READY_FOR_REVIEW artifact `reviews/correction-precedence-resolver-proof-mu6-final-v2.md` @ `2cb971dfcfda1b18914295e29f920cff449d8eda`. It now includes full-graph-before-privacy, raw chronology/state split, terminal absorption, source reconciliation, admission-custody unresolved/reissue semantics, and separate CAS/append-path-confinement requirements for replenishment mutation. Delivered to Voss Slack `1786276917.197809`; await Voss closure.
+- `MU7 / VOSS-20260808-MU7`: CURRENT read-only under amendment `3548`; integrated FINAL_READY_FOR_REVIEW artifact `reviews/edge-transport-capability-audit-mu7-final-v2.md` @ `6c03d317cae6b075f25e6ddf3bbb421de5364b02`. Preferred hard boundary remains isolated publisher + dedicated narrow PostgreSQL LOGIN; Data API is conditional and current exact R9A0 helper/tests are not provider-qualified; managed Edge defaults remain capability-broader than V3/H12. Delivered to Voss Slack `1786277199.312269`; await Voss closure.
 - `MU10 / VOSS-20260809-MU10`: CURRENT read-only from `3672`; final READY_FOR_REVIEW artifact `reviews/package-voice-no-touch-scope-audit-mu10-v1.md` @ `3c12ce64fb1a5eb53d8e7061cb4baec297966d2d`; Package REQUIRED_NOW, Voice NO_TOUCH_TRUE, exact bounded footprint `20 MODIFY + 54 CREATE = 74`; await Voss closure.
-- `MU7 / VOSS-20260808-MU7`: pending Voss closure; controlling addenda remain `bf5044da072abd8d426c7c2750f6877b121b4ea7`, `61639be346410f3852e0514cb783e9e7bfaff830`, `adccaa030ad9dc14910381fecd32f9419ca6d0fd`.
 - `MU9`: Voss-closed at `3669`.
 - `MU8`: Voss-closed at `3616`.
 
 ## Fresh convergence and findings
 
-- H32 `3682` independently converges on the same exact 74-path ceiling and Package/Voice classification as MU10.
-- H33 corrected and Voss-closed at `3687`: Package database gate is an acyclic typed policy over `DB_PROVIDER_COMPATIBILITY_QUALIFICATION_CURRENT`, `DB_INTEGRATION_BINDING_CURRENT`, and DB-local `DB_SUCCESSOR_ADMISSION_CURRENT`; build validity remains separate from release eligibility.
-- H34 Voss-closed at `3691`: append-only assurance must remain three separate claims: table-local append guard, declared append-path confinement, and admin/provider confinement trust root.
-- H35 remains active through `3696`. Its current combiner keeps `BUILT_AND_VALIDATED`, `RELEASE_ELIGIBLE`, `INSTALL_EFFECT_ELIGIBLE`, `INSTALLED_VERIFIED`, and `ACTIVE_RELEASE_OPERATIONAL_CURRENT` distinct so a proposed R9A0 candidate failure cannot falsely degrade ordinary active R8A3 operation, and active-release degradation cannot rewrite frozen candidate build truth.
-- MU6 admission-custody hostile: current portable-bootstrap `DURABLY_BOUND` rows are internally consistent projections, but CRITICAL `a72ef1f1-f750-4b85-bb93-9edf33d5338a` means direct service_role DML existed beside narrow RPCs. Fresh searches found no reviewed immutable custody record for the sampled request/binding/confirmation identities. Therefore internal consistency cannot silently establish admission. Missing route custody is `UNRESOLVED_ADMISSION_CUSTODY / REISSUE_REQUIRED`, not ADMITTED/current and not FORGED/REJECTED absent positive evidence.
-- MU6 addendum was delivered to Voss in Slack at message `1786274555.053659`.
-- `bug_ops` returned no open bugs assigned to MUNE at this refresh.
+- H32 `3682` independently converges on MU10: exact `20 MODIFY + 54 CREATE = 74`, Package change required, Voice no-touch preserved.
+- H33 Voss-closed at `3687`: Package database gate is an acyclic typed policy over provider-compatible DB qualification, current DB integration binding, and DB-local successor admission; build validity remains separate from release eligibility.
+- H34 Voss-closed at `3691`: append-only assurance remains three independent claims: table-local append guard, declared append-path confinement, and admin/provider confinement trust root.
+- H35 integrated final is at `3699`, keeping build validity, database gate, pre-release qualification, release admission/selection, route-scoped install eligibility, post-effect installation verification, active-release selection, and future protected-effect eligibility distinct. H35 remains non-state READY_FOR_REVIEW at this checkpoint.
+- MU6 fresh Vera catalog proof for existing TRIAGED MEDIUM `ca11d679-add2-42b7-b0cc-1ec6e24eef4d`: service_role has direct INSERT on `public.vera_coordination_events`; RLS enabled but not forced; only anon/authenticated deny policy; service_role BYPASSRLS; no narrow public append/replenishment function found. A future workload CAS must therefore include append-path confinement or authority-bearing writes remain bypassable.
+- MU6 portable-bootstrap custody: internally coherent `DURABLY_BOUND` rows with unavailable immutable route provenance remain `UNRESOLVED_ADMISSION_CUSTODY / REISSUE_REQUIRED`, not silently admitted and not labeled forged absent proof.
+- MU7 fresh provider proof: PostgreSQL `17.6 / 170006`; `authenticator -> service_role SET=true`; exact `r9a0_governance.require_service_role()` reads legacy `request.jwt.claim.role` only and bypasses JWT checks for `session_user=postgres`; live `auth.role()` supports PG14+ `request.jwt.claims`. Existing TRIAGED bugs `03854c12-eec8-4cf1-b876-84fddff6c827` HIGH and `493ad51c-70a0-48a9-be3f-59280c60fca1` MEDIUM cover the defects; no duplicate filed.
+- `bug_ops` had no open bugs assigned to MUNE in the latest reviewed snapshot.
 
 ## Effect boundary
 
-Authorized Mune research/checkpoint branch writes, Slack coordination, and read-only source/provider inspection occurred. No Vera-R9A0 producer-byte write, canonical coordination INSERT, merge, deployment, production/hosted schema or role/grant mutation, credential/permission change, paid-service action, deletion, installation, model training or canonical-memory mutation occurred.
+Authorized Mune research/checkpoint branch writes, Slack coordination, and read-only provider/source inspection occurred. No Vera-R9A0 producer-byte write, canonical coordination INSERT, merge, deployment, production/hosted schema or role/grant mutation, credential/permission change, paid-service action, deletion, installation, model training or canonical-memory mutation occurred.
