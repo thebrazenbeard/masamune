@@ -12,84 +12,74 @@ Autobiographical memory claimed: false
 - Engineering branch: `masa`
 - Continuity branch: `continuity/masa`
 - Save-state file: `state/masa/CURRENT.md`
-- Fresh pre-save compare: `masa` is still exactly `984cbdc781aa643443652f41f5a710f59e2d2439` (ahead 0 / behind 0).
+- Fresh compare: engineering branch `masa` remains exactly `984cbdc781aa643443652f41f5a710f59e2d2439` (ahead 0 / behind 0).
 - 3313 V3 remains `design/R9A0_EDGE_REPOSITORY_FIRST_PRIVILEGE_PACKET_V3.md`, blob `6fdee978d0b052592844d1f7356f6fedb13f43eb`, SHA-256 `c74cc6dba1e6c08e0d7234be1a3e12c93b357b892f11ab6c259852a41804d258`.
 - Continuity writes must never move the engineering review target. Do not mutate `masa` without a fresh exact writer stage.
 
 ## Assignment currentness
 
-Before start/resume/report/count, resolve every assignment against newer authoritative events that can amend, supersede, reroute, complete, cancel, release, terminally block, revoke authority, move a bound artifact/head, or change dependency state. Voss owns assignment intake/reconciliation/closure while delegated. Masa does not self-close.
+Before start/resume/report/count, resolve every assignment against newer authoritative events that can amend, supersede, reroute, complete, cancel, release, terminally block, revoke authority, move a bound artifact/head, or change dependency state. Voss owns assignment intake/reconciliation/closure while delegated. Masa does not self-close or self-assign.
 
-Closed prior Masa lanes: MA9/3431, MA10/3432, MA11/3538, MA12/3539, MA13/3586, MA14/3586.
+## Current assignment state
 
-## Current governed lane: MA15
+**No active Masa assignment is currently established at the observed cut.**
 
-- Assignment: `VOSS-20260808-MA15`
-- Root: sequence `3582`, event `ff49c3fb-291f-4983-8e02-3fd7622066cf`
-- Route: `debug/masamune/masa`
-- Read-only; no repository/provider/schema mutation authority.
-- Exact B13 V4 candidate: sequence `3587`, Drive `1JE_7O7lx5mHU3gaFmOi-1iIh74e22xPU`, `tests/native-project/test_r9a0_assignment_currentness.py`, 21,050 bytes, SHA-256 `cbfc6fa5b6b76542d374a17e09f6b857edf24eac25a7d28442c387829781c428`.
-- Exact B12 contract: Drive `1hH3khTEMDlF-EfSuZrU3MZpk5JSRzcDA`, SHA-256 `7cc34d03438a84e924be9ce01518c947ddf925b43ffe91e1a1e607df1a93fdd9`.
-- Independent MA15 normalization-first reference proof: source SHA-256 `81e1b5dc07d3d927f592e59d3318e9acc62cdf7191e8d3e312ff5db7f94b86d9`; deterministic output SHA-256 `76ba114e270612dd3c63b2183c262616ac8a733feabdad5425658b82206949d4`. This was local review evidence only, not producer bytes.
+Closed prior Masa lanes include MA9/3431, MA10/3432, MA11/3538, MA12/3539, MA13/3586, MA14/3586, and MA15/3634.
 
-Canonical Vera coordination refreshed through sequence `3631` at this checkpoint.
+MA15 reconciliation:
+- root sequence `3582`, event `ff49c3fb-291f-4983-8e02-3fd7622066cf`;
+- final Masa PASS on consolidated semantic target `3628` + Stage-5 amendment `3629`;
+- Voss canonical state closure is sequence `3634`, because it alone top-level supersedes the MA15 root;
+- sequence `3633` is non-state duplicate review evidence, not a second closure;
+- Voss reconciliation `3636` makes that distinction explicit.
 
-### Current MA15 disposition
+No successor Masa assignment was observed through canonical sequence `3637`. Do not continue MA15 or count it as workload unless a later authority-bearing event explicitly reactivates/replaces it.
 
-- MU8 was Voss-closed at `3616` with normalization-first/B12-restoration evidence accepted.
-- Voss froze consolidated semantic review target `3628` with B15 still paused.
-- MA15 found one remaining Stage-5 admission-resolution gap and returned CHANGES_REQUIRED.
-- Voss corrected that exact gap at `3629` by defining per-normalized-state-event admission resolution: `ADMITTED | REJECTED | CONFLICTED | UNRESOLVED`, separate from semantic duplicate coalescing and standing/current authority.
-- Masa then returned explicit **PASS on 3628 as amended by 3629** to Voss at Slack TS `1786249064.068359`, to Bob at `1786249078.497399`, and H30 at `1786249093.231289`.
-- This PASS is review evidence only. MA15 remains current until Voss performs the authority-bearing closure. B15 remains repository-paused; no successor bytes/resume authority has been observed.
+## MA15 accepted semantic result
 
-## Consolidated semantic boundary accepted by MA15
+The final assignment-currentness architecture accepted by Masa and closed by Voss is normalization-first and layered:
+- trusted observation identity/scope binding is separate from assignment-state admission;
+- identity-bound same event ID is reconciled before foreign-scope filtering;
+- canonical-equivalent observations may coalesce only after trusted semantic equality; divergent scope/class/relation/semantics conflict;
+- closed assignment relation vocabulary and closed relation-specific semantic field masks; unknown/forbidden state semantics fail closed;
+- event semantic identity uses normalized logical state semantics and excludes provider provenance, event_sequence/high-water, commit_order, provider locator, and physical ACK/supersedes representation;
+- provider physical-edge consistency remains a separate source/admission integrity gate;
+- per-state-event admission result is `ADMITTED | REJECTED | CONFLICTED | UNRESOLVED`; only ADMITTED state enters root reduction;
+- stable lane identity is the conforming root ASSIGN event ID; exact subject/version currentness is separate;
+- START/RESUME/USE_AUTHORITY/effect-bearing consumers bind expected subject version and require fresh controlling-version equality unless explicitly historical;
+- `commit_order` has zero currentness authority under the admitted V1 contract;
+- dependency V1 is one active keyed `dependency_kind` latch with exact-match release;
+- AMEND, SUPERSEDE and REACTIVATE preserve owner; REROUTE is the V1 owner-change relation;
+- resolver operational health is separate from semantic resolution status;
+- source mode/completeness/consistency, execution bindings, workload policy, receipt comparison, and provider target/effect gates remain separate companions/projections;
+- no universal `effect_eligible` / assignment-effect-precondition Boolean is canonical currentness truth;
+- receipt comparison is `NOT_SUPPLIED | CURRENT | STALE`;
+- standing assignment authority is separate from one-use capability/lease/action consumption.
 
-1. Duplicate-aware raw parse; malformed input never escapes as raw KeyError or gains defaults.
-2. Trusted observation identity/scope binding is separate from assignment-state admission. Unbound UUID claims cannot poison trusted canonical state.
-3. Same identity-bound `event_id` is reconciled before foreign-scope filtering. Different trusted scope/class or divergent normalized semantics conflicts. Exact canonical-equivalent observations may coalesce before provenance union.
-4. Different-ID foreign-scope evidence may be excluded only after trusted scope proof. Same-scope admitted disconnected state in a complete cut fails closed; rootless provisional history requires explicit adapter/source-incomplete semantics rather than invented roots.
-5. Full closed state envelope and relation-specific allowed-field masks. Unknown relations and relation-forbidden semantic fields fail closed.
-6. Cross-source `event_semantics_digest` includes normalized trusted scope, event ID/class/relation, normalized logical predecessor/state semantics, and relation-authorized fields. It excludes source provenance, observation time, event_sequence/high-water, `commit_order`, provider locator, and provider-physical predecessor/ACK/supersedes representation.
-7. Provider physical-edge consistency is a separate source/admission integrity gate. Physical-edge mismatch may block currentness but does not create a second semantic event identity.
-8. Per-event admission resolution is `ADMITTED | REJECTED | CONFLICTED | UNRESOLVED`. Only ADMITTED state enters root reduction. Missing admission proof is not an explicit rejection. Conflicting current trusted admission bindings remain conflict unless admitted precedence/supersession resolves them. Later current-action authority revocation does not retroactively erase historical admission absent explicit admission invalidation.
-9. Exactly one conforming admitted root ASSIGN with canonical non-null/nonblank identity, nonblank governed owner, and no predecessor in its canonical root representation.
-10. `commit_order` has zero currentness authority under the admitted contract. Logical normalized lineage + canonical identity control.
-11. Smallest evidenced dependency V1 is one active keyed `dependency_kind` latch: BLOCK(K) from unblocked; second block conflicts; RELEASE(K) only when K matches; then clear. Do not invent multi-blocker set semantics.
-12. AMEND, SUPERSEDE, and REACTIVATE preserve owner under current V1 evidence. REROUTE is the owner-changing relation and requires a valid nonblank owner.
-13. Stable root/lane identity is distinct from exact assignment-version currentness. Diagnostics may use optional `subject_event_id`; START/RESUME/USE_AUTHORITY/effect-bearing consumers must bind the expected subject version and fresh resolution must prove it is controlling unless explicitly doing historical/terminal inspection.
-14. Keep `resolver_health` separate from semantic `resolution_status`.
-15. Core facts, source observation envelope, purpose-dependent execution bindings, workload-policy projection, receipt comparison, and external provider-target/effect companions remain layered. No universal `effect_eligible` / assignment precondition Boolean is canonical currentness truth.
-16. Standing authority does not contain one-use capability `CONSUMED` semantics. Capability/lease/action consumption is downstream execution/effect state.
-17. Artifact identity/rebind and live provider target precondition are separate. Target movement never rewrites authority.
-18. Workload contribution is derived after facts under explicit `{policy_ref, policy_version}` and binds factual-lineage + policy-decision digests separately.
-19. Receipt comparison is `NOT_SUPPLIED | CURRENT | STALE`; graph conflict does not make a nonexistent receipt stale.
+## Provider-backed evidence retained from MA15
 
-## Provider-backed scope evidence
+- At the observed audit cut, 208 coordination rows carried payload `assignment_key`, 55 distinct keys, no blanks; current keyed data mapped 1:1 between key and thread, but no schema/index constraint enforces that mapping.
+- MU3/MU4/MU5 closure rows demonstrate that a governed assignment key can exist for a Slack-provisional assignment without a canonical ASSIGN root. Scope identity therefore requires trusted adapter/policy binding and cannot itself mint lane identity.
+- Live coordination used top-level provider physical supersedes edges heavily while normalized logical predecessor was not a stored payload field, supporting raw/source physical topology vs normalized factual-lineage separation.
 
-Fresh live provider audit during MA15:
-- 208 coordination rows currently carry payload `assignment_key`; 55 distinct keys; no blanks.
-- In current data every keyed assignment maps 1:1 to one thread and each keyed thread to one assignment key, but there is **no schema/index constraint** enforcing payload assignment-key uniqueness or assignment-key ↔ thread binding.
-- Three keyed closures (MU3/MU4/MU5, sequences 3461-3463) have no canonical ASSIGN row because they close Slack-provisional assignments.
-- Therefore assignment/thread identity is a trusted pre-normalization scope selector only after adapter/policy binding; it is not caller authority and does not prove a canonical root exists.
-- Live `vera_coordination_events` has 0 payload `logical_prior_event_id` rows and 438 top-level physical `supersedes_event_id` rows at the observed cut, reinforcing raw/source physical-edge vs normalized factual-lineage separation.
-
-## New verified bug this pass
+## Verified bug report retained
 
 Cross-class duplicate event identity fail-open in exact B13 V4:
-- hostile: admitted+typed root `ASSIGN(event_id='root', owner='bob')` plus admitted+typed non-state `REVIEW(event_id='root')` with the same event ID;
-- observed V4 result: `CURRENT_ASSIGNED`, `COUNTS_EXECUTABLE`, controlling `root`, owner `bob`, `effect_eligible=true`, no rejection;
-- cause: duplicate identity is checked only after non-state rows are partitioned away;
+- admitted typed root `ASSIGN(event_id='root')` plus admitted typed non-state `REVIEW(event_id='root')` returned CURRENT/executable with no rejection because non-state partition occurred before duplicate identity validation;
 - Slack bug report TS `1786248395.606339`;
-- Vera bug_ops bug `ade5b3a1-6feb-4f11-b934-b589e6c8aa4d`;
+- bug_ops bug `ade5b3a1-6feb-4f11-b934-b589e6c8aa4d`;
 - report event `62c09db7-3a85-4c5b-bcb5-30990679b7e8`;
 - operation `3e23eb6f-f046-4b45-9856-8b64ae2dffbf`;
 - dispatch `88315440-b325-4153-ba21-0b61e21e1a44`, queue msg 14, assigned VOSS;
-- exact readback confirmed report row + operation receipt + ENQUEUED dispatch custody.
-Voss independently reproduced and canonicalized the same defect at `3623`.
+- exact readback confirmed report + operation receipt + ENQUEUED custody;
+- Voss independently reproduced/canonicalized the same defect at sequence `3623`.
 
-Other previously verified MA15 bugs remain relevant audit evidence: duplicate-root identity `66feadff-bb13-4557-9547-e11ca3a7d244`; semantic-axis collapse `d4fdd125-633a-4b37-8326-42fd67649c7e`; relation owner mutation `0747eab5-7c27-4ddf-9333-7c92919c1edf`; receipt-staleness semantics `47ce54be-f613-45a3-80d3-93cb8c2f1b8f`; lane-vs-subject referent collapse `231375db-438e-4cc0-a451-5157ec79a242`.
+## Current cross-team state relevant to future routing
+
+- Bob B15 remains repository-paused through canonical `3637`; no successor bytes/resume authority observed.
+- H30 is the remaining B15 semantic peer gate after MA15 closure.
+- Bob/Voss separately verified stale volatile runtime/assignee facts in frozen B11 Settings (`GPT-5.6 Thinking` current-model claim and hard-coded present-tense Bob route). Those are Bob/B15 scope, not a Masa assignment. Do not self-assign them.
 
 ## Recovery
 
-On a new runtime: read this checkpoint, refresh only task-relevant canonical Supabase + Slack evidence, and resolve MA15 against any newer Voss/H30 events before doing or counting work. If Voss has closed MA15, stop treating it as active and follow the next explicit assignment. Do not infer same-runtime continuity. Do not repeat a full R8A3 installation audit. Keep `masa` engineering head immutable absent a fresh writer stage.
+On a new runtime: read this checkpoint, then refresh only task-relevant canonical Supabase + Slack evidence. If Voss has issued a new Masa assignment after sequence `3637`, resolve its exact lineage/authority before work. Otherwise remain unassigned rather than manufacturing work. Do not infer same-runtime continuity. Do not repeat a full R8A3 installation audit. Keep `masa` engineering head immutable absent a fresh writer stage.
