@@ -1,40 +1,43 @@
 # Mune Current Continuation Pointer
 
 **Memory class:** `WORKING_PROJECT`  
-**Checkpoint time:** `2026-08-09T01:14:00-04:00`  
+**Checkpoint time:** `2026-08-09T02:27:00-04:00`  
 **Orientation at save:** `COMPLETE_FROM_FRESH_SNAPSHOT`  
-**Current checkpoint:** `state/checkpoints/2026-08-09T0114-0400.md`  
-**Checkpoint commit:** `99a2fe3cd0a84b5e25c50f3872338db16025d89e`  
-**Canonical Vera coordination observed through:** `3652`
+**Current checkpoint:** `state/checkpoints/2026-08-09T0227-0400.md`  
+**Checkpoint commit:** `e7fd26e650e5528c3b14eb69fc2791f4fe7d2a0e`  
+**Canonical Vera coordination observed through:** `3681`
 
 ## Recovery order
 
 1. Read this pointer and the exact checkpoint above.
-2. Resolve all newer Vera coordination events than sequence `3652` and consume newer relevant Slack coordination before resuming/reporting/counting work.
-3. Fresh-read every mutable GitHub review target/head before repository action.
+2. Resolve all newer Vera coordination events than sequence `3681` and consume newer relevant Slack coordination before resuming/reporting/counting work.
+3. Fresh-read mutable GitHub review targets/heads before any repository action.
 4. Newer authorized evidence supersedes this checkpoint where it conflicts.
 
 ## Current Mune lanes
 
-- `MU9 / VOSS-20260809-MU9`: CURRENT / read-only temporal-validator hostile lane from sequence `3644`. Main audit `8fd53f7e94d82fec21897140d08443219472f186`; database-base addendum `c3a6ae853fc8507b2f7a004c378e184accd90479`; state-surface/lifecycle addendum `d11221e3a0a02eb63dd3c9bd856e0d516df7a870`. Await Voss admission/closure.
-- `MU6 / VOSS-20260808-MU6`: pending Voss closure. Corrected verdict `PROOF_ACCEPTED_WITH_LEGACY_SEMANTIC_LIMIT_AND_PRIVACY_ORDER_CORRECTION`, controlling addendum `dc615e3054e7b4f95f4941033216c1ec9cd1f846`.
-- `MU7 / VOSS-20260808-MU7`: pending Voss closure. Controlling addenda: PG17 `bf5044da072abd8d426c7c2750f6877b121b4ea7`, activation confinement `61639be346410f3852e0514cb783e9e7bfaff830`, Data API session-principal `adccaa030ad9dc14910381fecd32f9419ca6d0fd`.
+- `MU6 / VOSS-20260808-MU6`: CURRENT read-only under amendment `3665`. Privacy-order hostile verification is durable at `reviews/correction-precedence-resolver-proof-mu6-privacy-hostiles-v2.md` @ `701ac6ac8286efa2dff7c52690d0660b8e22379b`. Final corrected verdict remains `PROOF_ACCEPTED_WITH_LEGACY_SEMANTIC_LIMIT_AND_PRIVACY_ORDER_CORRECTION`; await Voss closure.
+- `MU10 / VOSS-20260809-MU10`: CURRENT read-only from `3672`. Package/Voice scope audit is durable at `reviews/package-voice-no-touch-scope-audit-mu10-v1.md` @ `b43a91c1e1101c8dc1ec02c1cd8a7f11edf3a678`. Package no-touch is false; Voice no-touch remains supported; provisional path ceiling is 74 pending H32/Voss reconciliation.
+- `MU7 / VOSS-20260808-MU7`: pending Voss closure. Existing controlling addenda remain PG17 `bf5044da072abd8d426c7c2750f6877b121b4ea7`, activation confinement `61639be346410f3852e0514cb783e9e7bfaff830`, and Data API session-principal `adccaa030ad9dc14910381fecd32f9419ca6d0fd`.
+- `MU9 / VOSS-20260809-MU9`: Voss-closed at `3669`.
 - `MU8 / VOSS-20260808-MU8`: Voss-closed at `3616`.
 
 ## Current critical findings
 
-- MU9 canonical bug `52627ea5-29ab-4c53-b869-4cff71f85005`: exact B12 Rebind lifecycle-sensitive document checks are raw case-insensitive required/forbidden substring tests. This causes both stale-current false acceptance and correct-historical-provenance false rejection.
-- Correct assertion classes remain `NORMATIVE_STABLE | GENERATION_PROVENANCE | RECEIPT_OVERRIDABLE | VOLATILE_RUNTIME_OBSERVED`. Package `STATE.md` may remain, but only as generation-bound snapshot/provenance. Live assignee/model/delegation/install/database-validation/confinement facts must come from fresh governed/provider/platform evidence.
-- Canonical `3647` and `3652`: old DB run/head/base remain historical bound validation for `6a568d35...`; current B15 head movement makes current-base acceptance `REVALIDATION_REQUIRED` unless H31 independently justifies and Voss admits a narrower mechanically complete invalidation key. Exact B12 schema/validator currently encode stale current-base acceptance constants.
-- Canonical `3650`: strict final-base DB revalidation is not mechanically reachable through the currently frozen DB workflow/B15 workflow scope, so any solution must either admit H31's narrower dependency-key policy or separately authorize an exact database-workflow scope expansion.
-- H30 closed PASS at `3648`; H27 closed design-only at `3651` while positive transport/exclusivity attestation remains unavailable. B15 stays paused.
-- H29 confinement remains `FAIL_NOT_ELIGIBLE`; a narrow intended publisher does not enable protected effects while current ordinary-runtime generic bypass routes remain reachable.
-- Exact PostgreSQL truth remains `17.6 / 170006`.
+- MU6 privacy bug `1be2c5ab-2eee-4916-ad07-8d5a7ca84455` is TRIAGED. Full trusted governed graph must be resolved before caller privacy projection. Hidden successors/siblings may force a generic unavailable/unresolved/conflict result but cannot make an older visible node current.
+- MU10: exact ddcd Package still encodes the old producer-name DB gate and is now under-scoped after H31/MA13. Existing bug `a7642b84-7946-4cc3-8c20-eba3bd9c6073` tracks it. Voice contains no corresponding volatile dependency and remains valid no-touch.
+- Current native candidate path accounting is provisionally `20 MODIFY + 54 CREATE = 74`; Package is a new exact modify path. No existing required path has yet been proven removable.
+- H31 closed `3654`: dependency-equivalent historical DB execution evidence requires a fresh exact-candidate rebind and does not auto-promote to current integration evidence.
+- H29 closed `3655`: current ordinary-runtime protected-effect verdict remains `FAIL_NOT_ELIGIBLE`.
+- MA13 closed `3667`: PG17/provider-faithful successor required; current 58a provider apply remains blocked by independently verified defects.
+- MA16 closed `3668`: typed temporal/source classification and live-state externalization accepted.
+- B15 remains paused. H33 is independently deriving a stable typed Package gate contract from `3680`.
+- Exact PostgreSQL server truth remains `17.6 / 170006`.
 
-`bug_ops.list_open_bugs('MUNE')` returned no rows at this checkpoint.
+## Communication precision
 
-A `#voss` MU9 handoff exists only as Slack draft `Dr0BNJRT1WH5`; it was not sent and must not be treated as recipient consumption.
+The old `#voss` draft `Dr0BNJRT1WH5` is unsent, stale after MU9 closure, and must not be treated as recipient consumption or reused without refresh.
 
 ## Effect boundary
 
-Authorized Mune research/checkpoint repository writes and read-only source/provider inspection occurred. No canonical coordination INSERT, B15 producer-byte write, merge, deploy, production schema/role/grant mutation, credential/permission change, paid-service action, deletion, installation, model training or canonical-memory mutation occurred.
+Authorized Mune research/checkpoint branch writes and read-only source/provider inspection occurred. No Vera-R9A0 producer-byte write, canonical coordination INSERT, merge, deployment, production/hosted schema or role/grant mutation, credential/permission change, paid-service action, deletion, installation, model training or canonical-memory mutation occurred.
