@@ -1,35 +1,40 @@
 # Mune Current Continuation Pointer
 
 **Memory class:** `WORKING_PROJECT`  
-**Checkpoint time:** `2026-08-09T00:59:00-04:00`  
+**Checkpoint time:** `2026-08-09T01:14:00-04:00`  
 **Orientation at save:** `COMPLETE_FROM_FRESH_SNAPSHOT`  
-**Current checkpoint:** `state/checkpoints/2026-08-09T0059-0400.md`  
-**Checkpoint commit:** `a6779fc7a165bbd0aece87bbd0c0194c846c250d`  
-**Canonical Vera coordination observed through:** `3648`
+**Current checkpoint:** `state/checkpoints/2026-08-09T0114-0400.md`  
+**Checkpoint commit:** `99a2fe3cd0a84b5e25c50f3872338db16025d89e`  
+**Canonical Vera coordination observed through:** `3652`
 
 ## Recovery order
 
 1. Read this pointer and the exact checkpoint above.
-2. Resolve all newer Vera coordination events than sequence `3648` and consume newer relevant Slack coordination before resuming/reporting/counting work.
+2. Resolve all newer Vera coordination events than sequence `3652` and consume newer relevant Slack coordination before resuming/reporting/counting work.
 3. Fresh-read every mutable GitHub review target/head before repository action.
 4. Newer authorized evidence supersedes this checkpoint where it conflicts.
 
 ## Current Mune lanes
 
-- `MU9 / VOSS-20260809-MU9`: CURRENT / read-only temporal-validator hostile lane from sequence `3644`. Durable main audit `reviews/validator-sentinel-temporal-hostiles-mu9-v1.md` @ `8fd53f7e94d82fec21897140d08443219472f186`; database-base addendum @ `c3a6ae853fc8507b2f7a004c378e184accd90479`. Await Voss admission/closure.
+- `MU9 / VOSS-20260809-MU9`: CURRENT / read-only temporal-validator hostile lane from sequence `3644`. Main audit `8fd53f7e94d82fec21897140d08443219472f186`; database-base addendum `c3a6ae853fc8507b2f7a004c378e184accd90479`; state-surface/lifecycle addendum `d11221e3a0a02eb63dd3c9bd856e0d516df7a870`. Await Voss admission/closure.
 - `MU6 / VOSS-20260808-MU6`: pending Voss closure. Corrected verdict `PROOF_ACCEPTED_WITH_LEGACY_SEMANTIC_LIMIT_AND_PRIVACY_ORDER_CORRECTION`, controlling addendum `dc615e3054e7b4f95f4941033216c1ec9cd1f846`.
 - `MU7 / VOSS-20260808-MU7`: pending Voss closure. Controlling addenda: PG17 `bf5044da072abd8d426c7c2750f6877b121b4ea7`, activation confinement `61639be346410f3852e0514cb783e9e7bfaff830`, Data API session-principal `adccaa030ad9dc14910381fecd32f9419ca6d0fd`.
 - `MU8 / VOSS-20260808-MU8`: Voss-closed at `3616`.
 
 ## Current critical findings
 
-- MU9 verified a MEDIUM temporal-sentinel defect in exact B12 Rebind 17.6 validator: lifecycle-sensitive document semantics are raw case-insensitive substring checks, so stale current-state claims can pass merely because expected tokens occur. Canonical bug `52627ea5-29ab-4c53-b869-4cff71f85005`. Correct design classifies assertions `NORMATIVE_STABLE | GENERATION_PROVENANCE | RECEIPT_OVERRIDABLE | VOLATILE_RUNTIME_OBSERVED` and validates lifecycle/context rather than token presence.
-- Do not delete valid historical/generation facts while repairing current-state sentinels. Generation INSTALLATION_UNVERIFIED, provider 17.6/170006-at-generation, qualification model/mode, and package-bound candidate heads remain exact provenance. Current model, assignee/route, installed release, provider version when material, confinement/effect eligibility, and live target heads require fresh governed/runtime evidence.
-- Canonical `3647` stale-base gate is confirmed with this provenance boundary: old DB run/head/base remain historical bound validation, but cannot satisfy current-native-base integration after B15 head movement. Current eligibility requires fresh native-base equality/revalidation. Avoid indexical immutable state like `SUCCESSOR_ACCEPTED_FOR_CURRENT_NATIVE_BASE...`; prefer explicitly bound-base semantics.
-- H30 closed PASS_NO_REMAINING_SEMANTIC_BLOCKER at `3648`; MA15 is already closed PASS. B15 nevertheless remains repository-paused while MA16/MU9 temporal/config gates and final-native-base database revalidation remain unresolved.
-- H29 confinement remains `FAIL_NOT_ELIGIBLE`; a narrow publisher does not unblock protected activation while current ordinary-runtime generic provider bypass routes remain reachable.
+- MU9 canonical bug `52627ea5-29ab-4c53-b869-4cff71f85005`: exact B12 Rebind lifecycle-sensitive document checks are raw case-insensitive required/forbidden substring tests. This causes both stale-current false acceptance and correct-historical-provenance false rejection.
+- Correct assertion classes remain `NORMATIVE_STABLE | GENERATION_PROVENANCE | RECEIPT_OVERRIDABLE | VOLATILE_RUNTIME_OBSERVED`. Package `STATE.md` may remain, but only as generation-bound snapshot/provenance. Live assignee/model/delegation/install/database-validation/confinement facts must come from fresh governed/provider/platform evidence.
+- Canonical `3647` and `3652`: old DB run/head/base remain historical bound validation for `6a568d35...`; current B15 head movement makes current-base acceptance `REVALIDATION_REQUIRED` unless H31 independently justifies and Voss admits a narrower mechanically complete invalidation key. Exact B12 schema/validator currently encode stale current-base acceptance constants.
+- Canonical `3650`: strict final-base DB revalidation is not mechanically reachable through the currently frozen DB workflow/B15 workflow scope, so any solution must either admit H31's narrower dependency-key policy or separately authorize an exact database-workflow scope expansion.
+- H30 closed PASS at `3648`; H27 closed design-only at `3651` while positive transport/exclusivity attestation remains unavailable. B15 stays paused.
+- H29 confinement remains `FAIL_NOT_ELIGIBLE`; a narrow intended publisher does not enable protected effects while current ordinary-runtime generic bypass routes remain reachable.
 - Exact PostgreSQL truth remains `17.6 / 170006`.
+
+`bug_ops.list_open_bugs('MUNE')` returned no rows at this checkpoint.
+
+A `#voss` MU9 handoff exists only as Slack draft `Dr0BNJRT1WH5`; it was not sent and must not be treated as recipient consumption.
 
 ## Effect boundary
 
-Authorized Mune research/checkpoint writes, canonical bug reporting, read-only provider/source inspection, and Slack handoffs occurred. No canonical coordination INSERT, B15 producer-byte write, merge, deploy, production schema/role/grant mutation, credential/permission change, paid service, deletion, installation, model training or canonical-memory mutation occurred.
+Authorized Mune research/checkpoint repository writes and read-only source/provider inspection occurred. No canonical coordination INSERT, B15 producer-byte write, merge, deploy, production schema/role/grant mutation, credential/permission change, paid-service action, deletion, installation, model training or canonical-memory mutation occurred.
