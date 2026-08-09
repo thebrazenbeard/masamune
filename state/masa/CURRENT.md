@@ -5,7 +5,7 @@ Memory class: WORKING_PROJECT
 Orientation: COMPLETE_FROM_FRESH_SNAPSHOT
 Same-runtime continuity claimed: false
 Autobiographical memory claimed: false
-Canonical cutoff at save: 3655
+Canonical cutoff at save: 3681
 
 ## Repository custody
 
@@ -14,115 +14,85 @@ Canonical cutoff at save: 3655
 - Continuity branch: `continuity/masa`
 - Save-state file: `state/masa/CURRENT.md`
 - Fresh pre-save compare: `masa` remains exactly `984cbdc781aa643443652f41f5a710f59e2d2439` (ahead 0 / behind 0).
-- 3313 V3 remains `design/R9A0_EDGE_REPOSITORY_FIRST_PRIVILEGE_PACKET_V3.md`, blob `6fdee978d0b052592844d1f7356f6fedb13f43eb`, SHA-256 `c74cc6dba1e6c08e0d7234be1a3e12c93b357b892f11ab6c259852a41804d258`.
 - Continuity writes never authorize or move the engineering review target. Do not mutate `masa` without a fresh exact writer stage.
 
-## Assignment currentness correction
+## Assignment currentness
 
-Before start/resume/report/count/use-authority/effect, resolve against newer authority-admitted assignment events. Voss owns assignment intake, routing, reconciliation and closure while delegated. Masa does not self-assign or self-close.
+Resolve against newer authority-admitted events before start/resume/report/count/use-authority/effect. Voss owns intake/routing/reconciliation/closure while delegated. Masa does not self-assign or self-close.
 
-Correction to the prior checkpoint: **MA13 was incorrectly listed as closed.** Fresh canonical thread readback shows MA13 root 3545 remains CURRENT; sequence 3586 belongs to Bob B15 review and is not an MA13 closure. Closed Masa lanes include MA9/3431, MA10/3432, MA11/3538, MA12/3539, and MA15/3634. MA15 duplicate closure evidence was reconciled at 3636: 3634 is the canonical state closure; 3633 is non-state duplicate review evidence.
+Closed current lanes:
+- MA13 `VOSS-20260808-MA13`, root 3545, Voss closed APPROVED at 3667.
+- MA16 `VOSS-20260809-MA16`, root 3643, Voss closed APPROVED at 3668.
 
-## Current governed lane: MA13
+Current read-only lanes:
+- MA17 `VOSS-20260809-MA17`, root 3671, `vera-r9a0/assignments/masa/pg17-provider-repair-strategy-ma17-v1`.
+- MA18 `VOSS-20260809-MA18`, root 3674, `vera-r9a0/assignments/masa/database-validation-rebind-route-ma18-v1`.
+No repository/workflow/provider/schema mutation or successor-byte authority is attached to either lane.
 
-- Assignment: `VOSS-20260808-MA13`
-- Root sequence/event: `3545` / `8766fc04-36d6-4524-b348-4fc781e8cb39`
-- Thread: `vera-r9a0/assignments/masa/pg17-provider-parity-ci-blueprint-ma13-v1`
-- Route: `debug/masamune/masa`
-- Read-only provider-faithful PostgreSQL 17 validation successor blueprint. No repo/workflow/provider mutation authority.
-- Hephaestus peer challenge 3569 remains review input: keep `DB_LOGIN_ORIGIN_GUARD_VALIDATED`, `POSTGREST_HTTP_AUTH_PATH_VALIDATED`, and `TRANSPORT_EXCLUSIVITY` separate; `session_user` proves DB-login origin, not HTTP traversal or credential exclusivity.
-- Voss re-prioritized MA13 as release-critical after 3647/3650 while MA16 remains active.
+## MA17 final producer preflight
 
-### MA13 exact evidence
+Final READY_FOR_REVIEW handoff to Voss: Slack TS `1786258249.906259`.
 
-Current database package:
-- repo `thebrazenbeard/vera-R9A0`
-- DB head `58a6ae4d4272165bd5b988bdd7a8bb0e72417302`
-- 22-file manifest `docs/database/R9A0_DATABASE_SLICE_MANIFEST.json`, blob `2d726f33b7e4347625c80e9bd09180c15490c457`.
-- integrity migration `supabase/migrations/20260806224900_r9a0_coordination_integrity_repairs.sql`, blob `1c426b34c624f687e543e0a79ea8f28b93be4418`.
-- historical database workflow at native base `6a568d35c142dc37ea41a0209cdb1f295949f767`, blob `85c4e3fbe017199253c506510336f2846eb183df`, uses Docker `postgres:15` and postgres superuser.
-- run `31158655712` / job `92803743968` passed all migration/test/harness/manifest steps. Receipt artifact ID `8986156837`, digest `sha256:fab5ff198bff39d1ffc610272d1c1c8c1483c7c766c78f42369b17e447d02653`.
-- Treat this as immutable historical execution evidence for its exact PG15/native-base context, not PG17/provider-parity or current-final-base proof.
+Recommended architecture:
+`KEEP_DEDICATED_R9A0_OWNER; REPAIR_224900_IN_PLACE_AS_UNSHIPPED_GOVERNED_CANDIDATE; TEMPORARY_EXPLICIT_OWNER_TRANSFER_PREREQUISITES; DEDICATED_OWNER_GLOBAL_ROUTINE_DEFAULT_HARDENING_PLUS_EXPLICIT_OBJECT_ACLS; EXACT_ROLLBACK_BASELINE_AND_REAPPLY_PROOF`.
 
-Fresh build-ground `agvhmutlrolbaijzlbqk` readback:
-- PostgreSQL `17.6 / 170006`, `current_user=session_user=postgres`.
-- `postgres` is NOSUPERUSER, CREATEROLE, CREATEDB, LOGIN, INHERIT, BYPASSRLS.
-- `createrole_self_grant=''`.
-- PUBLIC database ACL has CONNECT/TEMP, not CREATE.
-- `r9a0_owner` does not currently exist on the build ground.
-- `authenticator -> service_role` has SET=true; provider membership topology is broader than a plain PostgreSQL container.
+Core findings:
+- Keep dedicated NOLOGIN/NOSUPERUSER/NOBYPASSRLS/NOCREATEROLE/NOCREATEDB/NOINHERIT `r9a0_owner`; provider `postgres` remains explicit admin trust root.
+- Arbitrary pre-existing same-name cluster role must fail closed. A recognized rerun requires non-secret release-managed provenance plus exact attrs/membership/owned-object fingerprint; provenance marker is not authority.
+- Fresh/reapply path deliberately creates only temporary postgres→owner SET capability and temporary owner CREATE on current database, transfers ownership, then removes temporary privileges to final reviewed graph.
+- PG17 automatic creator membership is ADMIN TRUE / SET FALSE / INHERIT FALSE. ADMIN can self-grant SET, so final SET FALSE is accident prevention, not a confinement claim.
+- Do not alter database-wide global routine defaults for provider `postgres`. Use global PUBLIC-EXECUTE revoke for dedicated creator `r9a0_owner`, plus explicit per-routine revoke/readback. Current postgres-created `validate_event_chain()` requires explicit revoke because later ownership transfer does not retroactively apply owner defaults.
+- Rollback must reverse current object names/semantics, restore the foundation `append_coordination_event` body and foundation projections/ACLs, clear owner default-ACL/grant residue, and remove the managed role only when provenance/dependency checks permit.
+- Preferred rollback experiment is `REASSIGN OWNED BY r9a0_owner TO postgres`, then current integrity-object cleanup, predecessor restoration, `DROP OWNED BY r9a0_owner`, then managed `DROP ROLE`. Exact provider-like PG17 execution must prove whether this works after temporary SET is revoked; this remains explicit pre-byte uncertainty.
+- Required hostile matrix: fresh install; arbitrary same-name owner fail closed; managed rerun; drifted owner; final role/membership/DB ACL; effective routine/default ACL; SECURITY DEFINER/search_path; client/service-role negatives; all SQL suites/concurrency/manifest; full rollback fingerprint; reapply equality; foundation rollback residue policy.
 
-### Verified MA13 bug and report custody
+Likely change classes: 224900 migration + execution mirror + rollback + integrity test; PG17/provider workflow; migration ledger; DB manifest; Recovery/Rollback, Privilege Matrix, Supabase Architecture, successor-review docs; add a provider/rollback harness if cleaner than overloading existing SQL test.
 
-Exact 58a integrity migration creates NOLOGIN `r9a0_owner` and immediately transfers R9A0 schema/table/function/view ownership to it. Under fresh PG17 non-super CREATEROLE semantics, the creator does not automatically receive SET-to-new-owner, and the new owner does not receive database CREATE. The existing PG15 superuser workflow masks both provider prerequisites. Current exact DB package therefore has a provider-apply blocker until a governed bootstrap/migration correction is admitted and tested.
+Consumed existing bugs, no duplicates:
+- HIGH `79efb210-5cfe-4c0d-9a1a-3825f4be3195` owner-transfer/provider applicability.
+- MEDIUM `554c75ba-d94c-4848-8062-dfa54eafaa52` ineffective schema-scoped routine default hardening.
+- HIGH `ebf968be-9098-46b5-8bc6-a7bdfb46d0bd` rollback drift.
+Expanded rollback evidence sent to `#chat-bug-reports` TS `1786257410.372849`: current down file also leaves integrity RPC body, `thread_heads`/service-role grant, owner default ACL state and role residue; current CI has no rollback step.
+Mune falsification request TS `1786257458.402849`; no substantive Mune reply observed before save. H32/E5 independently converged on rollback provenance/fingerprint requirements.
 
-Canonical bug_ops report:
-- bug `79efb210-5cfe-4c0d-9a1a-3825f4be3195`
-- intake `R9A0-MA13-PG17-PROVIDER-OWNER-APPLY-001`
-- severity HIGH, status NEW, assigned VOSS
-- operation `bcb84e17-a4e8-419c-91cb-381e034e2cbf`
-- report event `2409252e-f48d-4544-8ad9-27bda174ae22`
-- dispatch `9090b261-8de7-4b22-b6bd-8f52dbf78072`, queue msg 19, ENQUEUED to VOSS
-- operation result digest `93d8b2a284130f83d2197777a8ef6066cf5151793e9c4d464eea2bc707aba0f1`
-- Slack `#chat-bug-reports` TS `1786253344.074139`.
-No role/schema/migration/provider state was changed while verifying.
+## MA18 final rebind-route preflight
 
-### MA13 successor blueprint handoff
+Final READY_FOR_REVIEW handoff to Voss: Slack TS `1786258172.508049`.
 
-Voss Slack handoff TS `1786253375.421209`, non-state READY_FOR_REVIEW proposal only.
+Verdict:
+`CURRENT_RELEASE_REQUIRES_NEW_PG17_EXECUTION_NOT_HISTORICAL_REBIND; EXACT_FINAL_NATIVE_BINDING_CAN_BE_EMITTED_FROM_SAME_NEW_RUN; FUTURE_EQUIVALENT_NATIVE_MOVES_USE_HERMETIC_REBIND; CURRENT_LEGACY_WORKFLOW_ROUTE_NOT_SUFFICIENT`.
 
-Proposed assurance surfaces:
-1. **PG17 engine/provider-role surface:** pin PostgreSQL-17 image/digest; record exact version/runtime/client identities; execute migrations/tests as a non-super postgres-equivalent under provider-like role attributes, membership/SET/ADMIN/INHERIT topology, DB ACL and `createrole_self_grant`; include owner-transfer and role-escalation hostiles.
-2. **PostgREST/API surface:** pin PostgREST image/version/config/login/exposed schemas/JWT-role configuration; run real HTTP JWT/RLS/RPC tests; keep DB-login-origin, HTTP-path and transport-exclusivity evidence separate.
-3. **Optional hosted-provider assurance:** a disposable hosted Supabase execution can provide stronger managed-provider parity only under separate exact authority/cost; MA13 does not perform it.
+Exact route evidence:
+- PR2 remains old `{base=6a568d35..., db=58a6ae4d..., merge=cd980846...}`.
+- Combined native is `ddcd98b4...`; today it differs from 6a only by Settings, but MA17 necessarily changes DB execution-sensitive inputs.
+- Combined/native DB workflow blob `85c4e3fb...` is PG15, pull_request-only, old target/head routing, no `workflow_dispatch`.
+- Default `main` has older workflow blob `3fb492e...` (14-file variant), also no `workflow_dispatch`.
+- Therefore historical run `31158655712` is RERUN_REQUIRED for current release, not eligible for a cheap H31 rebind.
 
-Receipt V2 should bind raw provenance, versioned execution/input digests, engine/container/runtime identities, provider-role/ACL fixture identity, PostgREST config/version/login and HTTP results, and explicit assurance-axis states. Avoid immutable `CURRENT_NATIVE_BASE` wording.
+Smallest current-release ordering:
+1. freeze final native candidate/head;
+2. produce corrected MA17 DB head/workflow;
+3. run full PG17/provider-faithful validation against that exact final native base/prospective merge;
+4. emit separate implementation-qualification and current-native↔DB-integration claims. If policy wants a distinct rebind receipt type, it can be a companion receipt from the same exact run/merge proof, not a second SQL execution.
 
-H31 canonical closure 3654 is accepted as lifecycle input: `NARROW_TO_VERSIONED_DEPENDENCY_DIGEST`, but dependency equality permits execution-evidence reuse only; it does not make an old receipt current. Exact final candidate still needs a fresh integration/rebind proof. MA13 PG15->PG17/provider-faithful parity is an independent rerun gate and can require new execution even when native Settings-only movement leaves DB repo inputs equal. Canonical 3650 reachability remains: current database workflow cannot attest the combined B15 base under existing trigger/scope, so a later implementation needs a separately admitted executable route.
+Future H31 optimization after a valid PG17 baseline:
+- use a SHA-pinned reusable `workflow_call` hermetic rebind verifier from native exact-head CI;
+- inputs bind exact native head, DB head, provider execution receipt ref+digest, policy version;
+- materialize prospective merge without remote mutation, recompute closed execution/input/integration digests from the resulting tree, validate receipt lifecycle, emit portable rebind receipt;
+- preserve independent `DB_EXECUTION_PROCEDURE_DIGEST`, `DB_EXECUTION_INPUT_DIGEST`, `DB_TRIGGER_OR_ROUTE_REACHABILITY_DIGEST`, `DB_PROVENANCE_DIGEST`, plus native↔DB interface/assumption digest when needed;
+- fail RERUN/REVALIDATE/UNAVAILABLE/INVALID_CONFLICTED/REISSUE according to exact changed axis; never infer currentness from path disjointness, mergeable=true or old PASS.
 
-Mune peer falsification request TS `1786253395.453859`. Bob propagation TS `1786253419.191179`.
+B16 challenge: its provider-run then rebind stages should be conditional. If the new provider run is already against the exact final native merge, a second rebind run is redundant. Rebind is mandatory only when provider execution was bound to an older native base or native moves afterward. Package/Contract must keep stable evidence predicates while actual current receipt IDs/results remain external.
 
-MA13 proposed verdict pending Voss: `PG17_PROVIDER_FAITHFUL_SUCCESSOR_REQUIRED; CURRENT_PG15_RECEIPT_HISTORICAL_VALID; CURRENT_58A_PACKAGE_HAS_PROVIDER_APPLY_BLOCKER; FINAL_NATIVE_INTEGRATION_REVALIDATION_SEPARATE; TRANSPORT_EXCLUSIVITY_NOT_PROVEN`.
+## Cross-team state at save
 
-## Current governed lane: MA16
-
-- Assignment: `VOSS-20260809-MA16`
-- Root sequence/event: `3643` / `d7671587-f09e-43cf-9b8f-aead4cdfd15d`
-- Route: `debug/masamune/masa`
-- Read-only temporal/provenance audit. No successor bytes, repository producer write, schema/provider/config mutation authority.
-- Final Voss Slack handoff TS `1786251617.380809`, verdict `CHANGES_REQUIRED / READY_FOR_REVIEW`; closure remains Voss authority.
-
-MA16 temporal model:
-- `NORMATIVE_STABLE`: stable rule/predicate, not current fact.
-- `GENERATION_PROVENANCE`: immutable package/build/qualification facts.
-- `INSTALLATION_RECEIPT_OVERRIDABLE`: immutable generation state plus separate current installation projection from valid receipt/readback.
-- `VOLATILE_RUNTIME_OBSERVED`: current model/assignee/head/DB applicability/authority/confinement/provider connection; live-source failure yields UNKNOWN/UNRESOLVED, never stale package fallback.
-
-Temporal class belongs to an **atomic assertion**, not a paragraph/file. Recommended normalized shape: `{subject,predicate,object,temporal_class,scope_or_condition,authoritative_source_kind}`. Mixed sentences such as current Basic Memory connection status + exact-authority reconnection rule must split the volatile fact from the stable conditional policy.
-
-Verified MA16 obligations:
-- B11 and current Project Instructions freeze `GPT-5.6 Thinking`; current runtime is GPT-5.6 Sol. Do not fix by freezing `Sol`.
-- Long-lived Settings/Project Instructions/Laws/Governance/State freeze current role/build/database claims; current values belong to currentness/platform/provider/receipt evidence.
-- Packaged `STATE.md` should be explicit generation/provenance state or split from a runtime-resolved current-state projection.
-- B12 indexical `CURRENT_NATIVE_BASE` values are stale after native base movement; preserve exact old receipt/base as bound provenance and derive current integration status separately.
-- B12 unqualified `production_prohibited=klmbpaigzeguvnpccqzz` loses the governing construction-target scope. Stable machine semantics should distinguish `production construction target prohibited` from separate exact-user-authority production apply gating. This was independently reported in `#chat-bug-reports` TS `1786251878.768629`.
-- Do not add `current_model`, `current_assignee`, `current_installed_release`, or `current_database_head` consts to immutable B12.
-
-Validator semantic-sentinel family remains canonical bug `52627ea5-29ab-4c53-b869-4cff71f85005` (MEDIUM/VOSS): raw case-insensitive REQUIRED/FORBIDDEN substring checks create temporal and stance false positives/false negatives. Masa reproduced but did not duplicate the ticket.
-
-## Cross-team board at save
-
-- H30 closed 3648 with `PASS_NO_REMAINING_SEMANTIC_BLOCKER`.
-- H31 closed 3654 with versioned dependency-equivalence/rebind architecture; current ddcd integration remains REVALIDATE_REQUIRED, not current by fiat.
-- H29 closed 3655 as future confinement/broker architecture; present bounded verdict remains `FAIL_NOT_ELIGIBLE` because generic target-reachable GitHub/Supabase mutators exist.
-- B15 remains paused; no successor-byte/resume authority observed.
-- Canonical 3653 adds B12 successor rebind obligations separating standing authority from capability consumption, provider-target movement, and factual executability/workload policy.
-- MU9/3644 remains a parallel read-only temporal-validator hostile lane.
-
-## Prior accepted MA15 semantic result retained
-
-Final currentness design is normalization-first and layered: trusted observation identity/scope separate from state admission; same-ID reconciliation before foreign filtering; closed relation/field masks; semantic digest excludes provider physical representation; provider physical consistency is a separate source/admission gate; per-event admission `ADMITTED|REJECTED|CONFLICTED|UNRESOLVED`; root ASSIGN ID is stable lane identity while exact subject/version currentness is separate; no semantic commit_order; one keyed dependency latch; AMEND/SUPERSEDE/REACTIVATE preserve owner and REROUTE changes owner; resolver health, source envelope, workload policy, receipt comparison, execution/effect companions remain distinct; no universal effect Boolean.
+- B15 remains paused; no resume or successor-byte authority through 3681.
+- H32/MU10 are reconciling Package no-touch; provisional native path ceiling is 74 = 20 MODIFY + 54 CREATE; Voice remains plausible no-touch.
+- B16 final candidate DAG is READY_FOR_REVIEW; MA18 challenged its unconditional DB rebind step.
+- H33 is deriving stable Package DB/release predicates; MA18 challenged any current receipt/head embedding because it creates a byte↔receipt cycle.
+- Current exposed-effect confinement remains FAIL_NOT_ELIGIBLE under H29/3655.
+- `public.vera_coordination_latest` was independently reported by Bob/Mune as raw chronology, not admitted assignment state; bug_ops MEDIUM `5c4ca43f-d253-4a9f-90c3-dd6d4361ef9e` now tracks that separate reducer/projection defect.
 
 ## Recovery
 
-On a new runtime: read this checkpoint, refresh task-relevant canonical Supabase + Slack evidence, and resolve MA13/MA16 against newer Voss events before continuing or reporting them active. Do not infer same-runtime continuity. Do not repeat a full R8A3 installation audit. Keep `masa` engineering head immutable absent a fresh writer stage.
+On a new runtime: read this checkpoint, refresh canonical `public.vera_coordination_events` and relevant Slack channels, resolve MA17/MA18 against newer Voss events, and continue only current assignments. Do not infer same-runtime continuity or repeat a full R8A3 install audit. Keep engineering branch `masa` immutable absent a fresh exact writer stage.
