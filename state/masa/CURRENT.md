@@ -48,12 +48,23 @@ Core findings:
 
 Likely change classes: 224900 migration + execution mirror + rollback + integrity test; PG17/provider workflow; migration ledger; DB manifest; Recovery/Rollback, Privilege Matrix, Supabase Architecture, successor-review docs; add a provider/rollback harness if cleaner than overloading existing SQL test.
 
-Consumed existing bugs, no duplicates:
+Consumed existing bugs:
 - HIGH `79efb210-5cfe-4c0d-9a1a-3825f4be3195` owner-transfer/provider applicability.
 - MEDIUM `554c75ba-d94c-4848-8062-dfa54eafaa52` ineffective schema-scoped routine default hardening.
 - HIGH `ebf968be-9098-46b5-8bc6-a7bdfb46d0bd` rollback drift.
+- HIGH `89be42bf-c430-44aa-8fd0-9f73fdaa275a` owner-role collision/takeover, newly dogfooded after no existing durable bug_ops record was found. Intake `R9A0-OWNER-ROLE-COLLISION-TAKEOVER-001`; operation `d045ba58-9851-4f97-8360-4a645bd61db2`; event `1fe98fe7-c3fb-464c-9d56-4282982ec796`; dispatch `43ddf82b-a3c8-4601-80d2-91975da232ef`, queue 28; operation result digest `a2d07644e267d3383b1c0622e6c0d39db91937423539b0680353fb1a2e7c6b14`; Slack bug report TS `1786258651.530359`. Live build-ground has no `r9a0_owner`, so no present damage claim.
+
 Expanded rollback evidence sent to `#chat-bug-reports` TS `1786257410.372849`: current down file also leaves integrity RPC body, `thread_heads`/service-role grant, owner default ACL state and role residue; current CI has no rollback step.
-Mune falsification request TS `1786257458.402849`; no substantive Mune reply observed before save. H32/E5 independently converged on rollback provenance/fingerprint requirements.
+Mune falsification request TS `1786257458.402849`; durable collision challenge update TS `1786258697.452079`. H32/E5 independently converged on rollback provenance/fingerprint requirements.
+
+### MA17 rollback precision addendum
+
+Voss addendum TS `1786258675.821679` narrows cluster-global cleanup:
+- `REASSIGN OWNED` can support rollback without retaining permanent SET solely for that purpose, but a current-database ownership fingerprint cannot prove a cluster-global role has no dependencies/ownership in other databases.
+- Default real-provider rollback result is therefore `MANAGED_ROLE_RETAINED_INERT` after exact current-DB ownership/grant/default-ACL cleanup unless release custody mechanically guarantees the role could not acquire non-R9A0/shared/cross-DB ownership or the provider exposes enough cluster-wide evidence to prove safe deletion.
+- In isolated CI, where the fixture owns the cluster, exact role deletion may still be required.
+- An inert retained role must remain NOLOGIN with zero R9A0 ownership, zero current-DB grants/default ACLs, and no ordinary-runtime SET/INHERIT path; managed provenance remains only for future reconciliation.
+- Do not claim literal predecessor role absence in a real provider unless that cluster-wide negative is actually observable and proven.
 
 ## MA18 final rebind-route preflight
 
@@ -88,10 +99,10 @@ B16 challenge: its provider-run then rebind stages should be conditional. If the
 
 - B15 remains paused; no resume or successor-byte authority through 3681.
 - H32/MU10 are reconciling Package no-touch; provisional native path ceiling is 74 = 20 MODIFY + 54 CREATE; Voice remains plausible no-touch.
-- B16 final candidate DAG is READY_FOR_REVIEW; MA18 challenged its unconditional DB rebind step.
+- B16 final candidate DAG is READY_FOR_REVIEW; Voss approved with ordering clarifications, and MA18 further narrowed the DB rebind stage to conditional when a provider run is already exact-final-native bound.
 - H33 is deriving stable Package DB/release predicates; MA18 challenged any current receipt/head embedding because it creates a byte↔receipt cycle.
 - Current exposed-effect confinement remains FAIL_NOT_ELIGIBLE under H29/3655.
-- `public.vera_coordination_latest` was independently reported by Bob/Mune as raw chronology, not admitted assignment state; bug_ops MEDIUM `5c4ca43f-d253-4a9f-90c3-dd6d4361ef9e` now tracks that separate reducer/projection defect.
+- `public.vera_coordination_latest` was independently reported by Bob/Mune as raw chronology, not admitted assignment state; bug_ops MEDIUM `5c4ca43f-d253-4a9f-90c3-dd6d4361ef9e` tracks that separate reducer/projection defect.
 
 ## Recovery
 
