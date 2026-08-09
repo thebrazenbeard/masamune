@@ -43,6 +43,7 @@ Fresh inspection of exact R9A0 database candidate `58a6ae4d4272165bd5b988bdd7a8b
 
 - either edge removes the referenced row from `thread_heads`;
 - any non-initial row must point to exactly one current head;
+- `v_link_count <> 1` rejects a row carrying both relation types;
 - cross-thread references are rejected;
 - `acknowledges_event_id` is UNIQUE, allowing only one acknowledgement child.
 
@@ -54,9 +55,13 @@ Fresh live Vera readback gives:
 - same-thread acknowledgement edges: `895`;
 - cross-thread acknowledgement edges: `473`;
 - acknowledgement parents with more than one child: `252`;
-- maximum observed acknowledgement fan-out: `18`.
+- maximum observed acknowledgement fan-out: `18`;
+- events carrying both supersedes and acknowledges relations: `261`;
+- dual-link same-target events: `50`;
+- dual-link distinct-target events: `211`;
+- dual-link events with at least one cross-thread relation: `86`.
 
-Therefore the final architecture requires at least two relation classes.
+Therefore the final architecture requires at least two relation classes, and those relation classes must be able to coexist on one operation/event when the closed policy permits it.
 
 ### A. Controlling admitted state-transition lineage
 
@@ -79,17 +84,19 @@ Properties:
 
 - may fan out;
 - may cross threads when policy permits;
+- may coexist with one controlling state-transition relation on the same event/operation;
+- may target the same or a different event than the controlling relation when the relation subtype permits it;
 - may advance raw observation chronology;
 - may affect source-completeness/reconciliation evidence;
 - **does not consume or replace controlling assignment state merely by existing**;
 - must not be constrained by a single-state-head UNIQUE rule unless the specific relation subtype explicitly requires it.
 
-The relation type determines whether an edge participates in state reduction. A generic `predecessor` abstraction that lets ACK behave like SUPERSEDE is unsafe.
+The relation type determines whether an edge participates in state reduction. A generic `predecessor` abstraction that lets ACK behave like SUPERSEDE is unsafe. Likewise, a schema that forces one relation slot total is lossy because state transition and evidence linkage are orthogonal facts.
 
 Existing bugs already track the concrete defects:
 
 - MEDIUM `95e63d67-c439-46cf-ab23-ad4b2c544eef`: ACK can consume active state and make open work disappear;
-- HIGH `2ee0bc39-a9cb-469b-b551-c2d67cd549b5`: strict single-chain/cross-thread-forbidden acknowledgement model cannot represent observed Vera fan-out/cross-thread evidence lineage.
+- HIGH `2ee0bc39-a9cb-469b-b551-c2d67cd549b5`: strict single-chain/cross-thread-forbidden acknowledgement model cannot represent observed Vera fan-out/cross-thread/dual-link evidence lineage.
 
 No duplicate ticket is needed.
 
@@ -202,7 +209,7 @@ Determine whether policy-required sources and admission-custody evidence are pre
 
 Construct full governed scope before privacy projection. Validate identities, roots, state-transition predecessors, generations, cycles, state forks, cross-scope collisions, and relation-class legality.
 
-Evidence/reference relations are represented separately and do not become state edges merely because they cite a state event.
+Evidence/reference relations are represented separately and do not become state edges merely because they cite a state event. A state-transition edge and one or more evidence/reference edges may coexist on the same event if their independently closed relation rules all pass.
 
 ### D. Admission / semantic adapter
 
@@ -226,29 +233,30 @@ Writes consume an exact resolver/workload version under CAS/serialization, appen
 2. State-transition lineage and evidence/reference lineage are different relation classes.
 3. ACK/review/evidence relations do not consume assignment state merely by existing.
 4. Evidence/reference relations may support policy-approved fan-out and cross-thread references.
-5. Only admitted typed state transitions alter controlling assignment state.
-6. Event sequence/timestamp/UUID has no standalone state authority.
-7. Terminal state is absorbing absent explicit valid predecessor/generation-bound reactivation/reopen.
-8. Workload snapshots have zero transition authority.
-9. Expected-source incompleteness is explicit and fail-closed.
-10. Unmirrored authority-bearing evidence does not silently become canonical state and does not permit stale canonical state to be described as source-complete.
-11. Full trusted governed graph precedes privacy projection.
-12. Hidden successors/siblings cannot re-promote older visible state.
-13. State forks/cycles/disconnected/cross-scope collisions never resolve by chronology.
-14. Legacy unstructured corrections are not NLP-promoted into control semantics.
-15. Internally coherent but admission-custody-unproven evidence is unresolved/reissue-required, not silently admitted or labeled forged.
-16. Raw chronology/head views cannot drive START/RESUME/workload/USE_AUTHORITY.
-17. Assignment issuance consumes exact workload/currentness version under serialized CAS plus in-transaction re-resolution.
-18. Authority-bearing append path must be mechanically confined; a bypassable CAS facade is not sufficient.
-19. Mutation retry safety uses stable operation identity + semantic request digest + exact replay receipt.
-20. Ambiguous write outcome requires readback/reconciliation before retry; blind replay is forbidden.
-21. Retry-idempotency and vacancy/concurrency CAS remain independent gates.
+5. A controlling state-transition relation and non-consuming evidence relation(s) may coexist on one event/operation where policy permits; one relation must not erase or prohibit the other.
+6. Only admitted typed state transitions alter controlling assignment state.
+7. Event sequence/timestamp/UUID has no standalone state authority.
+8. Terminal state is absorbing absent explicit valid predecessor/generation-bound reactivation/reopen.
+9. Workload snapshots have zero transition authority.
+10. Expected-source incompleteness is explicit and fail-closed.
+11. Unmirrored authority-bearing evidence does not silently become canonical state and does not permit stale canonical state to be described as source-complete.
+12. Full trusted governed graph precedes privacy projection.
+13. Hidden successors/siblings cannot re-promote older visible state.
+14. State forks/cycles/disconnected/cross-scope collisions never resolve by chronology.
+15. Legacy unstructured corrections are not NLP-promoted into control semantics.
+16. Internally coherent but admission-custody-unproven evidence is unresolved/reissue-required, not silently admitted or labeled forged.
+17. Raw chronology/head views cannot drive START/RESUME/workload/USE_AUTHORITY.
+18. Assignment issuance consumes exact workload/currentness version under serialized CAS plus in-transaction re-resolution.
+19. Authority-bearing append path must be mechanically confined; a bypassable CAS facade is not sufficient.
+20. Mutation retry safety uses stable operation identity + semantic request digest + exact replay receipt.
+21. Ambiguous write outcome requires readback/reconciliation before retry; blind replay is forbidden.
+22. Retry-idempotency and vacancy/concurrency CAS remain independent gates.
 
 ## Final disposition
 
 `FINAL_READY_FOR_REVIEW`
 
-MU6 now has one integrated contract: full governed graph before privacy, closed relation classes, non-consuming evidence lineage, admitted typed state reduction, terminal absorption, explicit source/custody uncertainty, and a separate writer path requiring both replenishment CAS/confinement and operation-id replay safety.
+MU6 now has one integrated contract: full governed graph before privacy, closed relation classes, coexistence of controlling and evidence relations, non-consuming fan-out/cross-thread evidence lineage, admitted typed state reduction, terminal absorption, explicit source/custody uncertainty, and a separate writer path requiring both replenishment CAS/confinement and operation-id replay safety.
 
 All concrete defects referenced above are already reported and triaged; this final creates no duplicate bug tickets.
 
