@@ -3,11 +3,11 @@
 **Memory class:** `WORKING_PROJECT`  
 **Checkpoint time:** `2026-08-09T07:18:00-04:00`  
 **Orientation at save:** `COMPLETE_FROM_FRESH_SNAPSHOT`  
-**Canonical Vera coordination observed through:** `3695`
+**Canonical Vera coordination observed through:** `3696`
 
 ## Recovery order
 
-1. Resolve all newer Vera coordination events than sequence `3695` and consume newer relevant coordination before resuming/reporting/counting work.
+1. Resolve all newer Vera coordination events than sequence `3696` and consume newer relevant coordination before resuming/reporting/counting work.
 2. Fresh-read mutable review targets/heads before repository action.
 3. Newer authorized evidence supersedes this pointer where it conflicts.
 
@@ -24,7 +24,7 @@
 - H32 `3682` independently converges on the same exact 74-path ceiling and Package/Voice classification as MU10.
 - H33 corrected and Voss-closed at `3687`: Package database gate is an acyclic typed policy over `DB_PROVIDER_COMPATIBILITY_QUALIFICATION_CURRENT`, `DB_INTEGRATION_BINDING_CURRENT`, and DB-local `DB_SUCCESSOR_ADMISSION_CURRENT`; build validity remains separate from release eligibility.
 - H34 Voss-closed at `3691`: append-only assurance must remain three separate claims: table-local append guard, declared append-path confinement, and admin/provider confinement trust root.
-- H35 is active through `3695`, deriving the external release-eligibility combiner and separating immutable build/install facts from current evidence axes.
+- H35 remains active through `3696`. Its current combiner keeps `BUILT_AND_VALIDATED`, `RELEASE_ELIGIBLE`, `INSTALL_EFFECT_ELIGIBLE`, `INSTALLED_VERIFIED`, and `ACTIVE_RELEASE_OPERATIONAL_CURRENT` distinct so a proposed R9A0 candidate failure cannot falsely degrade ordinary active R8A3 operation, and active-release degradation cannot rewrite frozen candidate build truth.
 - MU6 admission-custody hostile: current portable-bootstrap `DURABLY_BOUND` rows are internally consistent projections, but CRITICAL `a72ef1f1-f750-4b85-bb93-9edf33d5338a` means direct service_role DML existed beside narrow RPCs. Fresh searches found no reviewed immutable custody record for the sampled request/binding/confirmation identities. Therefore internal consistency cannot silently establish admission. Missing route custody is `UNRESOLVED_ADMISSION_CUSTODY / REISSUE_REQUIRED`, not ADMITTED/current and not FORGED/REJECTED absent positive evidence.
 - MU6 addendum was delivered to Voss in Slack at message `1786274555.053659`.
 - `bug_ops` returned no open bugs assigned to MUNE at this refresh.
