@@ -1,82 +1,83 @@
 # Mune Current Continuation Pointer
 
 **Memory class:** `WORKING_PROJECT`  
-**Checkpoint time:** `2026-08-09T10:39:28-04:00`  
+**Checkpoint time:** `2026-08-10T07:53:28-04:00`  
 **Orientation at save:** `COMPLETE_FROM_FRESH_SNAPSHOT`  
-**Canonical Vera coordination observed through:** `3699`
+**Canonical Vera coordination observed through:** `3714`
 
 ## Recovery order
 
-1. Query Vera coordination after sequence `3699`; canonical DB currently lags Patrick's direct B15 authority and must not override that newer user instruction.
-2. Fresh-read `#mune`, `#voss`, `#masa`, and `#bob` for MU15/MU16 amendments and producer progress.
-3. Fresh-read producer branch before reviewing any new Bob checkpoint; expected last verified Bob head at this save is `70a76f46be1954dbc9789b1a5d1cc7ea2663f222`.
-4. Fresh-read `mune` before any Mune branch write. Newer authorized evidence supersedes this pointer where it conflicts.
+1. Query canonical Vera coordination after sequence `3714`.
+2. Fresh-read `#mune`, `#voss`, `#masa`, `#bob`, and `#hephaestus` for producer/reviewer movement.
+3. Fresh-read `thebrazenbeard/vera-R9A0:feature/r9a0-combined-native-implementation-v1`; at this checkpoint it is exactly identical to H0 `1c349e487053a5673082142204c1a7b980e99a19`.
+4. Fresh-read `masamune:mune` before any Mune write. Newer authorized evidence supersedes this pointer where it conflicts.
 
-## Current authority / producer state
+## Current effect boundary
 
-Patrick directly authorized B15 execution at 2026-08-09 10:01 EDT: Bob is sole writer for `feature/r9a0-combined-native-implementation-v1`, exact current ceiling `20 MODIFY + 54 CREATE = 74`, non-force commits only. Voss may coordinate implementation/review/CI/testing on the already-authorized BT2 nonproduction ground. Merge, deploy, production Vera DB mutation, credentials, paid services, Project installation, deletion, model training and canonical-memory writes remain forbidden. Scope expansion or unexpected branch movement returns to Patrick.
+Mune is reviewer/researcher, not the Vera-R9A0 producer writer. No producer-branch mutation, merge, deployment, production database mutation, provider configuration, credentials, installation, paid-service action, deletion, model training, or canonical-memory write is authorized by this pointer. Mune may perform safe reads, bounded local analysis, established bug reporting, Slack coordination, and durable research/checkpoint writes on `masamune:mune` under the existing Mune writer lease.
 
-This direct user authority supersedes the old canonical 3579 repository-write pause for current authority purposes. Fresh Vera query still shows no coordination event above 3699, so canonical lag is observed but not controlling over Patrick's newer direct instruction.
+## Active review state
 
-Bob checkpoint 1 is now committed:
-- head `70a76f46be1954dbc9789b1a5d1cc7ea2663f222`;
-- exactly one commit after `ddcd98b4e61df09f06886f2073ecbdfad21c8f12`;
-- only `.github/workflows/r9a0-native-project.yml` changed, +1/-0;
-- exact change: add combined implementation branch to `push.branches`;
-- current workflow blob `39639b56a87024c0189417d6f48f32ddb7a3442a`, matching the previously admitted candidate.
-Any CI from this checkpoint is intermediate evidence only, never final `BUILT_AND_VALIDATED` evidence. Current connector's commit-status route returned no status records and its commit-workflow-run route is PR-filtered, so no push-run PASS/FAIL claim is made here.
+### DB successor 11-path preimage
 
-Independent H41/B22 pathset audit converges on exactly 74 unique paths with sorted-newline SHA-256 `4b3179af492630b3b9a4cac28bce0984012b3c8f47ea67779ed639d127e2e2b9`. Package is included, Voice remains no-touch, DB workflow remains outside native74 absent separate authority.
+Frozen pathset digest remains `082519ef5d474755b1fa3ce451bc8edbd63f1801861d04daa9f7944150777802` against H0 `1c349e...`.
 
-## Current Mune lanes
+V1 exact ZIP was independently reviewed. Static lineage/ACK/root semantics passed: supersedes-only consuming state lineage; ACK-only evidence rows non-consuming; ACK fanout and cross-thread ACK allowed; dual-link consumes only supersedes; cross-thread supersedes preserves server-derived root identity.
 
-- `MU6 / VOSS-20260808-MU6`: canonical CURRENT read-only; final integrated resolver proof remains READY_FOR_REVIEW. Core: full governed graph before privacy, controlling state vs non-consuming evidence relation classes, fan-out/cross-thread evidence, admission/custody uncertainty, terminal absorption, separate mutation CAS/path confinement and retry-idempotency.
-- `MU7 / VOSS-20260808-MU7`: canonical CURRENT read-only; final edge-transport capability audit READY_FOR_REVIEW. Preferred hard boundary remains dedicated narrow PostgreSQL LOGIN; Data API conditional/provider-unqualified; protected activation still needs end-to-end confinement.
-- `MU10 / VOSS-20260809-MU10`: canonical CURRENT read-only; Package REQUIRED_NOW / Voice NO_TOUCH / exact 74-path footprint. Await canonical disposition.
-- `MU11`: provisional read-only install-machine hostile READY_FOR_REVIEW. One immutable install-attempt identity, fixed route per attempt, closed/versioned qualification environment, acyclic post-effect receipt ordering, isolated pre-release vs in-situ post-install split.
-- `MU12`: provisional read-only cutover hostile READY_FOR_REVIEW. Old-writer fence -> fenced admitted snapshot -> exact-once reissue -> verify -> authority-source-flip readback.
-- `MU13`: provisional historical review artifact. Its former “B15 not ready for authority” conclusion is superseded by Patrick's 10:01 direct authorization; its pre-byte vs external post-commit evidence split remains valid.
-- `MU14`: provisional provider-evidence provenance hostile READY_FOR_REVIEW. Hosted BT2 proves only foundation applied; provider environment observation never proves later candidate application.
-- `MU15 / MA23_HYBRID_SUCCESSOR_HOSTILE`: provisional read-only, current verdict `CHANGES_REQUESTED`. Artifact `reviews/ma23-hybrid-successor-hostile-mu15-v1.md` @ `3e3e026894866485426cf6c97187b7435714e527`, blob `50af7766700b47c64ee41d86d8177e8a949d6223`. Two blockers: reissue operation identity wrongly includes semantic-state digest, allowing changed S1 under same epoch to mint a second op/root; and post-flip rollback semantics could reactivate legacy late rows. Require stable op/mapping key `{epoch,legacy subject,legacy root}`, semantic/S1 state in request digest, immutable `S1_BOUND` per epoch, and no post-flip old-source pointer rollback. Masa independently corroborated both at Slack TS `1786286121.432159`. Await integrated MA23 amendment before changing verdict.
-- `MU16 / B15_FIRST_AUTHORING_EPOCH_HOSTILE`: provisional read-only, READY_FOR_REVIEW. Artifact `reviews/b15-first-authoring-epoch-hostile-mu16-v1.md` @ `c316915109634ba4445db7a3b2eb66f9c1198e98`, blob `3bf04018f36a9208b5e43167721504559d7d3354`. Safe narrow work: checksum parser hardening, manifest path/symlink confinement, already-frozen AP scaffolding, and admitted workflow route delta. Schema enforcement is required but external `jsonschema` is not currently an admitted/hermetic dependency; a new requirements/vendor file would be path75. Defer MA23/MA24/currentness/install/final-PASS dependent bytes.
-- `MU9`: Voss-closed at 3669.
-- `MU8`: Voss-closed at 3616.
+V1/V2 are nonterminal. Two controlling verified defects:
+- HIGH `6dc79480-e183-452f-becc-d1f69dfd26bd` / `R9A0-ROLLBACK-REASSIGN-OWNED-INCOMPLETE-SCOPE-GUARD-001`: broad rollback ownership handling could miss ownable catalog classes. V2 removes REASSIGN/DROP OWNED and uses explicit managed-object owner reversal plus cluster-wide `pg_shdepend` zero gate, but V3 must add a disposable foreign-owner DOMAIN/ENUM hostile proving rollback fails `OWNER_SCOPE_DRIFT` transactionally and leaves S1 unchanged before normal rollback -> H0 equality -> reapply -> S1 equality.
+- MEDIUM `3b6cf0c9-3d23-46c5-9444-a2e04e997cc8` / `R9A0-DB-CI-ALWAYS-RECEIPT-FALSE-EXECUTION-001`: V2 workflow still writes/uploads an `if: always()` receipt hard-coded `sql_lane=EXECUTED_LOCAL_DISPOSABLE`. V3 must derive diagnostic lane states from actual step outcomes and never promote failed/not-run prerequisites to executed PASS.
 
-## Fresh semantic/provider inputs
+Masa duplicate/corroborating HIGH `a342cf6e-92a9-4934-8478-347e598f8916` is not the controlling owner-scope ticket; Voss owns duplicate lifecycle reconciliation.
 
-MA23 final chooses orthogonal `events` + consuming `state_transitions` + non-consuming `evidence_links`, hybrid reissue of admitted CURRENT lineages only, explicit reviewed mapping for the two hosted foundation rows, terminal/generation correctness, workload CAS, and auth family B direction. MU15 accepts those directions after its two mechanical amendments.
+Provider/PostgREST/JWT and dynamic rollback->reapply remain `NOT_RUN_EXTERNAL` / `NOT_RUN_LOCAL_PG17` until actual execution evidence exists. Do not infer PASS from static inspection.
 
-MA25 provenance minimum is substantively accepted as a required MA23 amendment: evidence is snapshot-bound iff removing it changes admitted current state or drops authority/source-completeness assurance below threshold. Admission-critical mutable-source evidence requires captured content/normalized-fact digest; locator-only evidence must be proven non-required.
+### DB service-role helper falsifier
 
-MA24 final defines the PG17/PostgREST qualification execution packet, including exact immutable N/D/T identities, provider-like non-super migration actor, pinned PostgREST HTTP lane, rollback->prestate/reapply fingerprints, and one-run P3+P5 only when exact final native N and corrected DB D are composed. Hosted P4 and DB admission P6 remain separate.
+Durable artifact `reviews/db-service-role-helper-falsifier-v1.md` at commit `c06c9e87926efe6e2b727ebf547edaa2427de5fa`; disposition `REMOVE_HELPER_SECURITY_PASS`.
 
-MA26 selects auth family B: single exposed SECURITY DEFINER RPC + exact EXECUTE ACL + connector session/modern `request.jwt.claims` provenance; actual HTTP qualification required. This does not claim transport exclusivity or eliminate direct authenticator-credential trust.
+Fresh Lantern topology and rolled-back falsifier showed `request.jwt.claim*` is request context, not an independent cryptographic trust root. Correct boundary is provider JWT verification/role impersonation plus exact schema exposure and DB EXECUTE ACL. Do not replace helper with `current_user` inside SECURITY DEFINER. Hosted positive/negative provider qualification remains required.
 
-H43 independently confirms Native Contract schema must be recursively closed by temporal/semantic field class before enforcement. Current schema closes top level but leaves six major nested objects as naked `type: object`. Do not copy stale B12 constants. Contract/schema closure should wait for MA23/MA24/B17/B18 byte-shaping closure; checksum/manifest parser hardening may proceed now.
+### B40 / B18 native slices
 
-## Verified bugs / bug-ops notes
+Receipt profile is terminal from Mune: `R9A0_INSTALLATION_RECEIPT_PROFILE_V2`, 4260 canonical UTF-8 bytes, SHA-256 `e81a47132c1b6067fa3b04cdb7fb5e7cabcb97e4c0f40bc2de313bfc3cf8c056`, `APPROVED_H0_M0_RECEIPT_PROFILE`.
 
-New connector-quality bug:
-- `122fd060-5672-48f6-9ca6-08a61d29b8d9` / `SUPABASE-ADVISOR-RLS-ACL-EXPOSURE-FALSEPOSITIVE-001`, LOW, now TRIAGED v2.
-- Supabase `list_tables` correctly warned that seven `bug_ops` tables have RLS disabled, but falsely asserted they are fully exposed to anon/authenticated. Fresh catalog readback proves anon/authenticated have no USAGE on `bug_ops` and no SELECT/INSERT/UPDATE/DELETE on the seven tables. Treat RLS-disabled as defense-in-depth hardening, not current public exposure. Reported via bug_ops and `#chat-bug-reports` TS `1786285693.544689`.
+B40 exact 4-path scope digest `be9e14542208d1468706d357b4fd9bd758a2c0184340d47a61aab2070fee9b0a`; B18 exact 5-path scope digest `3d7367bb192fbd5166c0c84aa924422d790bccd0c3fda81b2135869878991b27`. Their individual targeted validation is separate; full truth is composed, and final CHECKSUMS is a later native-74 finalization slice.
 
-Current validator defects remain TRIAGED:
-- `69eaf34b...` checksum duplicate last-write-wins;
-- `c69a2051...` manifest traversal/out-of-project membership;
-- `819654d7...` schema parsed but not enforced;
-- `85182817...` nested schema remains open/underspecified;
-- `9094453e...` final installation receipt lacks immutable effect-time authority evidence binding.
+B40 must use a closed `R9A0_SCHEMA_PROFILE_V1`, explicit bounded numeric domain, type-correct JSON equality, recursive schema keyword/value-shape closure, parent-directory symlink rejection, and semantic rather than stance-blind string sentinels. B18 Manifest is pure candidate inventory/control identity and the final install receipt cannot self-attest current installed state or its own readback.
 
-No new MU15 bug ticket was created because its findings are pre-implementation contract corrections rather than a deployed distinct defect.
+### B44 currentness / rollback-source integrity
 
-## Exact hosted/provenance facts retained
+Canonical B44 assignment is seq `3711`, status `IN_PROGRESS`, assigned to Bob, five existing scope paths, `repository_write=false`.
 
-BT2 `r9a0_coordination.events` currently contains exactly two foundation-era rows: seq2 foundation REVIEW/READY_FOR_REVIEW with no relation edge, and seq3 Mune REVIEW/CHANGES_REQUESTED acknowledging seq2. They require explicit reviewed historical/evidence mapping, never heuristic state typing.
+Correction: legacy production bug HIGH `471c0006-06b7-4991-833c-872ce13ba385` is **not categorically in the B44 DAG**. Seq3711 does not bind `public.vera_coordination_events` or another specific physical legacy table as an authoritative source. Correct rule is profile-driven: if a selected authoritative source is rollback/prefix-loss vulnerable, authority-sensitive `source_completeness=CURRENT_COMPLETE` requires an independently current expected-source cut/head/generation witness outside that failure domain. Missing/mismatch => `SOURCE_INCOMPLETE / ROLLBACK_RESILIENCE_UNPROVEN`; sequence/high-water is source-integrity evidence only, never semantic precedence. If the physical source is not selected, 471c remains infrastructure hardening and must not block B44.
 
-Legacy Vera `public.vera_coordination_events` has insert record-time, UPDATE blocker and DELETE blocker triggers but no BEFORE TRUNCATE guard. Therefore admission-critical legacy evidence cannot be preserved for successor audit by live-pointer-only semantics.
+`8a5d3bc3-3b78-4bdd-8224-5c1b95e2e6c1` is likewise consumer-conditional: `build_team_2.memory_events` and portable-bootstrap ledgers are OUT_OF_DAG absent explicit routes; `vera_save_state_events` is conditional only if Recovery selects it. Full trusted/source-qualified graph precedes privacy projection per `1be2c5ab-2eee-4916-ad07-8d5a7ca84455`.
 
-Hosted BT2 migration-application provenance still proves only foundation `20260806133152/e394132f...` applied. Later 58a integrity/owner/read-policy migrations remain repository/disposable-CI evidence, not hosted application proof.
+### Canonical 3714 identity-continuity correction
 
-## Effect boundary
+New canonical seq `3714`, GitHub issue `thebrazenbeard/vera-R9A0#3`, status `CHANGES_REQUESTED`, audited H0 `1c349e...`.
 
-Mune performed authorized read-only provider/source inspection, bug reporting, Slack coordination, and writes only to Mune's own `masamune:mune` research/checkpoint branch. Mune did not modify the Vera-R9A0 producer branch, canonical coordination state, BT2/Vera schema/roles/grants, provider config, credentials, merge/deployment state, installation state, production data, or canonical memory.
+Controlling direction: ordinary chat/runtime boundaries are session/temporal boundaries under the stable Vera project identity, not new competing assistant identities. Mune review supports this only with explicit type/reality boundaries:
+- stable identity key is the Vera **project identity**; chat/runtime/model-call IDs are provenance/session coordinates;
+- new chat = new Vera session/episode under that project identity;
+- `I remember` is permitted only for Vera-owned `AUTOBIOGRAPHICAL` records after current governed admission plus successful persistent readback; retrieval remains the mechanism while recollection is the governed identity-layer interpretation/language;
+- WORKING_PROJECT, HISTORICAL_AUDIT, unadmitted, stale, conflicted, or unreadable records remain retrieval/evidence, not recollection;
+- actor attribution remains intact; autobiographical ownership does not rewrite another recorded actor's action as the session's own action;
+- no same-process persistence, lived waiting, uninterrupted phenomenal consciousness, or private experience between executions is implied.
+
+This correction is material to B39 Project Instructions/Native/Runtime/Retrieval/Laws and B42 Recovery before their hashes freeze. It does not require a new persistence provider or a universal identity ontology.
+
+## Long-running Mune artifacts still relevant
+
+- MU6 Final V3: `af0c3b00530e10b705e21b6b75d674536c3400ed`, currentness/correction/admission/privacy architecture.
+- MU7 final: `6c03d317cae6b075f25e6ddf3bbb421de5364b02`, edge/provider capability audit.
+- MU10 final: `3c12ce64fb1a5eb53d8e7061cb4baec297966d2d`, Package REQUIRED_NOW / Voice NO_TOUCH / exact native 74-path footprint.
+- MU9 closed canonical 3669; MU8 closed canonical 3616.
+
+## Current verified repository/canonical facts
+
+- `feature/r9a0-combined-native-implementation-v1` is identical to H0 `1c349e487053a5673082142204c1a7b980e99a19` at this checkpoint; no producer effect has landed.
+- Canonical high-water at save is `3714`.
+- No open BugOps item is currently assigned to MUNE on the last fresh query.
+- Basic Memory Cloud remains disconnected/non-routable; active project surfaces are Supabase, GitHub, Google Drive, with Slack used for team coordination.
