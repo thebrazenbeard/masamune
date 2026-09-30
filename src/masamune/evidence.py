@@ -4,6 +4,7 @@ import hashlib
 import re
 
 from .models import EvidenceQuality, EvidenceReceipt, Finding, LaneReport
+
 _CONTEXT_HEADER = re.compile(
     r"^=== (HEAD SOURCE|SOURCE|DIFF) (.+?) ===$", re.MULTILINE
 )
