@@ -47,9 +47,10 @@ export function renderReport(
     "",
   ];
 
-  if (report.skeptic_flags.length) {
+  const skepticFlags = report.skeptic_flags ?? [];
+  if (skepticFlags.length) {
     lines.push("## Skeptic gate", "");
-    for (const flag of report.skeptic_flags) {
+    for (const flag of skepticFlags) {
       lines.push("- `" + safeMarkdown(flag) + "`");
     }
     lines.push("");
