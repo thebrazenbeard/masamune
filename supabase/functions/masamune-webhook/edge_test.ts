@@ -1,6 +1,6 @@
 import { sha256Hex, verifyGithubSignature } from "./crypto.ts";
 import { auditFinding } from "./evidence.ts";
-import { validateBillingPolicy } from "./config.ts";
+import { validateBillingPolicy, type Settings } from "./config.ts";
 import { skepticFlags } from "./skeptic.ts";
 import { loadPolicy } from "./policy.ts";
 import { reconcile } from "./reconcile.ts";
@@ -344,7 +344,7 @@ Deno.test("review identity changes with sampling configuration", async () => {
     muneModel: "model-b",
     muneBaseUrl: "https://mune.example/v1",
     muneTemperature: 1,
-  } as any;
+  } as Settings;
 
   const base = await reviewIdFor(context, settings);
   assert(
