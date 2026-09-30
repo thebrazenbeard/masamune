@@ -196,7 +196,9 @@ export class OpenAICompatibleModel {
           },
           body: JSON.stringify({
             model: this.config.modelId,
-            temperature: this.config.temperature,
+            ...(this.config.providerId === "google"
+              ? {}
+              : { temperature: this.config.temperature }),
             max_tokens: this.config.maxOutputTokens,
             messages: [
               { role: "system", content: system },
