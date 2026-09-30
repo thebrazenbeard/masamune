@@ -115,7 +115,6 @@ Deno.test("reconciliation requires verification evidence", () => {
   assert(withEvidence.confirmed.length === 1);
 });
 
-
 Deno.test("evidence audit distinguishes exact and weak anchors", async () => {
   const exact = await auditFinding(
     {
@@ -168,7 +167,6 @@ Deno.test("evidence audit distinguishes exact and weak anchors", async () => {
   );
   assert(assertion.quality === "MODEL_ASSERTION");
 });
-
 
 Deno.test("skeptic gate catches incomplete challenge coverage", () => {
   const masa = {
