@@ -27,6 +27,7 @@ export interface Settings {
   globalReviewsPerDay: number;
   repoReviewsPerDay: number;
   reviewProtocolVersion: string;
+  zeroCostEnforced: boolean;
 }
 
 function env(name: string, fallback = ""): string {
