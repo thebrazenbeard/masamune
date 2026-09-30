@@ -1,6 +1,7 @@
 import {
   loadSettings,
   missingRuntimeSecrets,
+  missingRuntimeSecretsFromEnv,
   type Settings,
 } from "./config.ts";
 import {
@@ -431,8 +432,22 @@ async function processDelivery(
 Deno.serve(async (request: Request) => {
   if (request.method === "GET") {
     try {
+      const missing = missingRuntimeSecretsFromEnv();
+      if (configuredMissing.length) {
+        const zeroCost = Deno.env.get("MASAMUNE_ZERO_COST_ENFORCED") !== "false";
+        return jsonResponse(
+          {
+            status: "not_ready",
+            service: "masamune",
+            runtime: "supabase-edge",
+            billing_mode: zeroCost ? "zero-cost-enforced" : "operator-configured",
+            missing: configuredMissing,
+          },
+          503,
+        );
+      }
       const healthSettings = loadSettings();
-      const missing = missingRuntimeSecrets(healthSettings);
+      const configuredMissing = missingRuntimeSecrets(healthSettings);
       const billingMode = healthSettings.zeroCostEnforced
         ? "zero-cost-enforced"
         : "operator-configured";
