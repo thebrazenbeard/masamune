@@ -27,3 +27,24 @@ jobs:
         run: python -m ruff check src tests
       - name: Security lint
         run: python -m bandit -q -r src
+
+
+  edge:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+      - name: Format
+        working-directory: supabase/functions/masamune-webhook
+        run: deno fmt --check
+      - name: Lint edge
+        working-directory: supabase/functions/masamune-webhook
+        run: deno lint
+      - name: Type check
+        working-directory: supabase/functions/masamune-webhook
+        run: deno check --config deno.json index.ts edge_test.ts
+      - name: Edge tests
+        working-directory: supabase/functions/masamune-webhook
+        run: deno test --config deno.json edge_test.ts

@@ -23,11 +23,14 @@ findings through a second adversarial lane before promotion.
 
 **V0 implementation / not yet a hosted production service.**
 
-This repository now contains an executable FastAPI GitHub App backend with:
+This repository now contains two executable V0 surfaces: a Python/FastAPI
+backend for local/self-hosted development and a zero-cost deployment path using
+a Supabase Edge Function + Postgres. The shared behavior includes:
 
 - GitHub App JWT + installation-token authentication;
 - HMAC-SHA256 webhook verification;
-- durable webhook delivery/idempotency ledger in SQLite;
+- durable webhook delivery/idempotency receipts (SQLite locally; Postgres on
+  the Supabase Edge path);
 - exact PR/issue/default-branch subject binding;
 - bounded source-context acquisition;
 - automatic PR review on open/reopen/synchronize/ready-for-review;
@@ -39,7 +42,10 @@ This repository now contains an executable FastAPI GitHub App backend with:
 - deterministic reconciliation into confirmed/narrowed/unresolved/rejected;
 - marker-based comment idempotency plus post-write readback;
 - repository-local `.masamune.yml` policy;
-- unit tests and CI.
+- unit tests and CI;
+- hard daily review caps and a singleton model-execution lease on the zero-cost
+  hosted path;
+- no paid inference fallback.
 
 It does **not** yet execute untrusted repository code, create repair PRs, provide
 a hosted queue, bill customers, or claim that a clean review proves a repository
@@ -106,12 +112,33 @@ masamune:
   allow_issue_commands: true
   allow_sweep: true
   post_unresolved: false
-  max_files: 40
-  max_file_bytes: 30000
-  max_context_bytes: 180000
+  max_files: 10
+  max_file_bytes: 8000
+  max_context_bytes: 20000
 ```
 
-Unknown policy keys fail closed.
+Unknown policy keys fail closed. Repository policy can reduce review scope but
+cannot raise the operator's own ceilings.
+
+## Zero-cost hosted profile
+
+The current hosted qualification target uses:
+
+- **Supabase Free** for the GitHub webhook, background execution, and durable
+  Postgres receipts;
+- **Groq Free / `qwen/qwen3.8-27b`** for Masa;
+- **Google Gemini Free / `gemini-2.5-flash-lite`** for Mune;
+- one active model review at a time;
+- 10 global reviews/day and 3 reviews/repository/day by default;
+- no automatic transition to paid infrastructure or inference.
+
+Provider free tiers are external conditions and can change. The implementation
+therefore hard-caps work rather than assuming unlimited free service. See
+[docs/ZERO_COST_DEPLOYMENT.md](docs/ZERO_COST_DEPLOYMENT.md).
+
+Private repositories remain disabled by default, including because current
+Gemini Free Tier terms state that Free Tier content may be used to improve
+Google products.
 
 ## Local development
 
@@ -136,6 +163,16 @@ The service exposes:
 
 GitHub App setup is documented in
 [docs/GITHUB_APP_SETUP.md](docs/GITHUB_APP_SETUP.md).
+
+The Supabase Edge implementation lives under
+`supabase/functions/masamune-webhook/`. Validate it with:
+
+```bash
+cd supabase/functions/masamune-webhook
+deno fmt --check
+deno check --config deno.json index.ts edge_test.ts
+deno test --config deno.json edge_test.ts
+```
 
 ## Security boundary
 

@@ -43,12 +43,20 @@ The service operator must explicitly set
 to configured model providers. A repository-controlled config file cannot
 override that operator boundary.
 
+The current zero-cost Mune default is the Gemini Developer API Free Tier.
+Google's current pricing terms state that Free Tier content is used to improve
+Google products. That is an additional reason the default hosted profile refuses
+private repositories.
+
 A production multi-tenant service needs explicit customer/provider data terms
 and per-customer retention controls before this should be offered commercially.
 
-## Durable local state
+## Durable state
 
-V0 SQLite persistence stores:
+The local Python backend uses SQLite. The zero-cost hosted path uses Supabase
+Postgres.
+
+Both persist:
 
 - GitHub delivery ID;
 - event name and payload digest;
@@ -56,6 +64,9 @@ V0 SQLite persistence stores:
 - timestamps and bounded error text;
 - exact reviewed repository/subject/head identity;
 - reconciled review report JSON.
+
+The hosted Postgres path additionally stores daily usage counters, idempotent
+review-budget claims, and the current/expired execution lease.
 
 The raw webhook payload and full source context are not persisted by the V0
 ledger.
@@ -70,8 +81,8 @@ observable before marking the delivery complete.
 
 ## Retention
 
-V0 has no automated retention/deletion scheduler. The SQLite database persists
-until the operator deletes or rotates it.
+V0 has no automated retention/deletion scheduler. SQLite or Supabase Postgres
+receipts persist until the operator deletes or rotates them.
 
 Production service work must add explicit retention windows, customer deletion,
 backup handling, encryption-at-rest requirements, and tenant isolation before

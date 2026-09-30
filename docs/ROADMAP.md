@@ -16,15 +16,20 @@ Implemented in the current feature branch:
 - durable delivery/review receipts;
 - idempotent/readback-verified comments;
 - repository policy;
+- Python local/self-hosted backend;
+- Supabase Edge + Postgres zero-cost hosted path;
+- hard daily free-tier budget admission;
+- singleton expiring model-execution lease;
+- Groq Masa + Gemini Mune free-tier defaults;
 - local tests/CI/container packaging.
 
 ## V0.2 — production execution substrate
 
 Next engineering targets:
 
-- durable queue with leases, fencing, retry budget, and stuck-work recovery;
-- PostgreSQL or equivalent shared persistence;
-- structured observability and per-review cost accounting;
+- durable queue with per-job leases, fencing, retry budget, and stuck-work
+  recovery beyond the current singleton execution lease;
+- structured observability and per-review token/cost accounting;
 - rate-limit handling and backpressure;
 - installation/repository entitlement registry;
 - provider timeout/failure isolation;

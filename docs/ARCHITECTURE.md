@@ -52,10 +52,12 @@ The only V0 repository effect is an issue/PR discussion comment.
 
 The effect path is:
 
-1. derive deterministic review ID from repository, subject type/number, base,
-   and exact head SHA;
+1. derive deterministic review ID from the protocol version, repository,
+   subject type/number, base/head SHAs, Masa/Mune provider+model IDs, and a
+   SHA-256 digest of the exact bounded context;
 2. search existing comments for that marker;
-3. run review only if the marker is absent;
+3. if an exact review receipt already exists, reuse it without another model
+   call; otherwise run the review;
 4. durably store the result and enter `READY_TO_PUBLISH`;
 5. re-check marker immediately before POST;
 6. write the comment;
@@ -147,22 +149,29 @@ Two models agreeing is not itself evidence.
 
 ## Durable state
 
-SQLite currently stores:
+The Python/local backend uses SQLite for webhook delivery identity, lifecycle
+state, exact review subject, and reconciled report JSON.
 
-- webhook delivery ID;
-- event type;
-- payload digest;
-- lifecycle state;
-- error text;
-- exact review subject;
-- reconciled report JSON.
+The zero-cost hosted path uses Supabase Postgres for the same evidence plus:
 
-The database is local to one service instance. V0 therefore requires persistent
-storage if restart continuity is expected.
+- UTC global daily review counters;
+- per-repository daily review counters;
+- idempotent budget claims keyed by exact review ID;
+- a singleton model-execution lease with expiry.
+
+The execution lease is a free-tier concurrency control, not a general
+distributed work queue. It prevents concurrent reviews from bursting model
+token-per-minute allowances. A crashed holder eventually loses the lease by
+expiry.
+
+The raw webhook payload and full source context are not durably stored by either
+V0 ledger.
 
 ## Current limitations
 
-- no distributed queue or multi-worker lease/fencing;
+- no durable distributed work queue or general multi-worker fencing beyond the
+  singleton zero-cost model-execution lease;
+- a busy zero-cost execution lane fails the delivery rather than queueing it;
 - no sandboxed repository test execution;
 - no semantic code graph or symbol-aware retrieval yet;
 - no historical per-repository failure graph;
@@ -171,6 +180,11 @@ storage if restart continuity is expected.
 - no organization dashboard;
 - no billing or Marketplace integration;
 - OpenAI-compatible chat-completions adapters only;
-- source context is byte/file bounded and can miss distant dependencies.
+- source context is byte/file bounded and can miss distant dependencies;
+- hosted V0 depends on third-party free-tier availability and fails rather than
+  switching to paid service.
+
+The exact zero-cost deployment ceilings and provider choices are documented in
+[ZERO_COST_DEPLOYMENT.md](ZERO_COST_DEPLOYMENT.md).
 
 Those limits are claim ceilings, not hidden roadmap accomplishments.

@@ -1,0 +1,150 @@
+export interface Settings {
+  githubAppId: string;
+  githubPrivateKey: string;
+  githubWebhookSecret: string;
+  githubApiUrl: string;
+
+  masaBaseUrl: string;
+  masaApiKey: string;
+  masaProviderId: string;
+  masaModel: string;
+
+  muneBaseUrl: string;
+  muneApiKey: string;
+  muneProviderId: string;
+  muneModel: string;
+
+  requireIndependence: boolean;
+  allowPrivateRepositories: boolean;
+  maxFiles: number;
+  maxFileBytes: number;
+  maxContextBytes: number;
+  modelMaxOutputTokens: number;
+  requestTimeoutMs: number;
+  maxWebhookBytes: number;
+  globalReviewsPerDay: number;
+  repoReviewsPerDay: number;
+  reviewProtocolVersion: string;
+}
+
+function env(name: string, fallback = ""): string {
+  return Deno.env.get(name) ?? fallback;
+}
+
+function boolEnv(name: string, fallback: boolean): boolean {
+  const value = Deno.env.get(name);
+  if (value === undefined) return fallback;
+  if (value === "true") return true;
+  if (value === "false") return false;
+  throw new Error(`${name} must be true or false`);
+}
+
+function intEnv(
+  name: string,
+  fallback: number,
+  min: number,
+  max: number,
+): number {
+  const raw = Deno.env.get(name);
+  const value = raw === undefined ? fallback : Number(raw);
+  if (!Number.isInteger(value) || value < min || value > max) {
+    throw new Error(`${name} must be an integer between ${min} and ${max}`);
+  }
+  return value;
+}
+
+export function loadSettings(): Settings {
+  const settings: Settings = {
+    githubAppId: env("MASAMUNE_GITHUB_APP_ID"),
+    githubPrivateKey: env("MASAMUNE_GITHUB_PRIVATE_KEY"),
+    githubWebhookSecret: env("MASAMUNE_GITHUB_WEBHOOK_SECRET"),
+    githubApiUrl: env("MASAMUNE_GITHUB_API_URL", "https://api.github.com"),
+
+    // Zero-cost default: one Groq free-tier call for Masa.
+    masaBaseUrl: env(
+      "MASAMUNE_MASA_BASE_URL",
+      "https://api.groq.com/openai/v1",
+    ),
+    masaApiKey: env("MASAMUNE_MASA_API_KEY"),
+    masaProviderId: env("MASAMUNE_MASA_PROVIDER_ID", "groq"),
+    masaModel: env("MASAMUNE_MASA_MODEL", "qwen/qwen3.8-27b"),
+
+    // Zero-cost default: Gemini free tier for Mune blind + challenge passes.
+    muneBaseUrl: env(
+      "MASAMUNE_MUNE_BASE_URL",
+      "https://generativelanguage.googleapis.com/v1beta/openai",
+    ),
+    muneApiKey: env("MASAMUNE_MUNE_API_KEY"),
+    muneProviderId: env("MASAMUNE_MUNE_PROVIDER_ID", "google"),
+    muneModel: env("MASAMUNE_MUNE_MODEL", "gemini-2.5-flash-lite"),
+
+    requireIndependence: boolEnv("MASAMUNE_REQUIRE_INDEPENDENCE", true),
+    allowPrivateRepositories: boolEnv(
+      "MASAMUNE_ALLOW_PRIVATE_REPOSITORIES",
+      false,
+    ),
+    maxFiles: intEnv("MASAMUNE_MAX_FILES", 10, 1, 200),
+    maxFileBytes: intEnv("MASAMUNE_MAX_FILE_BYTES", 8_000, 2_000, 200_000),
+    maxContextBytes: intEnv(
+      "MASAMUNE_MAX_CONTEXT_BYTES",
+      20_000,
+      10_000,
+      1_000_000,
+    ),
+    modelMaxOutputTokens: intEnv(
+      "MASAMUNE_MODEL_MAX_OUTPUT_TOKENS",
+      2_000,
+      500,
+      20_000,
+    ),
+    requestTimeoutMs: intEnv(
+      "MASAMUNE_REQUEST_TIMEOUT_MS",
+      45_000,
+      5_000,
+      120_000,
+    ),
+    maxWebhookBytes: intEnv(
+      "MASAMUNE_MAX_WEBHOOK_BYTES",
+      2_000_000,
+      1_024,
+      20_000_000,
+    ),
+    globalReviewsPerDay: intEnv(
+      "MASAMUNE_GLOBAL_REVIEWS_PER_DAY",
+      10,
+      1,
+      1_000,
+    ),
+    repoReviewsPerDay: intEnv("MASAMUNE_REPO_REVIEWS_PER_DAY", 3, 1, 100),
+    reviewProtocolVersion: env(
+      "MASAMUNE_REVIEW_PROTOCOL_VERSION",
+      "masamune-edge-v0.1",
+    ),
+  };
+
+  for (
+    const [name, value] of [
+      ["MASAMUNE_GITHUB_APP_ID", settings.githubAppId],
+      ["MASAMUNE_GITHUB_PRIVATE_KEY", settings.githubPrivateKey],
+      ["MASAMUNE_GITHUB_WEBHOOK_SECRET", settings.githubWebhookSecret],
+      ["MASAMUNE_MASA_API_KEY", settings.masaApiKey],
+      ["MASAMUNE_MUNE_API_KEY", settings.muneApiKey],
+    ] as const
+  ) {
+    if (!value) throw new Error(`missing required secret/config: ${name}`);
+  }
+
+  if (
+    settings.requireIndependence &&
+    (
+      settings.masaProviderId === settings.muneProviderId ||
+      settings.masaModel === settings.muneModel
+    )
+  ) {
+    throw new Error(
+      "Masa and Mune must use distinct providers and distinct models when independence is required",
+    );
+  }
+
+  return settings;
+}

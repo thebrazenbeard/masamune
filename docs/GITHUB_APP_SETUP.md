@@ -8,11 +8,22 @@ repositories.
 Create a GitHub App owned by the account or organization that will operate the
 service.
 
-Set the webhook URL to:
+For the Python/FastAPI backend, set the webhook URL to:
 
 ```text
 https://YOUR-SERVICE/webhook/github
 ```
+
+For the zero-cost Supabase Edge deployment, use:
+
+```text
+https://YOUR-PROJECT-REF.supabase.co/functions/v1/masamune-webhook
+```
+
+The Supabase function must be deployed with platform JWT verification disabled
+because GitHub does not send a Supabase JWT. This does **not** make the webhook
+unauthenticated: Masamune verifies GitHub's `X-Hub-Signature-256` HMAC against
+the raw body before accepting the delivery.
 
 Generate a strong webhook secret and store it as
 `MASAMUNE_GITHUB_WEBHOOK_SECRET`.
@@ -65,6 +76,16 @@ cannot silently enable private-source export.
 
 Configure two OpenAI-compatible chat-completions endpoints.
 
+The zero-cost profile defaults to:
+
+```text
+Masa: Groq / qwen/qwen3.8-27b
+Mune: Google / gemini-2.5-flash-lite
+```
+
+See [ZERO_COST_DEPLOYMENT.md](ZERO_COST_DEPLOYMENT.md) for the current free-tier
+limits, privacy caveat, and hard Masamune caps.
+
 Masa:
 
 ```text
@@ -89,14 +110,19 @@ that enforcement rather than pretending the lanes are provider-independent.
 
 ## Persistent state
 
-Set:
+For the Python/local backend, set:
 
 ```text
 MASAMUNE_STATE_DB_PATH=/durable/path/masamune.sqlite3
 ```
 
-The V0 SQLite ledger must live on persistent storage. Running it only on
-ephemeral container storage weakens restart/recovery guarantees.
+For the Supabase Edge backend, apply
+`supabase/migrations/20260930_masamune_v0.sql`. The Edge Function uses the
+project's Postgres database for delivery receipts, exact review receipts,
+zero-cost daily budget admission, and the singleton expiring execution lease.
+
+The Edge Function reads Supabase's server key from its managed environment and
+does not require that key to be copied into the repository.
 
 ## Repository installation
 
@@ -109,7 +135,9 @@ need that file; absence uses conservative defaults.
 
 After deployment:
 
-1. request `GET /health` and require `{"status":"ok"}`;
+1. request the active runtime's health endpoint and require
+   `{"status":"ok"}` (the Edge route reports
+   `"billing_mode":"zero-cost-capped"`);
 2. deliver a signed GitHub webhook;
 3. open a test PR;
 4. verify Masamune posts one marker-bearing review comment;

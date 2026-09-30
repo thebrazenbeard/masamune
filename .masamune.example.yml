@@ -5,6 +5,6 @@ masamune:
   allow_issue_commands: true
   allow_sweep: true
   post_unresolved: false
-  max_files: 40
-  max_file_bytes: 30000
-  max_context_bytes: 180000
+  max_files: 10
+  max_file_bytes: 8000
+  max_context_bytes: 20000

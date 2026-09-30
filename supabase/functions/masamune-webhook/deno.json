@@ -1,0 +1,9 @@
+{
+  "imports": {
+    "@supabase/supabase-js": "jsr:@supabase/supabase-js@2",
+    "@std/yaml": "jsr:@std/yaml@1"
+  },
+  "compilerOptions": {
+    "strict": true
+  }
+}
