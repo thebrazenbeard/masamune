@@ -1,4 +1,5 @@
 import { sha256Hex } from "./crypto.ts";
+import { auditReports } from "./evidence.ts";
 import { OpenAICompatibleModel } from "./llm.ts";
 import { reconcile } from "./reconcile.ts";
 import type { ReviewContext, ReviewReport } from "./types.ts";
@@ -63,6 +64,12 @@ export class MasamuneOrchestrator {
       masaReport,
     );
 
+    const evidenceReceipts = await auditReports(
+      masaReport,
+      muneBlind,
+      context.text,
+    );
+
     const scopeNote =
       `Bounded zero-cost review: at most ${context.policy.max_files} selected files, ` +
       `${context.policy.max_file_bytes} UTF-8 bytes per file/patch, and ` +
@@ -74,6 +81,7 @@ export class MasamuneOrchestrator {
       masaReport,
       muneBlind,
       challenges,
+      evidenceReceipts,
       scopeNote,
     );
   }
