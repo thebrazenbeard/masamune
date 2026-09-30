@@ -13,13 +13,23 @@ export function skepticFlags(
     if (muneIds.has(id)) flags.push("CROSS_LANE_FINDING_ID_COLLISION");
   }
 
-  const challengedIds = new Set(challenges.map((challenge) => challenge.finding_id));
+  const challengedIds = new Set(
+    challenges.map((challenge) => challenge.finding_id),
+  );
   const missing = [...masaIds].filter((id) => !challengedIds.has(id)).sort();
-  if (missing.length) flags.push(`CHALLENGE_COVERAGE_GAP:${missing.slice(0, 10).join(",")}`);
+  if (missing.length) {
+    flags.push(`CHALLENGE_COVERAGE_GAP:${missing.slice(0, 10).join(",")}`);
+  }
   const extra = [...challengedIds].filter((id) => !masaIds.has(id)).sort();
-  if (extra.length) flags.push(`CHALLENGE_FOR_UNKNOWN_FINDING:${extra.slice(0, 10).join(",")}`);
+  if (extra.length) {
+    flags.push(
+      `CHALLENGE_FOR_UNKNOWN_FINDING:${extra.slice(0, 10).join(",")}`,
+    );
+  }
 
-  const receiptById = new Map(receipts.map((receipt) => [receipt.finding_id, receipt]));
+  const receiptById = new Map(
+    receipts.map((receipt) => [receipt.finding_id, receipt]),
+  );
   for (const finding of masa.findings) {
     const receipt = receiptById.get(finding.id);
     if (!receipt) {
