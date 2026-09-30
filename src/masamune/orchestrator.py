@@ -7,8 +7,8 @@ from .context import ReviewContext
 from .llm import OpenAICompatibleModel
 from .models import ReviewReport
 from .reconcile import reconcile
-from .skeptic import skeptic_flags
 from .settings import Settings
+from .skeptic import skeptic_flags
 
 
 def review_id_for(context: ReviewContext, settings: Settings) -> str:
