@@ -2,10 +2,6 @@ from __future__ import annotations
 
 import hashlib
 import re
-from enum import StrEnum
-
-from pydantic import BaseModel, Field
-
 from .models import EvidenceQuality, EvidenceReceipt, Finding, LaneReport
 
 
@@ -35,7 +31,10 @@ def audit_finding(finding: Finding, lane: str, context: str) -> EvidenceReceipt:
     if path and path in sections:
         section = sections[path]
         source_hash = hashlib.sha256(section.encode("utf-8")).hexdigest()
-        truncated = "[MASAMUNE FILE/PATCH TRUNCATED]" in section or "[MASAMUNE CONTEXT TRUNCATED" in section
+        truncated = (
+            "[MASAMUNE FILE/PATCH TRUNCATED]" in section
+            or "[MASAMUNE CONTEXT TRUNCATED" in section
+        )
         if finding.line and not truncated:
             lines = section.splitlines()
             if 1 <= finding.line <= len(lines):
@@ -47,7 +46,10 @@ def audit_finding(finding: Finding, lane: str, context: str) -> EvidenceReceipt:
                     line=finding.line,
                     source_sha256=source_hash,
                     context_sha256=context_hash,
-                    rationale="Cited file and line are present in an untruncated bounded context section.",
+                    rationale=(
+                        "Cited file and line are present in an untruncated "
+                        "bounded context section."
+                    ),
                 )
         return EvidenceReceipt(
             finding_id=finding.id,
@@ -57,7 +59,10 @@ def audit_finding(finding: Finding, lane: str, context: str) -> EvidenceReceipt:
             line=finding.line,
             source_sha256=source_hash,
             context_sha256=context_hash,
-            rationale="Cited file is present in the bounded context, but the exact line cannot be established from the supplied section.",
+            rationale=(
+                "Cited file is present in the bounded context, but the exact "
+                "line cannot be established from the supplied section."
+            ),
         )
 
     for evidence in finding.evidence:
@@ -70,7 +75,10 @@ def audit_finding(finding: Finding, lane: str, context: str) -> EvidenceReceipt:
                 line=finding.line,
                 source_sha256=None,
                 context_sha256=context_hash,
-                rationale="Evidence text occurs directly in the bounded context without an exact file anchor.",
+                rationale=(
+                    "Evidence text occurs directly in the bounded context without "
+                    "an exact file anchor."
+                ),
             )
 
     return EvidenceReceipt(
@@ -81,7 +89,10 @@ def audit_finding(finding: Finding, lane: str, context: str) -> EvidenceReceipt:
         line=finding.line,
         source_sha256=None,
         context_sha256=context_hash,
-        rationale="No deterministic source anchor or exact context evidence was established.",
+        rationale=(
+            "No deterministic source anchor or exact context evidence was "
+            "established."
+        ),
     )
 
 
