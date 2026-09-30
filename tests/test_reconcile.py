@@ -113,3 +113,22 @@ def test_rejection_is_preserved() -> None:
         )],
     )
     assert report.rejected_ids == ["M-001"]
+
+
+def test_confirmation_without_source_anchor_stays_unresolved() -> None:
+    masa, mune = lanes()
+    report = reconcile(
+        subject(),
+        masa,
+        mune,
+        [
+            Challenge(
+                finding_id="M-001",
+                verdict="CONFIRM",
+                rationale="I agree.",
+                evidence=["reachable"],
+            )
+        ],
+    )
+    assert report.confirmed == []
+    assert [item.id for item in report.unresolved] == ["M-001"]
