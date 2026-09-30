@@ -250,3 +250,23 @@ Deno.test("skeptic gate accepts exact evidence and complete challenge", () => {
   );
   assert(flags.length === 0);
 });
+
+
+Deno.test("diff lines cannot claim exact source-line evidence", async () => {
+  const receipt = await auditFinding(
+    {
+      id: "M-004",
+      title: "unknown",
+      kind: "BUG",
+      severity: "HIGH",
+      confidence: 0.9,
+      file: "src/retry.ts",
+      line: 1,
+      evidence: [],
+      mechanism: "unknown",
+    },
+    "MASA",
+    "=== DIFF src/retry.ts ===\n@@ -1 +1 @@\n+dangerous retry\n",
+  );
+  assert(receipt.quality === "EXACT_FILE");
+});
