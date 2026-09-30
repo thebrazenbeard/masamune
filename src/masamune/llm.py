@@ -29,6 +29,7 @@ class OpenAICompatibleModel:
         model_id: str,
         timeout: float,
         max_output_tokens: int,
+        temperature: float,
     ) -> None:
         self.base_url = base_url.rstrip("/")
         self.api_key = api_key
@@ -36,6 +37,7 @@ class OpenAICompatibleModel:
         self.model_id = model_id
         self.timeout = timeout
         self.max_output_tokens = max_output_tokens
+        self.temperature = temperature
 
     async def _chat(self, system: str, user: str) -> str:
         if not self.api_key or not self.model_id:
@@ -44,7 +46,7 @@ class OpenAICompatibleModel:
             )
         payload = {
             "model": self.model_id,
-            "temperature": 0,
+            "temperature": self.temperature,
             "max_tokens": self.max_output_tokens,
             "messages": [
                 {"role": "system", "content": system},
