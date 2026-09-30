@@ -1,5 +1,6 @@
 import { sha256Hex, verifyGithubSignature } from "./crypto.ts";
 import { auditFinding } from "./evidence.ts";
+import { skepticFlags } from "./skeptic.ts";
 import { loadPolicy } from "./policy.ts";
 import { reconcile } from "./reconcile.ts";
 import { type LaneReport, parseCommand, type Subject } from "./types.ts";
@@ -166,4 +167,88 @@ Deno.test("evidence audit distinguishes exact and weak anchors", async () => {
     "=== HEAD SOURCE src/retry.ts ===\nline one\n",
   );
   assert(assertion.quality === "MODEL_ASSERTION");
+});
+
+
+Deno.test("skeptic gate catches incomplete challenge coverage", () => {
+  const masa = {
+    lane: "MASA" as const,
+    provider_id: "groq",
+    model_id: "masa-model",
+    findings: [{
+      id: "M-001",
+      title: "retry defect",
+      kind: "BUG" as const,
+      severity: "HIGH" as const,
+      confidence: 0.9,
+      file: "src/retry.ts",
+      line: 4,
+      evidence: ["evidence"],
+      mechanism: "replay",
+    }],
+    challenges: [],
+    notes: [],
+  };
+  const mune = {
+    lane: "MUNE" as const,
+    provider_id: "google",
+    model_id: "mune-model",
+    findings: [],
+    challenges: [],
+    notes: [],
+  };
+  const flags = skepticFlags(masa, mune, [], []);
+  assert(flags.includes("CHALLENGE_COVERAGE_GAP:M-001"));
+  assert(flags.includes("MISSING_EVIDENCE_RECEIPT:M-001"));
+});
+
+Deno.test("skeptic gate accepts exact evidence and complete challenge", () => {
+  const masa = {
+    lane: "MASA" as const,
+    provider_id: "groq",
+    model_id: "masa-model",
+    findings: [{
+      id: "M-001",
+      title: "retry defect",
+      kind: "BUG" as const,
+      severity: "HIGH" as const,
+      confidence: 0.9,
+      file: "src/retry.ts",
+      line: 4,
+      evidence: ["evidence"],
+      mechanism: "replay",
+    }],
+    challenges: [],
+    notes: [],
+  };
+  const mune = {
+    lane: "MUNE" as const,
+    provider_id: "google",
+    model_id: "mune-model",
+    findings: [],
+    challenges: [],
+    notes: [],
+  };
+  const flags = skepticFlags(
+    masa,
+    mune,
+    [{
+      finding_id: "M-001",
+      verdict: "CONFIRM" as const,
+      rationale: "reachable",
+      evidence: ["call path reaches retry"],
+      narrowed_title: null,
+    }],
+    [{
+      finding_id: "M-001",
+      lane: "MASA" as const,
+      quality: "EXACT_FILE_LINE" as const,
+      file: "src/retry.ts",
+      line: 4,
+      source_sha256: "a".repeat(64),
+      context_sha256: "b".repeat(64),
+      rationale: "exact source anchor",
+    }],
+  );
+  assert(flags.length === 0);
 });
