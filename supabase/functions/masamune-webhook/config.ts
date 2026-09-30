@@ -41,6 +41,22 @@ function boolEnv(name: string, fallback: boolean): boolean {
   throw new Error(`${name} must be true or false`);
 }
 
+function floatEnv(
+  name: string,
+  fallback: number,
+  min: number,
+  max: number,
+): number {
+  const raw = Deno.env.get(name);
+  const value = raw === undefined ? fallback : Number(raw);
+  if (!Number.isFinite(value) || value < min || value > max) {
+    throw new Error(
+      name + " must be a number between " + min + " and " + max,
+    );
+  }
+  return value;
+}
+
 function intEnv(
   name: string,
   fallback: number,
@@ -99,8 +115,8 @@ export function loadSettings(): Settings {
       500,
       20_000,
     ),
-    masaTemperature: Number(env("MASAMUNE_MASA_TEMPERATURE", "0")),
-    muneTemperature: Number(env("MASAMUNE_MUNE_TEMPERATURE", "1")),
+    masaTemperature: floatEnv("MASAMUNE_MASA_TEMPERATURE", 0, 0, 2),
+    muneTemperature: floatEnv("MASAMUNE_MUNE_TEMPERATURE", 1, 0, 2),
     requestTimeoutMs: intEnv(
       "MASAMUNE_REQUEST_TIMEOUT_MS",
       45_000,
