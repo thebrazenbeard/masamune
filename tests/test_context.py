@@ -23,3 +23,9 @@ def test_file_is_bounded() -> None:
     result = _bounded("x" * 100, 20)
     assert len(result) < 100
     assert "TRUNCATED" in result
+
+
+def test_invisible_unicode_is_made_visible() -> None:
+    result = _bounded("safe\u202Ehidden", 30_000)
+    assert "\u202e" not in result
+    assert "[MASAMUNE INVISIBLE U+202E]" in result
