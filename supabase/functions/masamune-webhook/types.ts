@@ -79,7 +79,11 @@ export interface RepoPolicy {
 export interface EvidenceReceipt {
   finding_id: string;
   lane: "MASA" | "MUNE";
-  quality: "EXACT_FILE_LINE" | "EXACT_FILE" | "CONTEXT_ONLY" | "MODEL_ASSERTION";
+  quality:
+    | "EXACT_FILE_LINE"
+    | "EXACT_FILE"
+    | "CONTEXT_ONLY"
+    | "MODEL_ASSERTION";
   file: string | null;
   line: number | null;
   source_sha256: string | null;
