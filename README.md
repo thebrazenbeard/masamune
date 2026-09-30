@@ -144,6 +144,9 @@ The review contract, finding lifecycle, and threat model are documented in
 The final real-system setup is tracked in
 [docs/GITHUB_APP_PRODUCTION_CHECKLIST.md](docs/GITHUB_APP_PRODUCTION_CHECKLIST.md).
 
+The immediate operator handoff is in
+[docs/NEXT_EXTERNAL_QUALIFICATION.md](docs/NEXT_EXTERNAL_QUALIFICATION.md).
+
 Private repositories remain disabled by default, including because current
 Gemini Free Tier terms state that Free Tier content may be used to improve
 Google products.
