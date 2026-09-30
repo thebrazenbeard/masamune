@@ -1,5 +1,6 @@
 import type {
   Challenge,
+  EvidenceReceipt,
   Finding,
   LaneReport,
   ReviewReport,
@@ -18,6 +19,7 @@ export function reconcile(
   masa: LaneReport,
   mune: LaneReport,
   challenges: Challenge[],
+  evidenceReceipts: EvidenceReceipt[] = [],
   scopeNote?: string,
 ): ReviewReport {
   const byId = new Map<string, Challenge>();
@@ -31,6 +33,9 @@ export function reconcile(
   const narrowed: Finding[] = [];
   const unresolved: Finding[] = [];
   const rejectedIds: string[] = [];
+  const receiptById = new Map(
+    evidenceReceipts.map((receipt) => [receipt.finding_id, receipt]),
+  );
 
   const masaIds = new Set(masa.findings.map((finding) => finding.id));
 
@@ -46,8 +51,16 @@ export function reconcile(
       continue;
     }
 
+    const receipt = receiptById.get(finding.id);
+    if (!receipt) {
+      unresolved.push(copyFinding(finding));
+      continue;
+    }
+
     if (challenge.verdict === "CONFIRM") {
-      if (finding.confidence >= 0.65 && challenge.evidence.length > 0) {
+      const exactAnchor = receipt.quality === "EXACT_FILE_LINE" ||
+        receipt.quality === "EXACT_FILE";
+      if (finding.confidence >= 0.65 && challenge.evidence.length > 0 && exactAnchor) {
         const promoted = copyFinding(finding);
         promoted.evidence.push(
           ...challenge.evidence.map((item) => `Mune verification: ${item}`),
@@ -60,6 +73,10 @@ export function reconcile(
     }
 
     if (challenge.verdict === "NARROW") {
+      if (receipt.quality === "MODEL_ASSERTION" || challenge.evidence.length === 0) {
+        unresolved.push(copyFinding(finding));
+        continue;
+      }
       const narrowedFinding = copyFinding(finding);
       if (challenge.narrowed_title) {
         narrowedFinding.title = challenge.narrowed_title;
@@ -91,6 +108,7 @@ export function reconcile(
     narrowed,
     unresolved,
     rejected_ids: rejectedIds,
+    evidence_receipts: evidenceReceipts,
     scope_note: scopeNote ?? null,
   };
 }
