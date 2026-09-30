@@ -6,28 +6,9 @@ from enum import StrEnum
 
 from pydantic import BaseModel, Field
 
-from .models import Finding, LaneReport
+from .models import EvidenceQuality, EvidenceReceipt, Finding, LaneReport
 
 
-class EvidenceQuality(StrEnum):
-    EXACT_FILE_LINE = "EXACT_FILE_LINE"
-    EXACT_FILE = "EXACT_FILE"
-    CONTEXT_ONLY = "CONTEXT_ONLY"
-    MODEL_ASSERTION = "MODEL_ASSERTION"
-
-
-class EvidenceReceipt(BaseModel):
-    finding_id: str
-    lane: str
-    quality: EvidenceQuality
-    file: str | None = None
-    line: int | None = Field(default=None, ge=1)
-    source_sha256: str | None = None
-    context_sha256: str
-    rationale: str
-
-
-_SOURCE_HEADER = re.compile(r"^=== (?:HEAD SOURCE|SOURCE|DIFF) (.+?) ===$", re.MULTILINE)
 _CONTEXT_HEADER = re.compile(r"^=== (?:HEAD SOURCE|SOURCE|DIFF) (.+?) ===$", re.MULTILINE)
 
 
