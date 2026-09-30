@@ -36,6 +36,16 @@ export function renderReport(
 ): string {
   const subject = report.subject;
   const marker = `<!-- masamune-review:${reviewId} -->`;
+  const receiptCounts = {
+    EXACT_FILE_LINE: 0,
+    EXACT_FILE: 0,
+    CONTEXT_ONLY: 0,
+    MODEL_ASSERTION: 0,
+  };
+  for (const receipt of report.evidence_receipts ?? []) {
+    receiptCounts[receipt.quality] += 1;
+  }
+
   const lines: string[] = [
     marker,
     "## ⚔️ Masamune adversarial review",
