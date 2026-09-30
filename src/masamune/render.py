@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from .models import Finding, ReviewReport
+from .models import EvidenceQuality, Finding, ReviewReport
 
 
 def _safe_md(text: str) -> str:
@@ -50,6 +50,7 @@ def render_report(
         f"**Mode:** {subject.kind}",
         f"**Masa:** `{report.masa.provider_id}/{report.masa.model_id}`",
         f"**Mune:** `{report.mune.provider_id}/{report.mune.model_id}`",
+        f"**Evidence audit:** exact line {receipt_counts["EXACT_FILE_LINE"]}, exact file {receipt_counts["EXACT_FILE"]}, context-only {receipt_counts["CONTEXT_ONLY"]}, model-only {receipt_counts["MODEL_ASSERTION"]}",
         "",
     ]
 
