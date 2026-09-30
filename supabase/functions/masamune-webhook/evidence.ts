@@ -21,9 +21,6 @@ function normal(path: string): string {
   return path.replaceAll("\\", "/").trim();
 }
 
-function sha256HexSyncUnavailable(): never {
-  throw new Error("unreachable");
-}
 
 interface Section {
   path: string;
