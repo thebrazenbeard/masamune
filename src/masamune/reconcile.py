@@ -2,7 +2,15 @@ from __future__ import annotations
 
 from copy import deepcopy
 
-from .models import Challenge, Finding, LaneReport, ReviewReport, Subject
+from .models import (
+    Challenge,
+    EvidenceQuality,
+    EvidenceReceipt,
+    Finding,
+    LaneReport,
+    ReviewReport,
+    Subject,
+)
 
 
 def reconcile(
@@ -11,6 +19,7 @@ def reconcile(
     mune: LaneReport,
     challenges: list[Challenge],
     *,
+    evidence_receipts: list[EvidenceReceipt] | None = None,
     scope_note: str | None = None,
 ) -> ReviewReport:
     by_id: dict[str, Challenge] = {}
@@ -19,6 +28,8 @@ def reconcile(
 
     confirmed: list[Finding] = []
     narrowed: list[Finding] = []
+    receipts = evidence_receipts or []
+    receipt_by_id = {receipt.finding_id: receipt for receipt in receipts}
     unresolved: list[Finding] = []
     rejected: list[str] = []
 
@@ -33,8 +44,17 @@ def reconcile(
             rejected.append(finding.id)
             continue
 
+        receipt = receipt_by_id.get(finding.id)
+        if receipt is None:
+            unresolved.append(finding)
+            continue
+
         if challenge.verdict == "CONFIRM":
-            if finding.confidence >= 0.65 and challenge.evidence:
+            exact_anchor = receipt.quality in {
+                EvidenceQuality.EXACT_FILE_LINE,
+                EvidenceQuality.EXACT_FILE,
+            }
+            if finding.confidence >= 0.65 and challenge.evidence and exact_anchor:
                 confirmed_finding = deepcopy(finding)
                 confirmed_finding.evidence.extend(
                     f"Mune verification: {item}" for item in challenge.evidence
@@ -45,6 +65,9 @@ def reconcile(
             continue
 
         if challenge.verdict == "NARROW":
+            if receipt.quality == EvidenceQuality.MODEL_ASSERTION or not challenge.evidence:
+                unresolved.append(finding)
+                continue
             narrowed_finding = deepcopy(finding)
             if challenge.narrowed_title:
                 narrowed_finding.title = challenge.narrowed_title
@@ -71,5 +94,6 @@ def reconcile(
         narrowed=narrowed,
         unresolved=unresolved,
         rejected_ids=rejected,
+        evidence_receipts=receipts,
         scope_note=scope_note,
     )
