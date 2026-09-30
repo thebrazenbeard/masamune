@@ -21,7 +21,8 @@ Implemented in the current feature branch:
 - hard daily free-tier budget admission;
 - singleton expiring model-execution lease;
 - Groq Masa + Gemini Mune free-tier defaults;
-- local tests/CI/container packaging.
+- local tests/CI/container packaging;
+- deterministic evidence receipts and skeptic gate.
 
 ## V0.2 — production execution substrate
 
@@ -38,6 +39,11 @@ Next engineering targets:
 - operator replay/reconciliation tools.
 
 ## V0.3 — stronger code understanding
+
+The evidence audit and skeptic gate are the foundation for this stage. They
+must remain separate from model confidence so improved retrieval can raise the
+evidence ceiling without creating fake certainty.
+
 
 - symbol-aware repository indexing;
 - dependency/call-graph context expansion;
