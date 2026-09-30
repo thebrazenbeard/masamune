@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from .models import EvidenceQuality, EvidenceReceipt, LaneReport, Challenge
+from .models import Challenge, EvidenceQuality, EvidenceReceipt, LaneReport
 
 
 def skeptic_flags(
