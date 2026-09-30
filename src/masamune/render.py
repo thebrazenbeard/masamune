@@ -53,6 +53,12 @@ def render_report(
         "",
     ]
 
+    if report.skeptic_flags:
+        lines += ["## Skeptic gate", ""]
+        for flag in report.skeptic_flags:
+            lines += [f"- `{_safe_md(flag)}`"]
+        lines += [""]
+
     if report.confirmed:
         lines += ["## Confirmed by Mune", ""]
         for finding in report.confirmed:
