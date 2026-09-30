@@ -21,7 +21,6 @@ function normal(path: string): string {
   return path.replaceAll("\\", "/").trim();
 }
 
-
 interface Section {
   path: string;
   content: string;
@@ -56,7 +55,9 @@ export async function auditFinding(
     (byte) => byte.toString(16).padStart(2, "0"),
   ).join("");
   const path = finding.file ? normal(finding.file) : null;
-  const section = path ? sections(context).find((item) => item.path === path) : null;
+  const section = path
+    ? sections(context).find((item) => item.path === path)
+    : null;
 
   if (path && section) {
     const sourceBytes = new TextEncoder().encode(section.content);
@@ -67,7 +68,8 @@ export async function auditFinding(
       sourceDigest,
       (byte) => byte.toString(16).padStart(2, "0"),
     ).join("");
-    const truncated = section.content.includes("[MASAMUNE FILE/PATCH TRUNCATED]") ||
+    const truncated =
+      section.content.includes("[MASAMUNE FILE/PATCH TRUNCATED]") ||
       section.content.includes("[MASAMUNE CONTEXT TRUNCATED");
     if (finding.line && !truncated) {
       const lineCount = section.content.split(/\r?\n/).length;
@@ -80,7 +82,8 @@ export async function auditFinding(
           line: finding.line,
           source_sha256: sourceSha256,
           context_sha256: contextSha256,
-          rationale: "Cited file and line are present in an untruncated bounded context section.",
+          rationale:
+            "Cited file and line are present in an untruncated bounded context section.",
         };
       }
     }
@@ -92,11 +95,14 @@ export async function auditFinding(
       line: finding.line ?? null,
       source_sha256: sourceSha256,
       context_sha256: contextSha256,
-      rationale: "Cited file is present in bounded context, but the exact line cannot be established from the supplied section.",
+      rationale:
+        "Cited file is present in bounded context, but the exact line cannot be established from the supplied section.",
     };
   }
 
-  if (finding.evidence.some((item) => item.length > 0 && context.includes(item))) {
+  if (
+    finding.evidence.some((item) => item.length > 0 && context.includes(item))
+  ) {
     return {
       finding_id: finding.id,
       lane,
@@ -105,7 +111,8 @@ export async function auditFinding(
       line: finding.line ?? null,
       source_sha256: null,
       context_sha256: contextSha256,
-      rationale: "Evidence text occurs directly in bounded context without an exact file anchor.",
+      rationale:
+        "Evidence text occurs directly in bounded context without an exact file anchor.",
     };
   }
 
@@ -117,7 +124,8 @@ export async function auditFinding(
     line: finding.line ?? null,
     source_sha256: null,
     context_sha256: contextSha256,
-    rationale: "No deterministic source anchor or exact context evidence was established.",
+    rationale:
+      "No deterministic source anchor or exact context evidence was established.",
   };
 }
 
