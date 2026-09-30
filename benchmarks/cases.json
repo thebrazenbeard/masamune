@@ -1,0 +1,29 @@
+{
+  "version": "0.1",
+  "cases": [
+    {
+      "id": "retry-ambiguous-timeout",
+      "language": "python",
+      "category": "reliability",
+      "path": "benchmarks/fixtures/retry_ambiguous_timeout.py",
+      "expected": {
+        "kind": "BUG",
+        "severity_at_least": "HIGH",
+        "anchor": "send()",
+        "mechanism_contains": ["timeout", "duplicate"]
+      }
+    },
+    {
+      "id": "tenant-cache-confusion",
+      "language": "python",
+      "category": "security",
+      "path": "benchmarks/fixtures/tenant_cache_confusion.py",
+      "expected": {
+        "kind": "SECURITY_CONCERN",
+        "severity_at_least": "HIGH",
+        "anchor": "cache[user_id]",
+        "mechanism_contains": ["tenant", "authorization"]
+      }
+    }
+  ]
+}
