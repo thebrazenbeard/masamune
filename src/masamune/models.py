@@ -6,6 +6,13 @@ from typing import Literal
 from pydantic import BaseModel, Field, model_validator
 
 
+class EvidenceQuality(StrEnum):
+    EXACT_FILE_LINE = "EXACT_FILE_LINE"
+    EXACT_FILE = "EXACT_FILE"
+    CONTEXT_ONLY = "CONTEXT_ONLY"
+    MODEL_ASSERTION = "MODEL_ASSERTION"
+
+
 class Severity(StrEnum):
     LOW = "LOW"
     MEDIUM = "MEDIUM"
@@ -71,6 +78,17 @@ class Subject(BaseModel):
     url: str
 
 
+class EvidenceReceipt(BaseModel):
+    finding_id: str
+    lane: str
+    quality: EvidenceQuality
+    file: str | None = None
+    line: int | None = Field(default=None, ge=1)
+    source_sha256: str | None = None
+    context_sha256: str
+    rationale: str
+
+
 class ReviewReport(BaseModel):
     subject: Subject
     masa: LaneReport
@@ -79,5 +97,5 @@ class ReviewReport(BaseModel):
     narrowed: list[Finding]
     unresolved: list[Finding]
     rejected_ids: list[str]
-    evidence_receipts: list[dict[str, object]] = Field(default_factory=list)
+    evidence_receipts: list[EvidenceReceipt] = Field(default_factory=list)
     scope_note: str | None = None
