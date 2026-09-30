@@ -40,6 +40,7 @@ export class MasamuneOrchestrator {
       modelId: settings.masaModel,
       timeoutMs: settings.requestTimeoutMs,
       maxOutputTokens: settings.modelMaxOutputTokens,
+      temperature: settings.masaTemperature,
       repairInvalidJson: false,
     });
     this.mune = new OpenAICompatibleModel({
@@ -49,6 +50,7 @@ export class MasamuneOrchestrator {
       modelId: settings.muneModel,
       timeoutMs: settings.requestTimeoutMs,
       maxOutputTokens: settings.modelMaxOutputTokens,
+      temperature: settings.muneTemperature,
       repairInvalidJson: true,
     });
   }
