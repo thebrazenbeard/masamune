@@ -16,6 +16,9 @@ class ReviewContext:
     policy: RepoPolicy
 
 
+_INVISIBLE_CONTROLS = re.compile("[\\u200b-\\u200f\\u202a-\\u202e\\u2060-\\u2064\\ufeff]")
+
+
 _SECRET_PATTERNS = [
     re.compile(r"-----BEGIN [A-Z ]*PRIVATE KEY-----.*?-----END [A-Z ]*PRIVATE KEY-----", re.DOTALL),
     re.compile(r"\bgh[pousr]_[A-Za-z0-9]{20,}\b"),
@@ -31,7 +34,10 @@ _SECRET_PATTERNS = [
 def _redact(text: str) -> str:
     for pattern in _SECRET_PATTERNS:
         text = pattern.sub("[REDACTED_POTENTIAL_SECRET]", text)
-    return text
+    return _INVISIBLE_CONTROLS.sub(
+        lambda match: f"[MASAMUNE INVISIBLE U+{ord(match.group()):04X}]",
+        text,
+    )
 
 
 def _bounded(text: str, max_bytes: int) -> str:
