@@ -141,6 +141,7 @@ export function loadSettings(): Settings {
       "MASAMUNE_REVIEW_PROTOCOL_VERSION",
       "masamune-edge-v0.1",
     ),
+    zeroCostEnforced: boolEnv("MASAMUNE_ZERO_COST_ENFORCED", true),
   };
 
   for (
@@ -167,5 +168,38 @@ export function loadSettings(): Settings {
     );
   }
 
+  validateBillingPolicy(settings);
   return settings;
+}
+
+export function validateBillingPolicy(
+  settings: Pick<
+    Settings,
+    | "zeroCostEnforced"
+    | "masaProviderId"
+    | "masaBaseUrl"
+    | "masaModel"
+    | "muneProviderId"
+    | "muneBaseUrl"
+    | "muneModel"
+    | "allowPrivateRepositories"
+  >,
+): void {
+  if (!settings.zeroCostEnforced) return;
+
+  const freeDefaults = [
+    settings.masaProviderId === "groq",
+    settings.masaBaseUrl === "https://api.groq.com/openai/v1",
+    settings.masaModel === "qwen/qwen3.8-27b",
+    settings.muneProviderId === "google",
+    settings.muneBaseUrl ===
+      "https://generativelanguage.googleapis.com/v1beta/openai",
+    settings.muneModel === "gemini-3.8-flash",
+    settings.allowPrivateRepositories === false,
+  ];
+  if (freeDefaults.some((ok) => !ok)) {
+    throw new Error(
+      "zero-cost enforcement rejects non-free provider/model configuration",
+    );
+  }
 }
