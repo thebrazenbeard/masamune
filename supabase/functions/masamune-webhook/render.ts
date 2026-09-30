@@ -47,6 +47,14 @@ export function renderReport(
     "",
   ];
 
+  if (report.skeptic_flags.length) {
+    lines.push("## Skeptic gate", "");
+    for (const flag of report.skeptic_flags) {
+      lines.push(`- \\`${safeMarkdown(flag)}\\``);
+    }
+    lines.push("");
+  }
+
   if (report.confirmed.length) {
     lines.push("## Confirmed by Mune", "");
     for (const finding of report.confirmed) {
