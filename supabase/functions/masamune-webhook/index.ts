@@ -426,12 +426,19 @@ async function processDelivery(
 
 Deno.serve(async (request: Request) => {
   if (request.method === "GET") {
-    return jsonResponse({
-      status: "ok",
-      service: "masamune",
-      runtime: "supabase-edge",
-      billing_mode: "zero-cost-capped",
-    });
+    try {
+      const healthSettings = loadSettings();
+      return jsonResponse({
+        status: "ok",
+        service: "masamune",
+        runtime: "supabase-edge",
+        billing_mode: healthSettings.zeroCostEnforced
+          ? "zero-cost-enforced"
+          : "operator-configured",
+      });
+    } catch {
+      return jsonResponse({ status: "misconfigured", service: "masamune" }, 503);
+    }
   }
 
   if (request.method !== "POST") {
