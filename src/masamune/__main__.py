@@ -2,9 +2,16 @@ from __future__ import annotations
 
 import uvicorn
 
+from .settings import get_settings
+
 
 def main() -> None:
-    uvicorn.run("masamune.app:app", host="0.0.0.0", port=8000)
+    settings = get_settings()
+    uvicorn.run(
+        "masamune.app:app",
+        host=settings.host,
+        port=settings.port,
+    )
 
 
 if __name__ == "__main__":

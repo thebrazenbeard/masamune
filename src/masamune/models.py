@@ -3,7 +3,7 @@ from __future__ import annotations
 from enum import StrEnum
 from typing import Literal
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 
 
 class Severity(StrEnum):
@@ -52,6 +52,13 @@ class LaneReport(BaseModel):
     findings: list[Finding] = Field(default_factory=list, max_length=30)
     challenges: list[Challenge] = Field(default_factory=list, max_length=30)
     notes: list[str] = Field(default_factory=list, max_length=20)
+
+    @model_validator(mode="after")
+    def unique_finding_ids(self) -> LaneReport:
+        identifiers = [finding.id for finding in self.findings]
+        if len(identifiers) != len(set(identifiers)):
+            raise ValueError("finding IDs must be unique within a lane report")
+        return self
 
 
 class Subject(BaseModel):

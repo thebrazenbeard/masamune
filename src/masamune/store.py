@@ -80,13 +80,18 @@ class DeliveryStore:
             except sqlite3.IntegrityError:
                 row = conn.execute(
                     """
-                    SELECT state, updated_at
+                    SELECT state, updated_at, event_name, payload_sha256
                     FROM webhook_delivery
                     WHERE delivery_id = ?
                     """,
                     (delivery_id,),
                 ).fetchone()
                 state = row["state"] if row else "UNKNOWN"
+                if row and (
+                    row["event_name"] != event_name
+                    or row["payload_sha256"] != payload_sha256
+                ):
+                    return DeliveryClaim(False, "CONFLICT")
                 stale_processing = False
                 if row and state == "PROCESSING":
                     updated = datetime.fromisoformat(row["updated_at"])

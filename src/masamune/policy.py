@@ -1,42 +1,35 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
-
 import yaml
+from pydantic import BaseModel, ConfigDict, Field
 
 
-@dataclass(frozen=True)
-class RepoPolicy:
+class RepoPolicy(BaseModel):
+    model_config = ConfigDict(extra="forbid", strict=True, frozen=True)
+
     enabled: bool = True
     review_pull_requests: bool = True
     allow_external_pull_requests: bool = False
     allow_issue_commands: bool = True
     allow_sweep: bool = True
     post_unresolved: bool = False
-    max_files: int = 40
-    max_file_bytes: int = 30_000
-    max_context_bytes: int = 180_000
-
-    def __post_init__(self) -> None:
-        if not 1 <= self.max_files <= 200:
-            raise ValueError("max_files must be between 1 and 200")
-        if not 2_000 <= self.max_file_bytes <= 200_000:
-            raise ValueError("max_file_bytes must be between 2000 and 200000")
-        if not 10_000 <= self.max_context_bytes <= 1_000_000:
-            raise ValueError(
-                "max_context_bytes must be between 10000 and 1000000"
-            )
+    max_files: int = Field(default=40, ge=1, le=200)
+    max_file_bytes: int = Field(default=30_000, ge=2_000, le=200_000)
+    max_context_bytes: int = Field(default=180_000, ge=10_000, le=1_000_000)
 
 
 def load_policy(text: str | None) -> RepoPolicy:
     if not text:
         return RepoPolicy()
-    raw = yaml.safe_load(text) or {}
+    raw = yaml.safe_load(text)
+    if raw is None:
+        return RepoPolicy()
+    if not isinstance(raw, dict):
+        raise TypeError(".masamune.yml must contain a mapping")
     cfg = raw.get("masamune", raw)
     if not isinstance(cfg, dict):
-        raise TypeError(".masamune.yml must contain a mapping")
-    allowed = {field for field in RepoPolicy.__dataclass_fields__}
-    unknown = set(cfg) - allowed
+        raise TypeError("masamune policy must contain a mapping")
+    unknown = set(cfg) - set(RepoPolicy.model_fields)
     if unknown:
         raise ValueError(f"unknown Masamune policy keys: {sorted(unknown)}")
-    return RepoPolicy(**cfg)
+    return RepoPolicy.model_validate(cfg)

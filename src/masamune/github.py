@@ -114,10 +114,15 @@ class GitHubAppClient:
         return files[:3000]
 
     async def collaborator_permission(self, full_name: str, username: str) -> str:
-        data = await self.request(
-            "GET",
-            f"/repos/{full_name}/collaborators/{username}/permission",
-        )
+        try:
+            data = await self.request(
+                "GET",
+                f"/repos/{full_name}/collaborators/{username}/permission",
+            )
+        except httpx.HTTPStatusError as exc:
+            if exc.response.status_code == 404:
+                return "none"
+            raise
         return str(data.get("permission") or "none").lower()
 
     async def commit_tree_sha(self, full_name: str, commit_sha: str) -> str:

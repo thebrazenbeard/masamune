@@ -3,7 +3,6 @@ from __future__ import annotations
 import hashlib
 import json
 import logging
-from dataclasses import replace
 from typing import Any
 
 from fastapi import BackgroundTasks, FastAPI, Header, HTTPException, Request
@@ -114,14 +113,18 @@ async def _process_delivery(
 
         default_ref = (payload.get("repository") or {}).get("default_branch") or "main"
         policy = await load_repo_policy(gh, repository, default_ref)
-        policy = replace(
-            policy,
-            max_files=min(policy.max_files, settings.max_files),
-            max_file_bytes=min(policy.max_file_bytes, settings.max_file_bytes),
-            max_context_bytes=min(
-                policy.max_context_bytes,
-                settings.max_context_bytes,
-            ),
+        policy = policy.model_copy(
+            update={
+                "max_files": min(policy.max_files, settings.max_files),
+                "max_file_bytes": min(
+                    policy.max_file_bytes,
+                    settings.max_file_bytes,
+                ),
+                "max_context_bytes": min(
+                    policy.max_context_bytes,
+                    settings.max_context_bytes,
+                ),
+            }
         )
         if not policy.enabled:
             store.mark(delivery_id, "IGNORED")

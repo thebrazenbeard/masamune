@@ -33,6 +33,8 @@ class Settings(BaseSettings):
     request_timeout_seconds: float = Field(default=90, ge=5, le=600)
     model_max_output_tokens: int = Field(default=5_000, ge=500, le=20_000)
     public_base_url: str = "http://localhost:8000"
+    host: str = "127.0.0.1"
+    port: int = Field(default=8_000, ge=1, le=65_535)
     state_db_path: str = "masamune.sqlite3"
 
     @model_validator(mode="after")
