@@ -22,12 +22,13 @@ function normal(path: string): string {
 }
 
 interface Section {
+  kind: "HEAD SOURCE" | "SOURCE" | "DIFF";
   path: string;
   content: string;
 }
 
 function sections(context: string): Section[] {
-  const header = /^=== (?:HEAD SOURCE|SOURCE|DIFF) (.+?) ===$/gm;
+  const header = /^=== (HEAD SOURCE|SOURCE|DIFF) (.+?) ===$/gm;
   const matches = [...context.matchAll(header)];
   return matches.map((match, index) => {
     const start = (match.index ?? 0) + match[0].length;
@@ -35,7 +36,8 @@ function sections(context: string): Section[] {
       ? (matches[index + 1].index ?? context.length)
       : context.length;
     return {
-      path: normal(match[1]),
+      kind: match[1] as Section["kind"],
+      path: normal(match[2]),
       content: context.slice(start, end).trim(),
     };
   });
@@ -71,7 +73,7 @@ export async function auditFinding(
     const truncated =
       section.content.includes("[MASAMUNE FILE/PATCH TRUNCATED]") ||
       section.content.includes("[MASAMUNE CONTEXT TRUNCATED");
-    if (finding.line && !truncated) {
+    if (section.kind !== "DIFF" && finding.line && !truncated) {
       const lineCount = section.content.split(/\r?\n/).length;
       if (finding.line <= lineCount) {
         return {
