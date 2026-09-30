@@ -80,7 +80,7 @@ The zero-cost profile defaults to:
 
 ```text
 Masa: Groq / qwen/qwen3.8-27b
-Mune: Google / gemini-2.5-flash-lite
+Mune: Google / gemini-3.8-flash
 ```
 
 See [ZERO_COST_DEPLOYMENT.md](ZERO_COST_DEPLOYMENT.md) for the current free-tier
@@ -102,6 +102,7 @@ MASAMUNE_MUNE_BASE_URL=
 MASAMUNE_MUNE_API_KEY=
 MASAMUNE_MUNE_PROVIDER_ID=
 MASAMUNE_MUNE_MODEL=
+MASAMUNE_MUNE_TEMPERATURE=1
 ```
 
 When `MASAMUNE_REQUIRE_INDEPENDENCE=true`, provider IDs and model IDs must both
@@ -137,7 +138,7 @@ After deployment:
 
 1. request the active runtime's health endpoint and require
    `{"status":"ok"}` (the Edge route reports
-   `"billing_mode":"zero-cost-capped"`);
+   `"billing_mode":"zero-cost-enforced"` when the zero-cost profile is active);
 2. deliver a signed GitHub webhook;
 3. open a test PR;
 4. verify Masamune posts one marker-bearing review comment;
