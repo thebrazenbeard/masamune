@@ -286,7 +286,6 @@ Deno.test("diff lines cannot claim exact source-line evidence", async () => {
   assert(receipt.quality === "EXACT_FILE");
 });
 
-
 Deno.test("zero-cost billing policy rejects paid model routing", () => {
   const base = {
     zeroCostEnforced: true,
