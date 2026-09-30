@@ -17,8 +17,10 @@ def review_id_for(context: ReviewContext, settings: Settings) -> str:
     raw = (
         f"{settings.review_protocol_version}|{subject.repository}|{subject.kind}|"
         f"{subject.number}|{subject.base_sha}|{subject.head_sha}|"
-        f"{settings.masa_provider_id}|{settings.masa_model}|"
-        f"{settings.mune_provider_id}|{settings.mune_model}|{context_digest}"
+        f"{settings.masa_provider_id}|{settings.masa_model}|{settings.masa_base_url}|"
+        f"{settings.masa_temperature}|{settings.model_max_output_tokens}|"
+        f"{settings.mune_provider_id}|{settings.mune_model}|{settings.mune_base_url}|"
+        f"{settings.mune_temperature}|{settings.model_max_output_tokens}|{context_digest}"
     )
     return hashlib.sha256(raw.encode("utf-8")).hexdigest()[:24]
 
