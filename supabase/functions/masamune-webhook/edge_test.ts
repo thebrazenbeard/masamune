@@ -106,12 +106,27 @@ Deno.test("reconciliation requires verification evidence", () => {
   assert(withoutEvidence.confirmed.length === 0);
   assert(withoutEvidence.unresolved.length === 1);
 
-  const withEvidence = reconcile(subject, masa, mune, [{
-    finding_id: "M-001",
-    verdict: "CONFIRM",
-    rationale: "reachable",
-    evidence: ["caller retries after ambiguous response"],
-  }]);
+  const withEvidence = reconcile(
+    subject,
+    masa,
+    mune,
+    [{
+      finding_id: "M-001",
+      verdict: "CONFIRM",
+      rationale: "reachable",
+      evidence: ["caller retries after ambiguous response"],
+    }],
+    [{
+      finding_id: "M-001",
+      lane: "MASA",
+      quality: "EXACT_FILE_LINE",
+      file: "src/retry.ts",
+      line: 1,
+      source_sha256: "a".repeat(64),
+      context_sha256: "b".repeat(64),
+      rationale: "exact source anchor",
+    }],
+  );
   assert(withEvidence.confirmed.length === 1);
 });
 
