@@ -1,5 +1,6 @@
 import { sha256Hex, verifyGithubSignature } from "./crypto.ts";
 import { auditFinding } from "./evidence.ts";
+import { validateBillingPolicy } from "./config.ts";
 import { skepticFlags } from "./skeptic.ts";
 import { loadPolicy } from "./policy.ts";
 import { reconcile } from "./reconcile.ts";
@@ -283,4 +284,27 @@ Deno.test("diff lines cannot claim exact source-line evidence", async () => {
     "=== DIFF src/retry.ts ===\n@@ -1 +1 @@\n+dangerous retry\n",
   );
   assert(receipt.quality === "EXACT_FILE");
+});
+
+
+Deno.test("zero-cost billing policy rejects paid model routing", () => {
+  const base = {
+    zeroCostEnforced: true,
+    masaProviderId: "groq",
+    masaBaseUrl: "https://api.groq.com/openai/v1",
+    masaModel: "qwen/qwen3.8-27b",
+    muneProviderId: "google",
+    muneBaseUrl: "https://generativelanguage.googleapis.com/v1beta/openai",
+    muneModel: "gemini-3.8-flash",
+    allowPrivateRepositories: false,
+  };
+  validateBillingPolicy(base);
+
+  let threw = false;
+  try {
+    validateBillingPolicy({ ...base, masaProviderId: "openai" });
+  } catch {
+    threw = true;
+  }
+  assert(threw);
 });
