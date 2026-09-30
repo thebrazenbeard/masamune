@@ -172,6 +172,26 @@ export function loadSettings(): Settings {
   return settings;
 }
 
+export function missingRuntimeSecrets(
+  settings: Pick<
+    Settings,
+    | "githubAppId"
+    | "githubPrivateKey"
+    | "githubWebhookSecret"
+    | "masaApiKey"
+    | "muneApiKey"
+  >,
+): string[] {
+  const required: Array<[string, string]> = [
+    ["MASAMUNE_GITHUB_APP_ID", settings.githubAppId],
+    ["MASAMUNE_GITHUB_PRIVATE_KEY", settings.githubPrivateKey],
+    ["MASAMUNE_GITHUB_WEBHOOK_SECRET", settings.githubWebhookSecret],
+    ["MASAMUNE_MASA_API_KEY", settings.masaApiKey],
+    ["MASAMUNE_MUNE_API_KEY", settings.muneApiKey],
+  ];
+  return required.filter(([, value]) => !value.trim()).map(([name]) => name);
+}
+
 export function validateBillingPolicy(
   settings: Pick<
     Settings,
