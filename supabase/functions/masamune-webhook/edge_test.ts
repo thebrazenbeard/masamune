@@ -4,6 +4,7 @@ import { validateBillingPolicy } from "./config.ts";
 import { skepticFlags } from "./skeptic.ts";
 import { loadPolicy } from "./policy.ts";
 import { reconcile } from "./reconcile.ts";
+import { reviewIdFor } from "./orchestrator.ts";
 import { type LaneReport, parseCommand, type Subject } from "./types.ts";
 
 function assert(
@@ -306,4 +307,63 @@ Deno.test("zero-cost billing policy rejects paid model routing", () => {
     threw = true;
   }
   assert(threw);
+});
+
+
+Deno.test("review identity changes with sampling configuration", async () => {
+  const context = {
+    subject: {
+      repository: "owner/repo",
+      kind: "PULL_REQUEST",
+      number: 1,
+      head_sha: "a".repeat(40),
+      base_sha: "b".repeat(40),
+      title: "test",
+      url: "https://github.com/owner/repo/pull/1",
+    },
+    text: "source",
+    policy: {
+      enabled: true,
+      review_pull_requests: true,
+      allow_external_pull_requests: false,
+      allow_issue_commands: true,
+      allow_sweep: false,
+      post_unresolved: false,
+      max_files: 5,
+      max_file_bytes: 8000,
+      max_context_bytes: 20000,
+    },
+  };
+  const settings = {
+    reviewProtocolVersion: "test-v1",
+    masaProviderId: "groq",
+    masaModel: "model-a",
+    masaBaseUrl: "https://masa.example/v1",
+    masaTemperature: 0,
+    modelMaxOutputTokens: 2000,
+    muneProviderId: "google",
+    muneModel: "model-b",
+    muneBaseUrl: "https://mune.example/v1",
+    muneTemperature: 1,
+  } as any;
+
+  const base = await reviewIdFor(context, settings);
+  assert(
+    base !== await reviewIdFor(
+      context,
+      { ...settings, masaTemperature: 0.5 },
+    ),
+  );
+  assert(
+    base !== await reviewIdFor(
+      context,
+      { ...settings, muneTemperature: 0.5 },
+    ),
+  );
+  assert(
+    base !== await reviewIdFor(
+      context,
+      { ...settings, masaBaseUrl: "https://other.example/v1" },
+    ),
+  );
 });
