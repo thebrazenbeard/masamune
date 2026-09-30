@@ -175,6 +175,7 @@ export interface ModelConfig {
   modelId: string;
   timeoutMs: number;
   maxOutputTokens: number;
+  temperature: number;
   repairInvalidJson: boolean;
 }
 
@@ -195,7 +196,7 @@ export class OpenAICompatibleModel {
           },
           body: JSON.stringify({
             model: this.config.modelId,
-            temperature: 0,
+            temperature: this.config.temperature,
             max_tokens: this.config.maxOutputTokens,
             messages: [
               { role: "system", content: system },
