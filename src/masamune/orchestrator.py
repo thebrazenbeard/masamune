@@ -64,6 +64,8 @@ class MasamuneOrchestrator:
 
         receipts = audit_reports(masa_report, mune_blind, context.text)
         flags = skeptic_flags(masa_report, mune_blind, challenges, receipts)
+        if "[MASAMUNE INVISIBLE U+" in context.text:
+            flags.append("INVISIBLE_UNICODE_IN_CONTEXT")
         report = reconcile(
             context.subject,
             masa_report,
