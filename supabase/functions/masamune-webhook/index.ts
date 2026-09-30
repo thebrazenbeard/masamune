@@ -428,13 +428,27 @@ Deno.serve(async (request: Request) => {
   if (request.method === "GET") {
     try {
       const healthSettings = loadSettings();
+      const missing = missingRuntimeSecrets(healthSettings);
+      const billingMode = healthSettings.zeroCostEnforced
+        ? "zero-cost-enforced"
+        : "operator-configured";
+      if (missing.length) {
+        return jsonResponse(
+          {
+            status: "not_ready",
+            service: "masamune",
+            runtime: "supabase-edge",
+            billing_mode: billingMode,
+            missing,
+          },
+          503,
+        );
+      }
       return jsonResponse({
         status: "ok",
         service: "masamune",
         runtime: "supabase-edge",
-        billing_mode: healthSettings.zeroCostEnforced
-          ? "zero-cost-enforced"
-          : "operator-configured",
+        billing_mode: billingMode,
       });
     } catch {
       return jsonResponse(
