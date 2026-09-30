@@ -64,7 +64,7 @@ Default:
 
 ```text
 provider: google
-model: gemini-2.5-flash-lite
+model: gemini-3.8-flash
 base URL: https://generativelanguage.googleapis.com/v1beta/openai
 ```
 
