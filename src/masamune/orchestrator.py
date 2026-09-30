@@ -1,0 +1,81 @@
+from __future__ import annotations
+
+import asyncio
+import hashlib
+
+from .context import ReviewContext
+from .llm import OpenAICompatibleModel
+from .models import ReviewReport
+from .reconcile import reconcile
+from .settings import Settings
+from .skeptic import skeptic_flags
+
+
+def review_id_for(context: ReviewContext, settings: Settings) -> str:
+    subject = context.subject
+    context_digest = hashlib.sha256(context.text.encode("utf-8")).hexdigest()
+    raw = (
+        f"{settings.review_protocol_version}|{subject.repository}|{subject.kind}|"
+        f"{subject.number}|{subject.base_sha}|{subject.head_sha}|"
+        f"{settings.masa_provider_id}|{settings.masa_model}|{settings.masa_base_url}|"
+        f"{settings.masa_temperature}|{settings.model_max_output_tokens}|"
+        f"{settings.mune_provider_id}|{settings.mune_model}|{settings.mune_base_url}|"
+        f"{settings.mune_temperature}|{settings.model_max_output_tokens}|{context_digest}"
+    )
+    return hashlib.sha256(raw.encode("utf-8")).hexdigest()[:24]
+
+
+class MasamuneOrchestrator:
+    def __init__(self, settings: Settings) -> None:
+        self.settings = settings
+        self.masa = OpenAICompatibleModel(
+            base_url=settings.masa_base_url,
+            api_key=settings.masa_api_key,
+            provider_id=settings.masa_provider_id,
+            model_id=settings.masa_model,
+            timeout=settings.request_timeout_seconds,
+            max_output_tokens=settings.model_max_output_tokens,
+            temperature=settings.masa_temperature,
+        )
+        self.mune = OpenAICompatibleModel(
+            base_url=settings.mune_base_url,
+            api_key=settings.mune_api_key,
+            provider_id=settings.mune_provider_id,
+            model_id=settings.mune_model,
+            timeout=settings.request_timeout_seconds,
+            max_output_tokens=settings.model_max_output_tokens,
+            temperature=settings.mune_temperature,
+        )
+
+    async def review(self, context: ReviewContext) -> ReviewReport:
+        # Both first passes start from the same exact evidence and neither sees the
+        # other's output. This is the independence boundary for the first pass.
+        masa_report, mune_blind = await asyncio.gather(
+            self.masa.masa_scan(context.text),
+            self.mune.mune_blind_scan(context.text),
+        )
+        challenges = await self.mune.mune_challenge(
+            context.text,
+            mune_blind,
+            masa_report,
+        )
+        scope_note = (
+            f"Bounded review: at most {context.policy.max_files} selected files and "
+            f"{context.policy.max_context_bytes} UTF-8 bytes of source/diff context. "
+            "A missing finding is not evidence of absence."
+        )
+        from .evidence import audit_reports
+
+        receipts = audit_reports(masa_report, mune_blind, context.text)
+        flags = skeptic_flags(masa_report, mune_blind, challenges, receipts)
+        if "[MASAMUNE INVISIBLE U+" in context.text:
+            flags.append("INVISIBLE_UNICODE_IN_CONTEXT")
+        report = reconcile(
+            context.subject,
+            masa_report,
+            mune_blind,
+            challenges,
+            evidence_receipts=receipts,
+            scope_note=scope_note,
+        )
+        return report.model_copy(update={"skeptic_flags": flags})

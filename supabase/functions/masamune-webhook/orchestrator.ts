@@ -21,8 +21,14 @@ export async function reviewIdFor(
     subject.head_sha,
     settings.masaProviderId,
     settings.masaModel,
+    settings.masaBaseUrl,
+    settings.masaTemperature,
+    settings.modelMaxOutputTokens,
     settings.muneProviderId,
     settings.muneModel,
+    settings.muneBaseUrl,
+    settings.muneTemperature,
+    settings.modelMaxOutputTokens,
     contextDigest,
   ].join("|");
   return (await sha256Hex(new TextEncoder().encode(raw))).slice(0, 24);
@@ -40,6 +46,7 @@ export class MasamuneOrchestrator {
       modelId: settings.masaModel,
       timeoutMs: settings.requestTimeoutMs,
       maxOutputTokens: settings.modelMaxOutputTokens,
+      temperature: settings.masaTemperature,
       repairInvalidJson: false,
     });
     this.mune = new OpenAICompatibleModel({
@@ -49,6 +56,7 @@ export class MasamuneOrchestrator {
       modelId: settings.muneModel,
       timeoutMs: settings.requestTimeoutMs,
       maxOutputTokens: settings.modelMaxOutputTokens,
+      temperature: settings.muneTemperature,
       repairInvalidJson: true,
     });
   }
@@ -83,6 +91,10 @@ export class MasamuneOrchestrator {
       challenges,
       evidenceReceipts,
     );
+    if (context.text.includes("[MASAMUNE INVISIBLE U+")) {
+      flags.push("INVISIBLE_UNICODE_IN_CONTEXT");
+    }
+
     const report = reconcile(
       context.subject,
       masaReport,
