@@ -98,4 +98,5 @@ class ReviewReport(BaseModel):
     unresolved: list[Finding]
     rejected_ids: list[str]
     evidence_receipts: list[EvidenceReceipt] = Field(default_factory=list)
+    skeptic_flags: list[str] = Field(default_factory=list, max_length=50)
     scope_note: str | None = None
