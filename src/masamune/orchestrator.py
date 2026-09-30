@@ -7,6 +7,7 @@ from .context import ReviewContext
 from .llm import OpenAICompatibleModel
 from .models import ReviewReport
 from .reconcile import reconcile
+from .skeptic import skeptic_flags
 from .settings import Settings
 
 
@@ -62,7 +63,8 @@ class MasamuneOrchestrator:
         from .evidence import audit_reports
 
         receipts = audit_reports(masa_report, mune_blind, context.text)
-        return reconcile(
+        flags = skeptic_flags(masa_report, mune_blind, challenges, receipts)
+        report = reconcile(
             context.subject,
             masa_report,
             mune_blind,
@@ -70,3 +72,4 @@ class MasamuneOrchestrator:
             evidence_receipts=receipts,
             scope_note=scope_note,
         )
+        return report.model_copy(update={"skeptic_flags": flags})
