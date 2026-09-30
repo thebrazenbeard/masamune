@@ -36,6 +36,7 @@ class Settings(BaseSettings):
     host: str = "127.0.0.1"
     port: int = Field(default=8_000, ge=1, le=65_535)
     state_db_path: str = "masamune.sqlite3"
+    review_protocol_version: str = "masamune-v0.1"
 
     @model_validator(mode="after")
     def validate_independence(self) -> Settings:
