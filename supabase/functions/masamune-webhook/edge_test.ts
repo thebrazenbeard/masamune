@@ -251,7 +251,6 @@ Deno.test("skeptic gate accepts exact evidence and complete challenge", () => {
   assert(flags.length === 0);
 });
 
-
 Deno.test("diff lines cannot claim exact source-line evidence", async () => {
   const receipt = await auditFinding(
     {
