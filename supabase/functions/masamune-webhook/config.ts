@@ -20,6 +20,8 @@ export interface Settings {
   maxFileBytes: number;
   maxContextBytes: number;
   modelMaxOutputTokens: number;
+  masaTemperature: number;
+  muneTemperature: number;
   requestTimeoutMs: number;
   maxWebhookBytes: number;
   globalReviewsPerDay: number;
@@ -97,6 +99,8 @@ export function loadSettings(): Settings {
       500,
       20_000,
     ),
+    masaTemperature: Number(env("MASAMUNE_MASA_TEMPERATURE", "0")),
+    muneTemperature: Number(env("MASAMUNE_MUNE_TEMPERATURE", "1")),
     requestTimeoutMs: intEnv(
       "MASAMUNE_REQUEST_TIMEOUT_MS",
       45_000,
