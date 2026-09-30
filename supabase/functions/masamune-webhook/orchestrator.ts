@@ -2,6 +2,7 @@ import { sha256Hex } from "./crypto.ts";
 import { auditReports } from "./evidence.ts";
 import { OpenAICompatibleModel } from "./llm.ts";
 import { reconcile } from "./reconcile.ts";
+import { skepticFlags } from "./skeptic.ts";
 import type { ReviewContext, ReviewReport } from "./types.ts";
 import type { Settings } from "./config.ts";
 
@@ -76,7 +77,17 @@ export class MasamuneOrchestrator {
       `${context.policy.max_context_bytes} UTF-8 bytes of aggregate source/diff context. ` +
       "A missing finding is not evidence of absence.";
 
-    return reconcile(
+    const flags = skepticFlags(
+      masaReport,
+      muneBlind,
+      challenges,
+      evidenceReceipts,
+    );
+    if (context.text.includes("[MASAMUNE INVISIBLE U+")) {
+      flags.push("INVISIBLE_UNICODE_IN_CONTEXT");
+    }
+
+    const report = reconcile(
       context.subject,
       masaReport,
       muneBlind,
@@ -84,5 +95,6 @@ export class MasamuneOrchestrator {
       evidenceReceipts,
       scopeNote,
     );
+    return { ...report, skeptic_flags: flags };
   }
 }
