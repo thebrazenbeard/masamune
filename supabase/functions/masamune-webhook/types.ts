@@ -60,7 +60,7 @@ export interface ReviewReport {
   narrowed: Finding[];
   unresolved: Finding[];
   rejected_ids: string[];
-  evidence_receipts: EvidenceReceipt[];
+  evidence_receipts?: EvidenceReceipt[];
   scope_note?: string | null;
 }
 
