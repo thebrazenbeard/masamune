@@ -437,7 +437,10 @@ Deno.serve(async (request: Request) => {
           : "operator-configured",
       });
     } catch {
-      return jsonResponse({ status: "misconfigured", service: "masamune" }, 503);
+      return jsonResponse(
+        { status: "misconfigured", service: "masamune" },
+        503,
+      );
     }
   }
 
