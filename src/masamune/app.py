@@ -15,6 +15,7 @@ from .context import (
     load_repo_policy,
 )
 from .github import GitHubAppClient
+from .models import ReviewReport
 from .orchestrator import MasamuneOrchestrator, review_id_for
 from .render import render_report
 from .security import verify_github_signature
@@ -48,8 +49,27 @@ async def _publish_review(
     anchor_issue: int,
     orchestrator: MasamuneOrchestrator,
 ) -> None:
-    review_id = review_id_for(context)
+    review_id = review_id_for(context, orchestrator.settings)
     marker = f"<!-- masamune-review:{review_id} -->"
+
+    cached = store.get_review(review_id)
+    if cached is not None:
+        report = ReviewReport.model_validate(cached)
+        body = render_report(
+            report,
+            review_id,
+            include_unresolved=context.policy.post_unresolved,
+        )
+        if not await gh.has_comment_marker(
+            context.subject.repository, anchor_issue, marker
+        ):
+            await gh.comment(context.subject.repository, anchor_issue, body)
+        if not await gh.has_comment_marker(
+            context.subject.repository, anchor_issue, marker
+        ):
+            raise RuntimeError("cached Masamune comment write did not verify by readback")
+        store.mark(delivery_id, "COMPLETED")
+        return
 
     # Fast idempotency path: do not pay for a repeated model review if the exact
     # subject has already been published on this discussion.
