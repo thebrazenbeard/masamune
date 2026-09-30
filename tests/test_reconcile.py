@@ -1,5 +1,7 @@
 from masamune.models import (
     Challenge,
+    EvidenceQuality,
+    EvidenceReceipt,
     Finding,
     FindingKind,
     LaneReport,
@@ -47,6 +49,19 @@ def subject() -> Subject:
         base_sha="b" * 40,
         title="Fix retry",
         url="https://github.com/owner/repo/pull/7",
+    )
+
+
+def exact_receipt() -> EvidenceReceipt:
+    return EvidenceReceipt(
+        finding_id="M-001",
+        lane="MASA",
+        quality=EvidenceQuality.EXACT_FILE_LINE,
+        file="src/retry.py",
+        line=1,
+        source_sha256="a" * 64,
+        context_sha256="b" * 64,
+        rationale="exact source anchor",
     )
 
 
