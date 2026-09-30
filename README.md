@@ -150,6 +150,10 @@ verify visibility.
 A model finding is not promoted merely because two models agree. See
 [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
+Source/model data flow and retention boundaries are documented in
+[docs/DATA_HANDLING.md](docs/DATA_HANDLING.md). Security reporting and current
+security claim ceilings are in [SECURITY.md](SECURITY.md).
+
 ## Historical Masa / Mune state
 
 The prior debugger-team operating records under `state/continuation/` remain
