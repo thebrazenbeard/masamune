@@ -388,4 +388,3 @@ Deno.test("runtime readiness reports missing secret names without values", () =>
   assert(missing.includes("MASAMUNE_GITHUB_APP_ID"));
   assert(missing.includes("MASAMUNE_MUNE_API_KEY"));
 });
-
