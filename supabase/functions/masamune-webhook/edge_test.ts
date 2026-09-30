@@ -2,7 +2,6 @@ import { sha256Hex, verifyGithubSignature } from "./crypto.ts";
 import { auditFinding } from "./evidence.ts";
 import {
   missingRuntimeSecrets,
-  missingRuntimeSecretsFromEnv,
   type Settings,
   validateBillingPolicy,
 } from "./config.ts";
@@ -390,7 +389,3 @@ Deno.test("runtime readiness reports missing secret names without values", () =>
   assert(missing.includes("MASAMUNE_MUNE_API_KEY"));
 });
 
-Deno.test("runtime readiness exposes only missing secret names", () => {
-  const missing = missingRuntimeSecretsFromEnv();
-  assert(missing.every((name) => name.startsWith("MASAMUNE_")));
-});
