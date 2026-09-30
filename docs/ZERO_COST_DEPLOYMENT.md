@@ -91,6 +91,11 @@ provider/data terms are acceptable.
 
 ## Hard zero-cost ceilings
 
+The hosted edge profile defaults to an **enforced zero-cost provider allowlist**.
+When `MASAMUNE_ZERO_COST_ENFORCED=true`, startup rejects any provider/model
+routing other than the documented free-tier Masa/Mune pair and also rejects
+private-repository routing.
+
 The hosted edge profile defaults to:
 
 ```text
