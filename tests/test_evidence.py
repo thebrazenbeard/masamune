@@ -56,3 +56,12 @@ def test_context_only_evidence_is_distinguished() -> None:
         context,
     )
     assert receipt.quality == EvidenceQuality.CONTEXT_ONLY
+
+def test_diff_line_is_not_source_line_evidence() -> None:
+    context = "=== DIFF src/retry.py ===\n@@ -1 +1 @@\n+dangerous retry\n"
+    receipt = audit_finding(
+        make_finding(file="src/retry.py", line=1, evidence=[]),
+        "MASA",
+        context,
+    )
+    assert receipt.quality == EvidenceQuality.EXACT_FILE
