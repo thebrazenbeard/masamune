@@ -68,9 +68,16 @@ model: gemini-3.8-flash
 base URL: https://generativelanguage.googleapis.com/v1beta/openai
 ```
 
-Google currently lists Gemini 2.5 Flash-Lite input and output as free of charge
-on the Gemini Developer API Free Tier. The OpenAI-compatible endpoint accepts
-Bearer API-key authentication.
+Google currently lists Gemini 3.8 Flash input and output as free of charge
+on the Gemini Developer API Free Tier. Google also documents Gemini 3.8 Flash as
+the current stable Flash model and provides an OpenAI-compatible chat-completions
+endpoint. The zero-cost profile sets Mune's temperature to the model default
+(1.0) rather than forcing the 0 temperature used by older deterministic-style
+models.
+
+This replaces the earlier Gemini 2.5 Flash-Lite default because Google's current
+model documentation notes that 2.5 models have restricted access for some new
+projects and recommends newer models for new projects.
 
 References:
 
@@ -138,3 +145,9 @@ and limits.
 A future paid Masamune service can use the same evidence/reconciliation model,
 but paid inference or infrastructure must never be activated implicitly by this
 profile.
+
+
+Current provider references:
+- https://ai.google.dev/gemini-api/docs/models
+- https://ai.google.dev/gemini-api/docs/openai
+- https://ai.google.dev/gemini-api/docs/pricing
