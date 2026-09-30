@@ -54,6 +54,7 @@ export function renderReport(
     `**Mode:** ${subject.kind}`,
     `**Masa:** \`${report.masa.provider_id}/${report.masa.model_id}\``,
     `**Mune:** \`${report.mune.provider_id}/${report.mune.model_id}\``,
+    `**Evidence audit:** exact line ${receiptCounts.EXACT_FILE_LINE}, exact file ${receiptCounts.EXACT_FILE}, context-only ${receiptCounts.CONTEXT_ONLY}, model-only ${receiptCounts.MODEL_ASSERTION}`,
     "",
   ];
 
