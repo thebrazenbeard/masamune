@@ -4,8 +4,8 @@ from masamune.app import _publish_review
 from masamune.context import ReviewContext
 from masamune.models import LaneReport, ReviewReport, Subject
 from masamune.policy import RepoPolicy
-from masamune.store import DeliveryStore
 from masamune.settings import Settings
+from masamune.store import DeliveryStore
 
 
 class FakeGitHub:
