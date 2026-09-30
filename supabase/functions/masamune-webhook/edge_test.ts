@@ -5,7 +5,7 @@ import { skepticFlags } from "./skeptic.ts";
 import { loadPolicy } from "./policy.ts";
 import { reconcile } from "./reconcile.ts";
 import { reviewIdFor } from "./orchestrator.ts";
-import { type LaneReport, parseCommand, type Subject } from "./types.ts";
+import { type LaneReport, parseCommand, type ReviewContext, type Subject } from "./types.ts";
 
 function assert(
   condition: unknown,
@@ -310,7 +310,7 @@ Deno.test("zero-cost billing policy rejects paid model routing", () => {
 });
 
 Deno.test("review identity changes with sampling configuration", async () => {
-  const context = {
+  const context: ReviewContext = {
     subject: {
       repository: "owner/repo",
       kind: "PULL_REQUEST",
