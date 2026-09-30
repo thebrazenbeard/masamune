@@ -10,11 +10,14 @@ from .reconcile import reconcile
 from .settings import Settings
 
 
-def review_id_for(context: ReviewContext) -> str:
+def review_id_for(context: ReviewContext, settings: Settings) -> str:
     subject = context.subject
+    context_digest = hashlib.sha256(context.text.encode("utf-8")).hexdigest()
     raw = (
-        f"{subject.repository}|{subject.kind}|{subject.number}|"
-        f"{subject.base_sha}|{subject.head_sha}"
+        f"{settings.review_protocol_version}|{subject.repository}|{subject.kind}|"
+        f"{subject.number}|{subject.base_sha}|{subject.head_sha}|"
+        f"{settings.masa_provider_id}|{settings.masa_model}|"
+        f"{settings.mune_provider_id}|{settings.mune_model}|{context_digest}"
     )
     return hashlib.sha256(raw.encode("utf-8")).hexdigest()[:24]
 
@@ -56,10 +59,14 @@ class MasamuneOrchestrator:
             f"{context.policy.max_context_bytes} UTF-8 bytes of source/diff context. "
             "A missing finding is not evidence of absence."
         )
+        from .evidence import audit_reports
+
+        receipts = audit_reports(masa_report, mune_blind, context.text)
         return reconcile(
             context.subject,
             masa_report,
             mune_blind,
             challenges,
+            evidence_receipts=receipts,
             scope_note=scope_note,
         )
