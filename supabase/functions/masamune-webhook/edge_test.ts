@@ -1,6 +1,6 @@
 import { sha256Hex, verifyGithubSignature } from "./crypto.ts";
 import { auditFinding } from "./evidence.ts";
-import { type Settings, validateBillingPolicy } from "./config.ts";
+import { missingRuntimeSecrets, type Settings, validateBillingPolicy } from "./config.ts";
 import { skepticFlags } from "./skeptic.ts";
 import { loadPolicy } from "./policy.ts";
 import { reconcile } from "./reconcile.ts";
@@ -370,4 +370,18 @@ Deno.test("review identity changes with sampling configuration", async () => {
       { ...settings, masaBaseUrl: "https://other.example/v1" },
     ),
   );
+});
+
+
+Deno.test("runtime readiness reports missing secret names without values", () => {
+  const missing = missingRuntimeSecrets({
+    githubAppId: "",
+    githubPrivateKey: "",
+    githubWebhookSecret: "",
+    masaApiKey: "",
+    muneApiKey: "",
+  });
+  assert(missing.length === 5);
+  assert(missing.includes("MASAMUNE_GITHUB_APP_ID"));
+  assert(missing.includes("MASAMUNE_MUNE_API_KEY"));
 });
