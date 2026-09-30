@@ -136,6 +136,14 @@ Provider free tiers are external conditions and can change. The implementation
 therefore hard-caps work rather than assuming unlimited free service. See
 [docs/ZERO_COST_DEPLOYMENT.md](docs/ZERO_COST_DEPLOYMENT.md).
 
+The review contract, finding lifecycle, and threat model are documented in
+[docs/ADVERSARIAL_REVIEW_PROTOCOL.md](docs/ADVERSARIAL_REVIEW_PROTOCOL.md),
+[docs/FINDING_LIFECYCLE.md](docs/FINDING_LIFECYCLE.md), and
+[docs/THREAT_MODEL.md](docs/THREAT_MODEL.md).
+
+The final real-system setup is tracked in
+[docs/GITHUB_APP_PRODUCTION_CHECKLIST.md](docs/GITHUB_APP_PRODUCTION_CHECKLIST.md).
+
 Private repositories remain disabled by default, including because current
 Gemini Free Tier terms state that Free Tier content may be used to improve
 Google products.
