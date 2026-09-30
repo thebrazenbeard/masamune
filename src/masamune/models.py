@@ -79,4 +79,5 @@ class ReviewReport(BaseModel):
     narrowed: list[Finding]
     unresolved: list[Finding]
     rejected_ids: list[str]
+    evidence_receipts: list[dict[str, object]] = Field(default_factory=list)
     scope_note: str | None = None
