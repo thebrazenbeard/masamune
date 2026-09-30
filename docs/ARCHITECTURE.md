@@ -78,7 +78,9 @@ GitHub webhook
   -> exact subject/context builder
   -> [Masa blind scan || Mune blind scan]
   -> Mune challenge
-  -> deterministic reconciliation
+  -> deterministic evidence audit
+  -> deterministic skeptic gate
+  -> reconciliation
   -> durable review receipt
   -> GitHub comment
   -> readback verification
@@ -133,6 +135,27 @@ tokens, and concurrency, and inspects a bounded diverse subset.
 
 This is discovery, not exhaustive static analysis.
 
+## Evidence audit
+
+Every model finding receives a deterministic evidence receipt bound to the
+exact bounded-context digest. The auditor distinguishes `EXACT_FILE_LINE`,
+`EXACT_FILE`, `CONTEXT_ONLY`, and `MODEL_ASSERTION`.
+
+A diff hunk is deliberately not treated as a source-line anchor. This matters
+because GitHub's review APIs use diff coordinates for inline comments, while a
+finding's `line` field refers to the head blob source. Those coordinate systems
+must not be conflated.
+
+## Skeptic gate
+
+The skeptic is currently deterministic rather than another model call. It checks
+challenge coverage, finding-ID integrity, evidence-receipt presence, weak anchors
+on high-severity findings, and reviewer provider/model collisions.
+
+This intentionally improves the zero-cost path without consuming another free
+model request. A future third model lane is an explicit policy change, not a
+hidden behavior.
+
 ## Reconciliation
 
 Masa findings are promoted only after Mune supplies a challenge record.
@@ -145,7 +168,8 @@ Masa findings are promoted only after Mune supplies a challenge record.
 - blind-only Mune findings -> unresolved; they have not survived an additional
   independent challenge.
 
-Two models agreeing is not itself evidence.
+Two models agreeing is not itself evidence. Evidence quality and challenge
+coverage are separate deterministic gates.
 
 ## Durable state
 
