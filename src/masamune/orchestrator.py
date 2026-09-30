@@ -33,6 +33,7 @@ class MasamuneOrchestrator:
             model_id=settings.masa_model,
             timeout=settings.request_timeout_seconds,
             max_output_tokens=settings.model_max_output_tokens,
+            temperature=settings.masa_temperature,
         )
         self.mune = OpenAICompatibleModel(
             base_url=settings.mune_base_url,
@@ -41,6 +42,7 @@ class MasamuneOrchestrator:
             model_id=settings.mune_model,
             timeout=settings.request_timeout_seconds,
             max_output_tokens=settings.model_max_output_tokens,
+            temperature=settings.mune_temperature,
         )
 
     async def review(self, context: ReviewContext) -> ReviewReport:
