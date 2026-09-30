@@ -127,7 +127,7 @@ The current hosted qualification target uses:
 - **Supabase Free** for the GitHub webhook, background execution, and durable
   Postgres receipts;
 - **Groq Free / `qwen/qwen3.8-27b`** for Masa;
-- **Google Gemini Free / `gemini-2.5-flash-lite`** for Mune;
+- **Google Gemini Free / `gemini-3.8-flash`** for Mune;
 - one active model review at a time;
 - 10 global reviews/day and 3 reviews/repository/day by default;
 - no automatic transition to paid infrastructure or inference.
