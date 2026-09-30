@@ -77,6 +77,7 @@ def test_confirm_requires_challenge_evidence() -> None:
             rationale="Mechanism is reachable.",
             evidence=["call path reaches retry after ambiguous response"],
         )],
+        evidence_receipts=[exact_receipt()],
     )
     assert [item.id for item in report.confirmed] == ["M-001"]
     assert report.unresolved == []
