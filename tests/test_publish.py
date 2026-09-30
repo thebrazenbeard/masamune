@@ -5,6 +5,7 @@ from masamune.context import ReviewContext
 from masamune.models import LaneReport, ReviewReport, Subject
 from masamune.policy import RepoPolicy
 from masamune.store import DeliveryStore
+from masamune.settings import Settings
 
 
 class FakeGitHub:
@@ -27,6 +28,12 @@ class FakeOrchestrator:
     def __init__(self, report: ReviewReport) -> None:
         self.report = report
         self.calls = 0
+        self.settings = Settings(
+            masa_provider_id="provider-a",
+            masa_model="model-a",
+            mune_provider_id="provider-b",
+            mune_model="model-b",
+        )
 
     async def review(self, context: ReviewContext) -> ReviewReport:
         self.calls += 1
