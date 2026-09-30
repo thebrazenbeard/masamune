@@ -5,7 +5,12 @@ import { skepticFlags } from "./skeptic.ts";
 import { loadPolicy } from "./policy.ts";
 import { reconcile } from "./reconcile.ts";
 import { reviewIdFor } from "./orchestrator.ts";
-import { type LaneReport, parseCommand, type ReviewContext, type Subject } from "./types.ts";
+import {
+  type LaneReport,
+  parseCommand,
+  type ReviewContext,
+  type Subject,
+} from "./types.ts";
 
 function assert(
   condition: unknown,
