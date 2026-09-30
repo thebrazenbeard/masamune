@@ -122,6 +122,16 @@ class DeliveryStore:
                 (state, now, error, delivery_id),
             )
 
+    def get_review(self, review_id: str) -> dict[str, Any] | None:
+        with self._connect() as conn:
+            row = conn.execute(
+                "SELECT result_json FROM review_receipt WHERE review_id = ?",
+                (review_id,),
+            ).fetchone()
+        if not row:
+            return None
+        return json.loads(row["result_json"])
+
     def save_review(
         self,
         review_id: str,
