@@ -433,32 +433,36 @@ Deno.serve(async (request: Request) => {
   if (request.method === "GET") {
     try {
       const missing = missingRuntimeSecretsFromEnv();
-      if (configuredMissing.length) {
-        const zeroCost = Deno.env.get("MASAMUNE_ZERO_COST_ENFORCED") !== "false";
+      if (missing.length) {
+        const zeroCost =
+          Deno.env.get("MASAMUNE_ZERO_COST_ENFORCED") !== "false";
         return jsonResponse(
           {
             status: "not_ready",
             service: "masamune",
             runtime: "supabase-edge",
-            billing_mode: zeroCost ? "zero-cost-enforced" : "operator-configured",
-            missing: configuredMissing,
+            billing_mode: zeroCost
+              ? "zero-cost-enforced"
+              : "operator-configured",
+            missing,
           },
           503,
         );
       }
+
       const healthSettings = loadSettings();
       const configuredMissing = missingRuntimeSecrets(healthSettings);
       const billingMode = healthSettings.zeroCostEnforced
         ? "zero-cost-enforced"
         : "operator-configured";
-      if (missing.length) {
+      if (configuredMissing.length) {
         return jsonResponse(
           {
             status: "not_ready",
             service: "masamune",
             runtime: "supabase-edge",
             billing_mode: billingMode,
-            missing,
+            missing: configuredMissing,
           },
           503,
         );
