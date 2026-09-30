@@ -95,7 +95,7 @@ export function loadSettings(): Settings {
     ),
     muneApiKey: env("MASAMUNE_MUNE_API_KEY"),
     muneProviderId: env("MASAMUNE_MUNE_PROVIDER_ID", "google"),
-    muneModel: env("MASAMUNE_MUNE_MODEL", "gemini-2.5-flash-lite"),
+    muneModel: env("MASAMUNE_MUNE_MODEL", "gemini-3.8-flash"),
 
     requireIndependence: boolEnv("MASAMUNE_REQUIRE_INDEPENDENCE", true),
     allowPrivateRepositories: boolEnv(
@@ -170,6 +170,17 @@ export function loadSettings(): Settings {
 
   validateBillingPolicy(settings);
   return settings;
+}
+
+export function missingRuntimeSecretsFromEnv(): string[] {
+  const names = [
+    "MASAMUNE_GITHUB_APP_ID",
+    "MASAMUNE_GITHUB_PRIVATE_KEY",
+    "MASAMUNE_GITHUB_WEBHOOK_SECRET",
+    "MASAMUNE_MASA_API_KEY",
+    "MASAMUNE_MUNE_API_KEY",
+  ];
+  return names.filter((name) => !(Deno.env.get(name) ?? "").trim());
 }
 
 export function missingRuntimeSecrets(
