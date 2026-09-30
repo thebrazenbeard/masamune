@@ -1,4 +1,5 @@
 import { sha256Hex, verifyGithubSignature } from "./crypto.ts";
+import { auditFinding } from "./evidence.ts";
 import { loadPolicy } from "./policy.ts";
 import { reconcile } from "./reconcile.ts";
 import { type LaneReport, parseCommand, type Subject } from "./types.ts";
@@ -111,4 +112,58 @@ Deno.test("reconciliation requires verification evidence", () => {
     evidence: ["caller retries after ambiguous response"],
   }]);
   assert(withEvidence.confirmed.length === 1);
+});
+
+
+Deno.test("evidence audit distinguishes exact and weak anchors", async () => {
+  const exact = await auditFinding(
+    {
+      id: "M-001",
+      title: "retry can duplicate effect",
+      kind: "BUG",
+      severity: "HIGH",
+      confidence: 0.9,
+      file: "src/retry.ts",
+      line: 2,
+      evidence: [],
+      mechanism: "response loss can replay the effect",
+    },
+    "MASA",
+    "=== HEAD SOURCE src/retry.ts ===\nline one\nline two\n",
+  );
+  assert(exact.quality === "EXACT_FILE_LINE");
+
+  const truncated = await auditFinding(
+    {
+      id: "M-002",
+      title: "unknown",
+      kind: "BUG",
+      severity: "MEDIUM",
+      confidence: 0.9,
+      file: "src/retry.ts",
+      line: 2,
+      evidence: [],
+      mechanism: "unknown",
+    },
+    "MASA",
+    "=== HEAD SOURCE src/retry.ts ===\nline one\n[MASAMUNE FILE/PATCH TRUNCATED]\n",
+  );
+  assert(truncated.quality === "EXACT_FILE");
+
+  const assertion = await auditFinding(
+    {
+      id: "M-003",
+      title: "unknown",
+      kind: "BUG",
+      severity: "MEDIUM",
+      confidence: 0.9,
+      file: "src/missing.ts",
+      line: 2,
+      evidence: ["not present"],
+      mechanism: "unknown",
+    },
+    "MASA",
+    "=== HEAD SOURCE src/retry.ts ===\nline one\n",
+  );
+  assert(assertion.quality === "MODEL_ASSERTION");
 });
