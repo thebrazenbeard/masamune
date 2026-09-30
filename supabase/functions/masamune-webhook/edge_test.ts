@@ -1,6 +1,10 @@
 import { sha256Hex, verifyGithubSignature } from "./crypto.ts";
 import { auditFinding } from "./evidence.ts";
-import { missingRuntimeSecrets, type Settings, validateBillingPolicy } from "./config.ts";
+import {
+  missingRuntimeSecrets,
+  type Settings,
+  validateBillingPolicy,
+} from "./config.ts";
 import { skepticFlags } from "./skeptic.ts";
 import { loadPolicy } from "./policy.ts";
 import { reconcile } from "./reconcile.ts";
@@ -371,7 +375,6 @@ Deno.test("review identity changes with sampling configuration", async () => {
     ),
   );
 });
-
 
 Deno.test("runtime readiness reports missing secret names without values", () => {
   const missing = missingRuntimeSecrets({
