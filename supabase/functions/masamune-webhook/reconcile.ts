@@ -60,7 +60,10 @@ export function reconcile(
     if (challenge.verdict === "CONFIRM") {
       const exactAnchor = receipt.quality === "EXACT_FILE_LINE" ||
         receipt.quality === "EXACT_FILE";
-      if (finding.confidence >= 0.65 && challenge.evidence.length > 0 && exactAnchor) {
+      if (
+        finding.confidence >= 0.65 && challenge.evidence.length > 0 &&
+        exactAnchor
+      ) {
         const promoted = copyFinding(finding);
         promoted.evidence.push(
           ...challenge.evidence.map((item) => `Mune verification: ${item}`),
@@ -73,7 +76,9 @@ export function reconcile(
     }
 
     if (challenge.verdict === "NARROW") {
-      if (receipt.quality === "MODEL_ASSERTION" || challenge.evidence.length === 0) {
+      if (
+        receipt.quality === "MODEL_ASSERTION" || challenge.evidence.length === 0
+      ) {
         unresolved.push(copyFinding(finding));
         continue;
       }
