@@ -1,5 +1,13 @@
+from masamune.models import (
+    Challenge,
+    EvidenceQuality,
+    EvidenceReceipt,
+    Finding,
+    FindingKind,
+    LaneReport,
+    Severity,
+)
 from masamune.skeptic import skeptic_flags
-from masamune.models import Challenge, EvidenceQuality, EvidenceReceipt, Finding, FindingKind, LaneReport, Severity
 
 
 def make_finding(identifier: str = "M-001") -> Finding:
