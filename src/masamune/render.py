@@ -42,6 +42,9 @@ def render_report(
 ) -> str:
     subject = report.subject
     marker = f"<!-- masamune-review:{review_id} -->"
+    receipt_counts = {quality.value: 0 for quality in EvidenceQuality}
+    for receipt in report.evidence_receipts:
+        receipt_counts[receipt.quality.value] += 1
     lines = [
         marker,
         "## ⚔️ Masamune adversarial review",
