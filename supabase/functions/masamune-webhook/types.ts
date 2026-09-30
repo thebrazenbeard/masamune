@@ -61,6 +61,7 @@ export interface ReviewReport {
   unresolved: Finding[];
   rejected_ids: string[];
   evidence_receipts?: EvidenceReceipt[];
+  skeptic_flags?: string[];
   scope_note?: string | null;
 }
 
