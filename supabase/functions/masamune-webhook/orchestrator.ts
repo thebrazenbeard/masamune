@@ -21,8 +21,14 @@ export async function reviewIdFor(
     subject.head_sha,
     settings.masaProviderId,
     settings.masaModel,
+    settings.masaBaseUrl,
+    settings.masaTemperature,
+    settings.modelMaxOutputTokens,
     settings.muneProviderId,
     settings.muneModel,
+    settings.muneBaseUrl,
+    settings.muneTemperature,
+    settings.modelMaxOutputTokens,
     contextDigest,
   ].join("|");
   return (await sha256Hex(new TextEncoder().encode(raw))).slice(0, 24);
