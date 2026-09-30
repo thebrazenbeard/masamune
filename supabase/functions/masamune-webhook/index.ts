@@ -1,4 +1,4 @@
-import { loadSettings, type Settings } from "./config.ts";
+import { loadSettings, missingRuntimeSecrets, type Settings } from "./config.ts";
 import {
   buildIssueContext,
   buildPrContext,
