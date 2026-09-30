@@ -18,11 +18,13 @@ class Settings(BaseSettings):
     masa_api_key: str = ""
     masa_provider_id: str = "openai-compatible"
     masa_model: str = ""
+    masa_temperature: float = Field(default=0, ge=0, le=2)
 
     mune_base_url: str = "https://api.openai.com/v1"
     mune_api_key: str = ""
     mune_provider_id: str = "openai-compatible"
     mune_model: str = ""
+    mune_temperature: float = Field(default=1, ge=0, le=2)
 
     require_independence: bool = True
     allow_private_repositories: bool = False
