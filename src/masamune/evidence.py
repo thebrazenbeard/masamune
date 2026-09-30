@@ -5,21 +5,24 @@ import re
 from .models import EvidenceQuality, EvidenceReceipt, Finding, LaneReport
 
 
-_CONTEXT_HEADER = re.compile(r"^=== (?:HEAD SOURCE|SOURCE|DIFF) (.+?) ===$", re.MULTILINE)
+_CONTEXT_HEADER = re.compile(
+    r"^=== (HEAD SOURCE|SOURCE|DIFF) (.+?) ===$", re.MULTILINE
+)
 
 
 def _normal(path: str) -> str:
     return path.replace("\\", "/").strip()
 
 
-def _sections(context: str) -> dict[str, str]:
+def _sections(context: str) -> dict[str, tuple[str, str]]:
     matches = list(_CONTEXT_HEADER.finditer(context))
-    result: dict[str, str] = {}
+    result: dict[str, tuple[str, str]] = {}
     for index, match in enumerate(matches):
-        path = _normal(match.group(1))
+        kind = match.group(1)
+        path = _normal(match.group(2))
         start = match.end()
         end = matches[index + 1].start() if index + 1 < len(matches) else len(context)
-        result[path] = context[start:end].strip()
+        result[path] = (kind, context[start:end].strip())
     return result
 
 
@@ -29,13 +32,13 @@ def audit_finding(finding: Finding, lane: str, context: str) -> EvidenceReceipt:
     path = _normal(finding.file) if finding.file else None
 
     if path and path in sections:
-        section = sections[path]
+        kind, section = sections[path]
         source_hash = hashlib.sha256(section.encode("utf-8")).hexdigest()
         truncated = (
             "[MASAMUNE FILE/PATCH TRUNCATED]" in section
             or "[MASAMUNE CONTEXT TRUNCATED" in section
         )
-        if finding.line and not truncated:
+        if kind != "DIFF" and finding.line and not truncated:
             lines = section.splitlines()
             if 1 <= finding.line <= len(lines):
                 return EvidenceReceipt(
