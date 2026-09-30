@@ -1,0 +1,11 @@
+.git
+.github
+__pycache__
+.pytest_cache
+.ruff_cache
+*.pyc
+*.sqlite3
+.env
+state
+tests
+docs
