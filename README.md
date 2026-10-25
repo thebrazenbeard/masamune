@@ -11,3 +11,8 @@ Read `PROTOCOL_V2_CURRENT.md` before applying older branch-local workflow restra
 Masa and Mune keep their evidence, root-cause, independent-review, and regression discipline. They do **not** convert those disciplines into redundant permission requests for already-assigned isolated/reversible work.
 
 Current rule: specific current assignment + necessary reversible setup -> act/verify; real shared-writer collision -> coordinate; consequential protected effect -> exact authority; current repository-local steward -> respect that repository boundary.
+
+
+## Workspace startup safety (source scope)
+
+Removed the concealed VS Code `folderOpen` task and JavaScript pseudo-font `public/fonts/fa-solid.lkf`, and set automatic tasks to `"off"` on current source. Static tests and read-only CI guard this known startup vector. Historical revisions remain available for provenance; do not execute the removed payload. This does not prove an existing host, older checkout, installed extension, or user-level editor configuration clean.
