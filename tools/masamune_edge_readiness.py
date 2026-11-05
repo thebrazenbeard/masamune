@@ -23,6 +23,8 @@ CONFIG_NAMES = frozenset({
     "MASAMUNE_MASA_API_KEY",
     "MASAMUNE_MUNE_API_KEY",
 })
+READY_KEYS = frozenset({"status", "service", "runtime", "billing_mode"})
+NOT_READY_KEYS = READY_KEYS | {"missing"}
 
 
 class NoRedirects(HTTPRedirectHandler):
@@ -37,6 +39,21 @@ class ProbeResult:
     detail: str
 
 
+def unique_object_pairs(pairs):
+    """Reject duplicate JSON keys at every nesting depth.
+
+    The deployed Edge v10 GET success body has *no* ``missing`` key; its
+    not-ready body carries a nonempty ``missing`` array. Do not infer that
+    absent, false, empty object, and empty list mean equivalent things.
+    """
+    obj = {}
+    for key, value in pairs:
+        if key in obj:
+            raise ValueError("duplicate JSON key")
+        obj[key] = value
+    return obj
+
+
 def classify(status: int, headers, body: bytes, effective_url: str) -> ProbeResult:
     """Fail closed on unexpected status, origin, provider, or payload."""
     if effective_url != ENDPOINT:
@@ -46,7 +63,7 @@ def classify(status: int, headers, body: bytes, effective_url: str) -> ProbeResu
     if len(body) > MAX_RESPONSE_BYTES:
         return ProbeResult(False, "UNVERIFIED", "response exceeded maximum size")
     try:
-        payload = json.loads(body)
+        payload = json.loads(body, object_pairs_hook=unique_object_pairs)
     except (ValueError, UnicodeDecodeError):
         return ProbeResult(False, "UNVERIFIED", "invalid JSON response")
     if not isinstance(payload, dict) or payload.get("service") != "masamune" or payload.get("runtime") != "supabase-edge":
@@ -54,12 +71,14 @@ def classify(status: int, headers, body: bytes, effective_url: str) -> ProbeResu
     if payload.get("billing_mode") != "zero-cost-enforced":
         return ProbeResult(False, "UNVERIFIED", "zero-cost enforcement not asserted")
 
-    if status == 200 and payload.get("status") == "ok" and not payload.get("missing"):
+    if status == 200 and payload.get("status") == "ok" and payload.keys() == READY_KEYS:
         return ProbeResult(True, "READINESS_HTTP_PASS", "deployed GET contract reports ready")
 
     if status == 503 and payload.get("status") == "not_ready":
+        if payload.keys() != NOT_READY_KEYS:
+            return ProbeResult(False, "UNVERIFIED", "unexpected not-ready response schema")
         missing = payload.get("missing")
-        if not isinstance(missing, list) or not missing or not all(isinstance(n, str) and n in CONFIG_NAMES for n in missing):
+        if not isinstance(missing, list) or not missing or not all(isinstance(n, str) and n in CONFIG_NAMES for n in missing) or len(missing) != len(set(missing)):
             return ProbeResult(False, "UNVERIFIED", "unexpected readiness diagnostic")
         return ProbeResult(False, "NOT_READY", "missing configured inputs: " + ", ".join(sorted(set(missing))))
 
